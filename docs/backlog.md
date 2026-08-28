@@ -68,9 +68,9 @@ Priority key:
 
 ## Epic E5: Leaderboard and Board Visibility (P0)
 ### Story E5-S1: Derived stats
-- [ ] T29 Implement score calculation = marked square count (TODO)
-- [ ] T30 Implement bingo counting logic (rows/cols/diagonals) (TODO)
-- [ ] T31 Implement blackout detection (TODO)
+- [x] T29 Implement score calculation = marked square count (DONE)
+- [x] T30 Implement bingo counting logic (rows/cols/diagonals) (DONE)
+- [x] T31 Implement blackout detection (DONE)
 
 ### Story E5-S2: Group leaderboard
 - [ ] T32 Build leaderboard API for group members (TODO)

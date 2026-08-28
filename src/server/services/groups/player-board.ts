@@ -1,5 +1,6 @@
 import { createHash } from "crypto";
 import { db } from "@/server/db/client";
+import { calculateScore, countBingos, isBlackout } from "@/lib/bingo";
 import { FREE_SPACE_POSITION, GROUP_OBJECTIVE_COUNT, GroupAccessError } from "./template-management";
 
 type TemplateObjective = {
@@ -22,6 +23,11 @@ export type PlayerBoardState = {
   groupName: string;
   createdAt: Date;
   squares: PlayerBoardSquareState[];
+  stats: {
+    score: number;
+    bingoCount: number;
+    blackout: boolean;
+  };
 };
 
 type PlayerBoardRecord = {
@@ -91,17 +97,25 @@ export function buildDeterministicBoardSquares(objectives: TemplateObjective[], 
 }
 
 function mapPlayerBoard(record: PlayerBoardRecord) {
+  const squares = record.squares.map((square) => ({
+    position: square.position,
+    content: square.objective.content,
+    isFreeSpace: square.objective.isFreeSpace,
+    isMarked: square.mark?.isMarked ?? false
+  }));
+  const marks = squares.map((square) => square.isMarked);
+
   return {
     boardId: record.id,
     groupId: record.group.id,
     groupName: record.group.name,
     createdAt: record.createdAt,
-    squares: record.squares.map((square) => ({
-      position: square.position,
-      content: square.objective.content,
-      isFreeSpace: square.objective.isFreeSpace,
-      isMarked: square.mark?.isMarked ?? false
-    }))
+    squares,
+    stats: {
+      score: calculateScore(marks),
+      bingoCount: countBingos(marks),
+      blackout: isBlackout(marks)
+    }
   } satisfies PlayerBoardState;
 }
 

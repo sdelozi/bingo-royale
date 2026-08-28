@@ -28,6 +28,9 @@ export default async function GroupBoardPage({ params }: GroupBoardPageProps) {
       <main>
         <h1>Your board: {board.groupName}</h1>
         <p>This layout is generated once per player and stays stable for the trip.</p>
+        <p>
+          Score: {board.stats.score} | Bingos: {board.stats.bingoCount} | Blackout: {board.stats.blackout ? "Yes" : "No"}
+        </p>
 
         <PlayerBoardGrid groupId={board.groupId} squares={board.squares} />
 

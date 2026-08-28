@@ -1,8 +1,8 @@
 # Versioning
 
 ## Current baseline
-- Current development version: 0.4.4
-- Rationale: core work through Epic 4 Story 3 is complete, plus manual-testing-driven board/template refinements (center free-space, admin default-mark toggle, and board tile consistency).
+- Current development version: 0.5.0
+- Rationale: Epic 5 has started with E5-S1 derived stats wired into player board state and UI.
 
 ## Rules until first release
 - Stay on major version 0 until first release.
