@@ -87,13 +87,13 @@ Priority key:
 - [x] T38 Require explicit confirmation on impact warning (DONE)
 
 ### Story E6-S2: Mark-preservation logic
-- [ ] T39 Keep all unaffected marks intact (TODO)
-- [ ] T40 Force unmark replaced objective squares (TODO)
-- [ ] T41 Keep board layout stable; no reshuffle/no reset (TODO)
+- [x] T39 Keep all unaffected marks intact (DONE)
+- [x] T40 Preserve mark state on replaced objective squares (DONE)
+- [x] T41 Keep board layout stable; no reshuffle/no reset (DONE)
 
 ### Story E6-S3: Auditing and recomputation
-- [ ] T42 Record board edit event with actor and timestamp (TODO)
-- [ ] T43 Recompute affected player stats after template edit (TODO)
+- [x] T42 Record board edit event with actor and timestamp (DONE)
+- [x] T43 Recompute affected player stats after template edit (DONE)
 
 ## Epic E7: Sync Strategy and Future Realtime Upgrade Path (P1)
 ### Story E7-S1: Polling v1
@@ -108,7 +108,7 @@ Priority key:
 ## Epic E8: Quality, Security, and Operations (P1)
 ### Story E8-S1: Test coverage
 - [x] T49 Unit tests for shuffle, bingo, blackout, score (DONE)
-- [ ] T50 Unit tests for mid-game edit mark-preservation rules (TODO)
+- [x] T50 Unit tests for mid-game edit mark-preservation rules (DONE)
 - [ ] T51 Integration tests for auth/group/join/play/leaderboard (TODO)
 - [ ] T61 Require test additions for all behavior-changing feature work (TODO)
 - [x] T62 Establish semantic versioning workflow (epic->minor, story/fix->patch) and version-based changelog updates (DONE)
