@@ -62,7 +62,7 @@ if (env.googleClientId && env.googleClientSecret) {
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(db),
   session: {
-    strategy: "database"
+    strategy: "jwt"
   },
   secret: env.authSecret,
   pages: {
@@ -70,9 +70,16 @@ export const authOptions: NextAuthOptions = {
   },
   providers,
   callbacks: {
-    session({ session, user }) {
-      if (session.user) {
-        session.user.id = user.id;
+    jwt({ token, user }) {
+      if (user?.id) {
+        token.sub = user.id;
+      }
+
+      return token;
+    },
+    session({ session, token }) {
+      if (session.user && token.sub) {
+        session.user.id = token.sub;
       }
 
       return session;
