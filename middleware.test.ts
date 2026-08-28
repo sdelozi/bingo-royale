@@ -40,4 +40,16 @@ describe("middleware", () => {
     expect(response.status).toBe(200);
     expect(response.headers.get("x-middleware-next")).toBe("1");
   });
+
+  it("redirects unauthenticated users from join share-link routes", async () => {
+    vi.mocked(getToken).mockResolvedValueOnce(null);
+
+    const request = new NextRequest("http://localhost/join/token-123?src=invite");
+    const response = await middleware(request);
+    const location = response.headers.get("location");
+
+    expect(response.status).toBe(307);
+    expect(location).toContain("/auth/signin");
+    expect(location).toContain("callbackUrl=%2Fjoin%2Ftoken-123%3Fsrc%3Dinvite");
+  });
 });

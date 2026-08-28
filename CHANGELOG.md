@@ -30,6 +30,9 @@ and this project adheres to Semantic Versioning where applicable.
 - Group list view showing role, invite code, and share link token path.
 - Test baseline for middleware auth redirects, auth register API route, group service logic, and groups API route.
 - Testing policy document and PR checklist item requiring tests for behavior-changing work.
+- Join-group flow via invite code and share-link token with duplicate-membership protection.
+- Join API route and groups-page join form, plus share-link landing page.
+- Additional tests for middleware join protection, join service logic, and join API route behavior.
 
 ### Changed
 - Planning docs expanded with roadmap, backlog, and ADR-0001.

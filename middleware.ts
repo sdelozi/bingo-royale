@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { getToken } from "next-auth/jwt";
 
-const protectedPrefixes = ["/dashboard", "/group", "/groups", "/board"];
+const protectedPrefixes = ["/dashboard", "/group", "/groups", "/board", "/join"];
 const authPages = ["/auth/signin", "/auth/register"];
 
 export async function middleware(request: NextRequest) {
@@ -36,6 +36,7 @@ export const config = {
     "/group/:path*",
     "/groups/:path*",
     "/board/:path*",
+    "/join/:path*",
     "/auth/signin",
     "/auth/register"
   ]

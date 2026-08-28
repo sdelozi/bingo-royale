@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { CreateGroupForm } from "@/components/groups/create-group-form";
+import { JoinGroupForm } from "@/components/groups/join-group-form";
 import { env } from "@/server/config/env";
 import { getCurrentUser } from "@/server/auth/session";
 import { listGroupsForUser } from "@/server/services/groups/list-user-groups";
@@ -20,6 +21,7 @@ export default async function GroupsPage() {
       <p>Create a group and share the invite code or share link.</p>
 
       <CreateGroupForm />
+      <JoinGroupForm />
 
       <section>
         <h2>Your groups</h2>

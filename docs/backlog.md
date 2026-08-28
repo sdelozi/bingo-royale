@@ -42,9 +42,9 @@ Priority key:
 - [x] T14 Generate unique invite code and optional share link token (DONE)
 
 ### Story E3-S2: Membership flows
-- [ ] T15 Join group by invite code (TODO)
-- [ ] T16 Join group by share link (TODO)
-- [ ] T17 Prevent duplicate membership entries (TODO)
+- [x] T15 Join group by invite code (DONE)
+- [x] T16 Join group by share link (DONE)
+- [x] T17 Prevent duplicate membership entries (DONE)
 
 ### Story E3-S3: Dashboard and role-aware UX
 - [ ] T18 Implement user dashboard showing all groups (TODO)
