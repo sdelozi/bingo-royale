@@ -11,7 +11,8 @@ const saveTemplateSchema = z.object({
   objectives: z
     .array(z.string().trim().min(1).max(140))
     .length(REGULAR_OBJECTIVE_COUNT, `Exactly ${REGULAR_OBJECTIVE_COUNT} non-free-space objectives are required.`),
-  freeSpaceMarkedByDefault: z.boolean().default(false)
+  freeSpaceMarkedByDefault: z.boolean().default(false),
+  warningAcknowledged: z.boolean().default(false)
 });
 
 export class GroupAccessError extends Error {
@@ -25,6 +26,16 @@ export class GroupForbiddenError extends Error {
   constructor() {
     super("Only group admins can manage templates.");
     this.name = "GroupForbiddenError";
+  }
+}
+
+export class TemplateEditConfirmationRequiredError extends Error {
+  impactedBoardCount: number;
+
+  constructor(impactedBoardCount: number) {
+    super("Saving template edits now will affect in-progress boards. Confirm to continue.");
+    this.name = "TemplateEditConfirmationRequiredError";
+    this.impactedBoardCount = impactedBoardCount;
   }
 }
 
@@ -71,6 +82,11 @@ export async function getGroupTemplateEditorData(userId: string, groupId: string
     include: {
       group: {
         include: {
+          _count: {
+            select: {
+              boards: true
+            }
+          },
           currentTemplate: {
             include: {
               objectives: {
@@ -102,7 +118,8 @@ export async function getGroupTemplateEditorData(userId: string, groupId: string
       currentVersion: 0,
       freeSpaceObjective: "Free space",
       objectives: Array.from({ length: REGULAR_OBJECTIVE_COUNT }, () => ""),
-      freeSpaceMarkedByDefault: false
+      freeSpaceMarkedByDefault: false,
+      hasExistingBoards: membership.group._count.boards > 0
     };
   }
 
@@ -115,7 +132,8 @@ export async function getGroupTemplateEditorData(userId: string, groupId: string
     currentVersion: template.version,
     freeSpaceObjective: freeSpaceObjective?.content ?? "Free space",
     objectives: regularObjectives.map((objective) => objective.content),
-    freeSpaceMarkedByDefault: template.freeSpaceMarkedByDefault
+    freeSpaceMarkedByDefault: template.freeSpaceMarkedByDefault,
+    hasExistingBoards: membership.group._count.boards > 0
   };
 }
 
@@ -141,6 +159,12 @@ export async function saveGroupTemplateForGroup(userId: string, groupId: string,
 
   if (membership.role !== MembershipRole.ADMIN) {
     throw new GroupForbiddenError();
+  }
+
+  const boardCount = await db.playerBoard.count({ where: { groupId } });
+
+  if (boardCount > 0 && !input.warningAcknowledged) {
+    throw new TemplateEditConfirmationRequiredError(boardCount);
   }
 
   return db.$transaction(async (tx) => {

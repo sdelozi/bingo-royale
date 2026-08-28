@@ -4,6 +4,7 @@ import { getAuthSession } from "@/server/auth/session";
 import {
   GroupAccessError,
   GroupForbiddenError,
+  TemplateEditConfirmationRequiredError,
   ZodError,
   saveGroupTemplateForGroup
 } from "@/server/services/groups/template-management";
@@ -16,6 +17,9 @@ vi.mock("@/server/services/groups/template-management", () => ({
   saveGroupTemplateForGroup: vi.fn(),
   GroupAccessError: class GroupAccessError extends Error {},
   GroupForbiddenError: class GroupForbiddenError extends Error {},
+  TemplateEditConfirmationRequiredError: class TemplateEditConfirmationRequiredError extends Error {
+    impactedBoardCount = 4;
+  },
   ZodError: class ZodError extends Error {
     issues = [{ message: "Invalid template payload." }];
   }
@@ -85,6 +89,25 @@ describe("POST /api/groups/[groupId]/template", () => {
     expect(response.status).toBe(400);
   });
 
+  it("returns 409 when confirmation is required", async () => {
+    vi.mocked(getAuthSession).mockResolvedValueOnce({ user: { id: "user-1" } } as never);
+    vi.mocked(saveGroupTemplateForGroup).mockRejectedValueOnce(new TemplateEditConfirmationRequiredError(4));
+
+    const response = await POST(
+      new Request("http://localhost/api/groups/group-1/template", {
+        method: "POST",
+        body: JSON.stringify({})
+      }),
+      { params: { groupId: "group-1" } }
+    );
+
+    const body = (await response.json()) as { requiresConfirmation?: boolean; impactedBoardCount?: number };
+
+    expect(response.status).toBe(409);
+    expect(body.requiresConfirmation).toBe(true);
+    expect(body.impactedBoardCount).toBe(4);
+  });
+
   it("returns 200 and result for successful save", async () => {
     vi.mocked(getAuthSession).mockResolvedValueOnce({ user: { id: "user-1" } } as never);
     vi.mocked(saveGroupTemplateForGroup).mockResolvedValueOnce({ version: 4 } as never);
@@ -92,7 +115,8 @@ describe("POST /api/groups/[groupId]/template", () => {
     const payload = {
       freeSpaceObjective: "Free space",
       objectives: Array.from({ length: 24 }, (_, i) => `Objective ${i + 1}`),
-      freeSpaceMarkedByDefault: false
+      freeSpaceMarkedByDefault: false,
+      warningAcknowledged: false
     };
 
     const response = await POST(

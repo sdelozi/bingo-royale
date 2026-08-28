@@ -7,6 +7,8 @@
 - E5-S2 leaderboard: added member leaderboard API and leaderboard page with score, bingo count, blackout, and board links.
 - Leaderboard now shows last-updated metadata and a manual refresh action.
 - E5-S3 board visibility: added a read-only member board route with group-membership access control.
+- E6-S1 safety guard: template editor now shows a warning modal before post-start saves.
+- Saving template edits after boards exist now requires explicit confirmation in both UI and API.
 
 ## 0.4.4
 - Board template UX now uses a dedicated free-space objective input and 24 regular objectives.
