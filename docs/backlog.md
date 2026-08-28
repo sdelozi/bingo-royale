@@ -38,8 +38,8 @@ Priority key:
 
 ## Epic E3: Groups, Roles, and Joining (P0)
 ### Story E3-S1: Group creation and ownership
-- [ ] T13 Create group API/UI with creator as admin (TODO)
-- [ ] T14 Generate unique invite code and optional share link token (TODO)
+- [x] T13 Create group API/UI with creator as admin (DONE)
+- [x] T14 Generate unique invite code and optional share link token (DONE)
 
 ### Story E3-S2: Membership flows
 - [ ] T15 Join group by invite code (TODO)
