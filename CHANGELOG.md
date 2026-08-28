@@ -16,6 +16,9 @@ and this project adheres to Semantic Versioning where applicable.
 - Local PostgreSQL bootstrap via Docker Compose and a development guide.
 - Prisma seed script and reusable database workflow scripts.
 - Shared Prisma client singleton for server-side usage.
+- Architecture notes defining repository structure, service boundaries, and environment conventions.
+- Initial provider-agnostic adapter contracts for notifications, realtime, and file storage.
+- Shared server-side service context and centralized environment contract.
 
 ### Changed
 - Planning docs expanded with roadmap, backlog, and ADR-0001.
