@@ -3,7 +3,6 @@ import { getAuthSession } from "@/server/auth/session";
 import {
   GroupAccessError,
   GroupBoardTemplateMissingError,
-  PlayerBoardSquareLockedError,
   PlayerBoardSquareNotFoundError,
   ZodError,
   updatePlayerBoardMark
@@ -30,10 +29,6 @@ export async function PATCH(request: Request, { params }: Params) {
   } catch (error) {
     if (error instanceof ZodError) {
       return NextResponse.json({ error: error.issues[0]?.message ?? "Invalid mark update payload." }, { status: 400 });
-    }
-
-    if (error instanceof PlayerBoardSquareLockedError) {
-      return NextResponse.json({ error: error.message }, { status: 400 });
     }
 
     if (error instanceof GroupAccessError || error instanceof PlayerBoardSquareNotFoundError) {

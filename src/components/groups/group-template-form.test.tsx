@@ -27,8 +27,9 @@ describe("GroupTemplateForm", () => {
     render(
       <GroupTemplateForm
         groupId="group-1"
-        initialObjectives={objectives}
-        initialFreeSpaceOrdinal={12}
+        initialFreeSpaceObjective="Free space"
+        initialObjectives={objectives.slice(0, 24)}
+        initialFreeSpaceMarkedByDefault={false}
         currentVersion={3}
       />
     );

@@ -2,7 +2,6 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { getAuthSession } from "@/server/auth/session";
 import {
   GroupBoardTemplateMissingError,
-  PlayerBoardSquareLockedError,
   PlayerBoardSquareNotFoundError,
   ZodError,
   updatePlayerBoardMark
@@ -17,7 +16,6 @@ vi.mock("@/server/services/groups/board-marking", () => ({
   updatePlayerBoardMark: vi.fn(),
   GroupAccessError: class GroupAccessError extends Error {},
   GroupBoardTemplateMissingError: class GroupBoardTemplateMissingError extends Error {},
-  PlayerBoardSquareLockedError: class PlayerBoardSquareLockedError extends Error {},
   PlayerBoardSquareNotFoundError: class PlayerBoardSquareNotFoundError extends Error {},
   ZodError: class ZodError extends Error {
     issues = [{ message: "Invalid mark update payload." }];
@@ -51,23 +49,6 @@ describe("PATCH /api/groups/[groupId]/board", () => {
       new Request("http://localhost/api/groups/group-1/board", {
         method: "PATCH",
         body: JSON.stringify({})
-      }),
-      { params: { groupId: "group-1" } }
-    );
-
-    expect(response.status).toBe(400);
-  });
-
-  it("returns 400 when a free-space tile is toggled", async () => {
-    vi.mocked(getAuthSession).mockResolvedValueOnce({ user: { id: "user-1" } } as never);
-    vi.mocked(updatePlayerBoardMark).mockRejectedValueOnce(
-      new PlayerBoardSquareLockedError("Free-space tiles are marked automatically and cannot be changed.") as never
-    );
-
-    const response = await PATCH(
-      new Request("http://localhost/api/groups/group-1/board", {
-        method: "PATCH",
-        body: JSON.stringify({ position: 12, isMarked: false })
       }),
       { params: { groupId: "group-1" } }
     );

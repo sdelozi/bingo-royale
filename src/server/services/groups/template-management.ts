@@ -3,12 +3,15 @@ import { ZodError, z } from "zod";
 import { db } from "@/server/db/client";
 
 const GROUP_OBJECTIVE_COUNT = 25;
+const FREE_SPACE_POSITION = 12;
+const REGULAR_OBJECTIVE_COUNT = GROUP_OBJECTIVE_COUNT - 1;
 
 const saveTemplateSchema = z.object({
+  freeSpaceObjective: z.string().trim().min(1).max(140),
   objectives: z
     .array(z.string().trim().min(1).max(140))
-    .length(GROUP_OBJECTIVE_COUNT, `Exactly ${GROUP_OBJECTIVE_COUNT} objectives are required.`),
-  freeSpaceOrdinal: z.number().int().min(0).max(GROUP_OBJECTIVE_COUNT - 1)
+    .length(REGULAR_OBJECTIVE_COUNT, `Exactly ${REGULAR_OBJECTIVE_COUNT} non-free-space objectives are required.`),
+  freeSpaceMarkedByDefault: z.boolean().default(false)
 });
 
 export class GroupAccessError extends Error {
@@ -32,11 +35,29 @@ export function parseTemplateInput(rawInput: unknown): SaveTemplateInput {
 }
 
 export function buildTemplateObjectives(input: SaveTemplateInput) {
-  return input.objectives.map((content, ordinal) => ({
-    ordinal,
-    content,
-    isFreeSpace: ordinal === input.freeSpaceOrdinal
-  }));
+  const regularObjectives = [...input.objectives];
+
+  return Array.from({ length: GROUP_OBJECTIVE_COUNT }, (_, ordinal) => {
+    if (ordinal === FREE_SPACE_POSITION) {
+      return {
+        ordinal,
+        content: input.freeSpaceObjective,
+        isFreeSpace: true
+      };
+    }
+
+    const content = regularObjectives.shift();
+
+    if (!content) {
+      throw new Error("Missing objective content while building template.");
+    }
+
+    return {
+      ordinal,
+      content,
+      isFreeSpace: false
+    };
+  });
 }
 
 export async function getGroupTemplateEditorData(userId: string, groupId: string) {
@@ -79,19 +100,22 @@ export async function getGroupTemplateEditorData(userId: string, groupId: string
       groupId: membership.group.id,
       groupName: membership.group.name,
       currentVersion: 0,
-      objectives: Array.from({ length: GROUP_OBJECTIVE_COUNT }, () => ""),
-      freeSpaceOrdinal: 12
+      freeSpaceObjective: "Free space",
+      objectives: Array.from({ length: REGULAR_OBJECTIVE_COUNT }, () => ""),
+      freeSpaceMarkedByDefault: false
     };
   }
 
   const freeSpaceObjective = template.objectives.find((objective) => objective.isFreeSpace);
+  const regularObjectives = template.objectives.filter((objective) => !objective.isFreeSpace);
 
   return {
     groupId: membership.group.id,
     groupName: membership.group.name,
     currentVersion: template.version,
-    objectives: template.objectives.map((objective) => objective.content),
-    freeSpaceOrdinal: freeSpaceObjective?.ordinal ?? 12
+    freeSpaceObjective: freeSpaceObjective?.content ?? "Free space",
+    objectives: regularObjectives.map((objective) => objective.content),
+    freeSpaceMarkedByDefault: template.freeSpaceMarkedByDefault
   };
 }
 
@@ -145,6 +169,7 @@ export async function saveGroupTemplateForGroup(userId: string, groupId: string,
         groupId,
         version: (latestTemplate?.version ?? 0) + 1,
         isActive: true,
+        freeSpaceMarkedByDefault: input.freeSpaceMarkedByDefault,
         objectives: {
           create: objectives
         }
@@ -169,9 +194,10 @@ export async function saveGroupTemplateForGroup(userId: string, groupId: string,
       templateId: template.id,
       version: template.version,
       objectiveCount: template.objectives.length,
-      freeSpaceOrdinal: input.freeSpaceOrdinal
+      freeSpacePosition: FREE_SPACE_POSITION,
+      freeSpaceMarkedByDefault: template.freeSpaceMarkedByDefault
     };
   });
 }
 
-export { GROUP_OBJECTIVE_COUNT, ZodError };
+export { GROUP_OBJECTIVE_COUNT, FREE_SPACE_POSITION, REGULAR_OBJECTIVE_COUNT, ZodError };

@@ -1,6 +1,13 @@
 # Changelog
 
-## 0.4.3 (in progress)
+## 0.4.4 (in progress)
+- Board template UX now uses a dedicated free-space objective input and 24 regular objectives.
+- Free-space objective is now always placed in the center tile when generating player boards.
+- Added admin control for whether free space is pre-marked by default on newly generated boards.
+- Free-space tile can now be toggled during play when not pre-marked, matching normal tile behavior.
+- Board grid now uses consistent tile sizing for cleaner visual layout.
+
+## 0.4.3
 - Fixed auth resilience when local DB is unavailable so credential sign-in no longer redirects to raw `/api/auth/error` pages.
 - Register API now returns structured JSON for temporary backend failures instead of default HTML 500 responses.
 - Register form now handles non-JSON error responses safely and shows a friendly fallback message.

@@ -38,26 +38,26 @@ function Stop-DevServerProcess() {
     return
   }
 
-  $pids = $connections | Select-Object -ExpandProperty OwningProcess -Unique
+  $processIds = $connections | Select-Object -ExpandProperty OwningProcess -Unique
 
-  foreach ($pid in $pids) {
-    if ($pid -eq $PID) {
+  foreach ($processId in $processIds) {
+    if ($processId -eq $PID) {
       continue
     }
 
     try {
-      $process = Get-Process -Id $pid -ErrorAction Stop
+      $process = Get-Process -Id $processId -ErrorAction Stop
     } catch {
       continue
     }
 
     if ($process.ProcessName -notin @("node", "npm", "npx")) {
-      Write-Host "Skipping PID $pid ($($process.ProcessName)); not a Node.js process on port $devPort."
+      Write-Host "Skipping PID $processId ($($process.ProcessName)); not a Node.js process on port $devPort."
       continue
     }
 
-    Write-Host "Stopping PID $pid ($($process.ProcessName)) on port $devPort..."
-    Stop-Process -Id $pid -Force -ErrorAction Stop
+    Write-Host "Stopping PID $processId ($($process.ProcessName)) on port $devPort..."
+    Stop-Process -Id $processId -Force -ErrorAction Stop
   }
 }
 

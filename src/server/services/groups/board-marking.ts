@@ -21,13 +21,6 @@ export class PlayerBoardSquareNotFoundError extends Error {
   }
 }
 
-export class PlayerBoardSquareLockedError extends Error {
-  constructor() {
-    super("Free-space tiles are marked automatically and cannot be changed.");
-    this.name = "PlayerBoardSquareLockedError";
-  }
-}
-
 export type UpdateBoardMarkInput = z.infer<typeof updateBoardMarkSchema>;
 
 export function parseUpdateBoardMarkInput(rawInput: unknown): UpdateBoardMarkInput {
@@ -65,10 +58,6 @@ export async function updatePlayerBoardMark(userId: string, groupId: string, raw
     throw new PlayerBoardSquareNotFoundError();
   }
 
-  if (square.objective.isFreeSpace) {
-    throw new PlayerBoardSquareLockedError();
-  }
-
   const mark = await db.playerMark.upsert({
     where: {
       playerBoardSquareId: square.id
@@ -89,7 +78,7 @@ export async function updatePlayerBoardMark(userId: string, groupId: string, raw
     position: input.position,
     isMarked: mark.isMarked,
     content: square.objective.content,
-    isFreeSpace: false
+    isFreeSpace: square.objective.isFreeSpace
   };
 }
 

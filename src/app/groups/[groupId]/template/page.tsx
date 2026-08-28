@@ -29,8 +29,9 @@ export default async function GroupTemplatePage({ params }: GroupTemplatePagePro
         <h1>Template Editor: {data.groupName}</h1>
         <GroupTemplateForm
           groupId={data.groupId}
+          initialFreeSpaceObjective={data.freeSpaceObjective}
           initialObjectives={data.objectives}
-          initialFreeSpaceOrdinal={data.freeSpaceOrdinal}
+          initialFreeSpaceMarkedByDefault={data.freeSpaceMarkedByDefault}
           currentVersion={data.currentVersion}
         />
         <p>

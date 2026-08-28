@@ -2,8 +2,10 @@ import { MembershipRole } from "@prisma/client";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { db } from "@/server/db/client";
 import {
+  FREE_SPACE_POSITION,
   GroupAccessError,
   GroupForbiddenError,
+  REGULAR_OBJECTIVE_COUNT,
   buildTemplateObjectives,
   getGroupTemplateEditorData,
   parseTemplateInput,
@@ -24,33 +26,37 @@ describe("template-management", () => {
     vi.clearAllMocks();
   });
 
-  it("validates exactly 25 objectives and one free-space index", () => {
+  it("validates free-space objective plus 24 regular objectives", () => {
     const valid = parseTemplateInput({
-      objectives: Array.from({ length: 25 }, (_, i) => `Objective ${i + 1}`),
-      freeSpaceOrdinal: 12
+      freeSpaceObjective: "Free space",
+      objectives: Array.from({ length: 24 }, (_, i) => `Objective ${i + 1}`),
+      freeSpaceMarkedByDefault: true
     });
 
-    expect(valid.objectives).toHaveLength(25);
+    expect(valid.objectives).toHaveLength(REGULAR_OBJECTIVE_COUNT);
 
     expect(() =>
       parseTemplateInput({
-        objectives: Array.from({ length: 24 }, (_, i) => `Objective ${i + 1}`),
-        freeSpaceOrdinal: 12
+        freeSpaceObjective: "Free space",
+        objectives: Array.from({ length: 23 }, (_, i) => `Objective ${i + 1}`),
+        freeSpaceMarkedByDefault: false
       })
     ).toThrow();
   });
 
-  it("builds objective rows with exactly one free-space objective", () => {
+  it("builds objective rows with free-space fixed to center tile", () => {
     const input = {
-      objectives: Array.from({ length: 25 }, (_, i) => `Objective ${i + 1}`),
-      freeSpaceOrdinal: 7
+      freeSpaceObjective: "Center free",
+      objectives: Array.from({ length: 24 }, (_, i) => `Objective ${i + 1}`),
+      freeSpaceMarkedByDefault: false
     };
 
     const objectives = buildTemplateObjectives(input);
 
     expect(objectives).toHaveLength(25);
     expect(objectives.filter((objective) => objective.isFreeSpace)).toHaveLength(1);
-    expect(objectives[7].isFreeSpace).toBe(true);
+    expect(objectives[FREE_SPACE_POSITION].isFreeSpace).toBe(true);
+    expect(objectives[FREE_SPACE_POSITION].content).toBe("Center free");
   });
 
   it("throws access error when requesting editor data outside membership", async () => {
@@ -77,8 +83,9 @@ describe("template-management", () => {
 
     const result = await getGroupTemplateEditorData("user-1", "group-1");
 
-    expect(result.objectives).toHaveLength(25);
-    expect(result.freeSpaceOrdinal).toBe(12);
+    expect(result.objectives).toHaveLength(24);
+    expect(result.freeSpaceObjective).toBe("Free space");
+    expect(result.freeSpaceMarkedByDefault).toBe(false);
     expect(result.currentVersion).toBe(0);
   });
 
@@ -93,7 +100,8 @@ describe("template-management", () => {
           create: vi.fn().mockResolvedValue({
             id: "template-3",
             version: 3,
-            objectives: Array.from({ length: 25 }, (_, index) => ({ ordinal: index }))
+            objectives: Array.from({ length: 25 }, (_, index) => ({ ordinal: index })),
+            freeSpaceMarkedByDefault: true
           })
         },
         group: {
@@ -105,12 +113,14 @@ describe("template-management", () => {
     });
 
     const result = await saveGroupTemplateForGroup("user-1", "group-1", {
-      objectives: Array.from({ length: 25 }, (_, i) => `Objective ${i + 1}`),
-      freeSpaceOrdinal: 12
+      freeSpaceObjective: "Center free",
+      objectives: Array.from({ length: 24 }, (_, i) => `Objective ${i + 1}`),
+      freeSpaceMarkedByDefault: true
     });
 
     expect(result.version).toBe(3);
     expect(result.objectiveCount).toBe(25);
-    expect(result.freeSpaceOrdinal).toBe(12);
+    expect(result.freeSpacePosition).toBe(12);
+    expect(result.freeSpaceMarkedByDefault).toBe(true);
   });
 });

@@ -1,6 +1,6 @@
 import { createHash } from "crypto";
 import { db } from "@/server/db/client";
-import { GROUP_OBJECTIVE_COUNT, GroupAccessError } from "./template-management";
+import { FREE_SPACE_POSITION, GROUP_OBJECTIVE_COUNT, GroupAccessError } from "./template-management";
 
 type TemplateObjective = {
   id: string;
@@ -78,7 +78,7 @@ export function buildDeterministicBoardSquares(objectives: TemplateObjective[], 
   let shuffledIndex = 0;
 
   return Array.from({ length: GROUP_OBJECTIVE_COUNT }, (_, position) => {
-    const objective = position === freeSpaceObjective.ordinal ? freeSpaceObjective : shuffledObjectives[shuffledIndex++];
+    const objective = position === FREE_SPACE_POSITION ? freeSpaceObjective : shuffledObjectives[shuffledIndex++];
 
     return {
       position,
@@ -100,7 +100,7 @@ function mapPlayerBoard(record: PlayerBoardRecord) {
       position: square.position,
       content: square.objective.content,
       isFreeSpace: square.objective.isFreeSpace,
-      isMarked: square.mark?.isMarked ?? square.objective.isFreeSpace
+      isMarked: square.mark?.isMarked ?? false
     }))
   } satisfies PlayerBoardState;
 }
@@ -228,7 +228,9 @@ export async function getOrCreatePlayerBoardForGroup(userId: string, groupId: st
           id: true,
           name: true,
           currentTemplate: {
-            include: {
+            select: {
+              id: true,
+              freeSpaceMarkedByDefault: true,
               objectives: {
                 orderBy: {
                   ordinal: "asc"
@@ -256,7 +258,7 @@ export async function getOrCreatePlayerBoardForGroup(userId: string, groupId: st
             create: boardSquares.map((square) => ({
               position: square.position,
               objectiveId: square.objectiveId,
-              ...(square.isFreeSpace
+              ...(square.isFreeSpace && group.currentTemplate.freeSpaceMarkedByDefault
                 ? {
                     mark: {
                       create: {

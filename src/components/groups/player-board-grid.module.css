@@ -1,0 +1,37 @@
+.boardGridTable {
+  width: min(100%, 780px);
+  table-layout: fixed;
+  border-collapse: collapse;
+  margin: 0;
+}
+
+.boardGridCell {
+  width: 20%;
+  border: 1px solid #d4d4d8;
+  padding: 0;
+  vertical-align: top;
+}
+
+.boardGridButton {
+  width: 100%;
+  min-height: 120px;
+  height: 100%;
+  padding: 0.75rem;
+  text-align: left;
+  border: 0;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.boardGridButton[aria-pressed="true"] {
+  background: #e7f7ed;
+}
+
+.boardGridButton:disabled {
+  cursor: wait;
+  opacity: 0.75;
+}

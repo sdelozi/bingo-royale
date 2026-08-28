@@ -16,7 +16,7 @@ function createSquares() {
     position: index,
     content: `Objective ${index + 1}`,
     isFreeSpace: index === 12,
-    isMarked: index === 12
+    isMarked: false
   }));
 }
 
@@ -83,12 +83,12 @@ describe("PlayerBoardGrid", () => {
     fetchMock.mockRestore();
   });
 
-  it("renders the free-space tile as locked and marked", () => {
+  it("renders the free-space tile as a normal toggleable tile", () => {
     render(<PlayerBoardGrid groupId="group-1" squares={createSquares()} />);
 
     const freeSpaceButton = screen.getByRole("button", { name: /Free space/i });
 
-    expect(freeSpaceButton).toBeDisabled();
-    expect(freeSpaceButton).toHaveAttribute("aria-pressed", "true");
+    expect(freeSpaceButton).not.toBeDisabled();
+    expect(freeSpaceButton).toHaveAttribute("aria-pressed", "false");
   });
 });

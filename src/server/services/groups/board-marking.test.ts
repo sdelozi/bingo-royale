@@ -2,7 +2,6 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { db } from "@/server/db/client";
 import { GroupBoardTemplateMissingError, getOrCreatePlayerBoardForGroup } from "./player-board";
 import {
-  PlayerBoardSquareLockedError,
   PlayerBoardSquareNotFoundError,
   parseUpdateBoardMarkInput,
   updatePlayerBoardMark
@@ -77,7 +76,7 @@ describe("board-marking", () => {
     expect(result).toMatchObject({ position: 3, isMarked: true, content: "Take a selfie" });
   });
 
-  it("rejects free-space mark changes", async () => {
+  it("allows free-space mark changes", async () => {
     vi.mocked(getOrCreatePlayerBoardForGroup).mockResolvedValueOnce({
       boardId: "board-1",
       groupId: "group-1",
@@ -91,15 +90,16 @@ describe("board-marking", () => {
         isFreeSpace: true,
         content: "Free space"
       },
-      mark: {
-        id: "mark-12",
-        isMarked: true
-      }
+      mark: null
+    } as never);
+    vi.mocked(db.playerMark.upsert).mockResolvedValueOnce({
+      isMarked: true
     } as never);
 
-    await expect(updatePlayerBoardMark("user-1", "group-1", { position: 12, isMarked: false })).rejects.toBeInstanceOf(
-      PlayerBoardSquareLockedError
-    );
+    const result = await updatePlayerBoardMark("user-1", "group-1", { position: 12, isMarked: true });
+
+    expect(result.isFreeSpace).toBe(true);
+    expect(result.isMarked).toBe(true);
   });
 
   it("throws when the requested square does not exist", async () => {

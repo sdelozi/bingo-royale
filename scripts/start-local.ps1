@@ -34,6 +34,23 @@ function Invoke-CommandChecked([scriptblock]$Command, [string]$FailureMessage) {
   }
 }
 
+function Invoke-CommandWithRetry([scriptblock]$Command, [string]$FailureMessage, [int]$Attempts = 3) {
+  for ($attempt = 1; $attempt -le $Attempts; $attempt++) {
+    & $Command
+
+    if ($LASTEXITCODE -eq 0) {
+      return
+    }
+
+    if ($attempt -lt $Attempts) {
+      Write-Host "Command failed (attempt $attempt/$Attempts). Retrying..."
+      Start-Sleep -Seconds 1
+    }
+  }
+
+  throw $FailureMessage
+}
+
 function Get-EnvValue([string]$Path, [string]$Key) {
   if (-not (Test-Path $Path)) {
     return $null
@@ -178,7 +195,9 @@ Invoke-CommandChecked { docker compose up -d postgres } "docker compose up faile
 Wait-ForPostgres
 
 Write-Step "Generating Prisma client"
-Invoke-CommandChecked { npm run db:generate } "Prisma client generation failed."
+Invoke-CommandWithRetry {
+  npm run db:generate
+} "Prisma client generation failed after retries. If this persists, stop active Node.js processes and try again."
 
 if ((Test-Path $migrationsPath) -and (Get-ChildItem -Path $migrationsPath -Directory | Measure-Object).Count -gt 0) {
   Write-Step "Applying committed Prisma migrations"

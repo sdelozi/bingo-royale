@@ -4,6 +4,7 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import type { PlayerBoardSquareState } from "@/server/services/groups/player-board";
+import styles from "./player-board-grid.module.css";
 
 type PlayerBoardGridProps = {
   groupId: string;
@@ -20,7 +21,7 @@ export function PlayerBoardGrid({ groupId, squares }: PlayerBoardGridProps) {
     const previousSquares = boardSquares;
     const square = previousSquares.find((item) => item.position === position);
 
-    if (!square || square.isFreeSpace || pendingPosition !== null) {
+    if (!square || pendingPosition !== null) {
       return;
     }
 
@@ -73,7 +74,7 @@ export function PlayerBoardGrid({ groupId, squares }: PlayerBoardGridProps) {
     <section>
       {error ? <p>{error}</p> : null}
 
-      <table>
+      <table className={styles.boardGridTable}>
         <tbody>
           {rows.map((row, rowIndex) => (
             <tr key={rowIndex}>
@@ -81,12 +82,13 @@ export function PlayerBoardGrid({ groupId, squares }: PlayerBoardGridProps) {
                 const isPending = pendingPosition === square.position;
 
                 return (
-                  <td key={square.position}>
+                  <td key={square.position} className={styles.boardGridCell}>
                     <button
+                      className={styles.boardGridButton}
                       type="button"
                       onClick={() => toggleSquare(square.position)}
                       aria-pressed={square.isMarked}
-                      disabled={square.isFreeSpace || isPending || pendingPosition !== null}
+                      disabled={isPending || pendingPosition !== null}
                     >
                       <strong>{square.isFreeSpace ? "Free space" : `Tile ${square.position + 1}`}</strong>
                       <br />

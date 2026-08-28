@@ -34,7 +34,7 @@ describe("player-board", () => {
   });
 
   it("builds deterministic board squares and keeps the free-space position fixed", () => {
-    const objectives = createTemplateObjectives(12);
+    const objectives = createTemplateObjectives(7);
 
     const firstLayout = buildDeterministicBoardSquares(objectives, "group-1:user-1:template-1");
     const secondLayout = buildDeterministicBoardSquares(objectives, "group-1:user-1:template-1");
@@ -43,10 +43,24 @@ describe("player-board", () => {
     expect(secondLayout.map((square) => square.objectiveId)).toEqual(firstLayout.map((square) => square.objectiveId));
     expect(firstLayout[12]).toMatchObject({
       position: 12,
-      objectiveId: "objective-13",
+      objectiveId: "objective-8",
       isFreeSpace: true
     });
     expect(firstLayout.filter((square) => square.isFreeSpace)).toHaveLength(1);
+  });
+
+  it("builds different shuffles for different player seeds", () => {
+    const objectives = createTemplateObjectives(12);
+
+    const firstPlayerLayout = buildDeterministicBoardSquares(objectives, "group-1:user-1:template-1");
+    const secondPlayerLayout = buildDeterministicBoardSquares(objectives, "group-1:user-2:template-1");
+
+    const firstSequence = firstPlayerLayout.map((square) => square.objectiveId).join("|");
+    const secondSequence = secondPlayerLayout.map((square) => square.objectiveId).join("|");
+
+    expect(firstSequence).not.toBe(secondSequence);
+    expect(firstPlayerLayout[12].isFreeSpace).toBe(true);
+    expect(secondPlayerLayout[12].isFreeSpace).toBe(true);
   });
 
   it("throws access error when the user is not a group member", async () => {
@@ -100,9 +114,7 @@ describe("player-board", () => {
             content: "Objective 2",
             isFreeSpace: true
           },
-          mark: {
-            isMarked: false
-          }
+          mark: null
         }
       ]
     } as never);
@@ -111,6 +123,7 @@ describe("player-board", () => {
 
     expect(result.boardId).toBe("board-1");
     expect(result.groupName).toBe("Trip");
+    expect(result.squares[1].isMarked).toBe(false);
     expect(db.$transaction).not.toHaveBeenCalled();
   });
 

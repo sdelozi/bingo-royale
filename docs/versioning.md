@@ -1,8 +1,8 @@
 # Versioning
 
 ## Current baseline
-- Current development version: 0.4.3
-- Rationale: core work through Epic 4 Story 3 is complete, plus stability fixes for auth/register behavior during local database outages.
+- Current development version: 0.4.4
+- Rationale: core work through Epic 4 Story 3 is complete, plus manual-testing-driven board/template refinements (center free-space, admin default-mark toggle, and board tile consistency).
 
 ## Rules until first release
 - Stay on major version 0 until first release.
