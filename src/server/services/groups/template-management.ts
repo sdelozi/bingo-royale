@@ -41,6 +41,12 @@ export class TemplateEditConfirmationRequiredError extends Error {
 
 export type SaveTemplateInput = z.infer<typeof saveTemplateSchema>;
 
+type TemplateObjectiveSnapshot = {
+  id: string;
+  ordinal: number;
+  content: string;
+};
+
 export function parseTemplateInput(rawInput: unknown): SaveTemplateInput {
   return saveTemplateSchema.parse(rawInput);
 }
@@ -69,6 +75,63 @@ export function buildTemplateObjectives(input: SaveTemplateInput) {
       isFreeSpace: false
     };
   });
+}
+
+export function getChangedObjectiveOrdinals(
+  previousObjectives: TemplateObjectiveSnapshot[],
+  nextObjectives: TemplateObjectiveSnapshot[]
+) {
+  const previousByOrdinal = new Map(previousObjectives.map((objective) => [objective.ordinal, objective]));
+
+  return nextObjectives
+    .filter((objective) => {
+      const previous = previousByOrdinal.get(objective.ordinal);
+
+      if (!previous) {
+        return true;
+      }
+
+      return previous.content !== objective.content;
+    })
+    .map((objective) => objective.ordinal);
+}
+
+async function syncExistingBoardsForTemplateEdit(
+  tx: Parameters<Parameters<typeof db.$transaction>[0]>[0],
+  groupId: string,
+  previousObjectives: TemplateObjectiveSnapshot[],
+  nextObjectives: TemplateObjectiveSnapshot[]
+) {
+  const previousByOrdinal = new Map(previousObjectives.map((objective) => [objective.ordinal, objective]));
+  const changedOrdinals = new Set(getChangedObjectiveOrdinals(previousObjectives, nextObjectives));
+  let remappedSquareCount = 0;
+
+  for (const nextObjective of nextObjectives) {
+    const previousObjective = previousByOrdinal.get(nextObjective.ordinal);
+
+    if (!previousObjective || previousObjective.id === nextObjective.id) {
+      continue;
+    }
+
+    const remapResult = await tx.playerBoardSquare.updateMany({
+      where: {
+        playerBoard: {
+          groupId
+        },
+        objectiveId: previousObjective.id
+      },
+      data: {
+        objectiveId: nextObjective.id
+      }
+    });
+
+    remappedSquareCount += remapResult.count;
+  }
+
+  return {
+    changedOrdinals: Array.from(changedOrdinals).sort((left, right) => left - right),
+    remappedSquareCount
+  };
 }
 
 export async function getGroupTemplateEditorData(userId: string, groupId: string) {
@@ -168,15 +231,36 @@ export async function saveGroupTemplateForGroup(userId: string, groupId: string,
   }
 
   return db.$transaction(async (tx) => {
-    const latestTemplate = await tx.boardTemplate.findFirst({
-      where: { groupId },
-      orderBy: {
-        version: "desc"
-      },
-      select: {
-        version: true
-      }
-    });
+    const [latestTemplate, activeTemplate] = await Promise.all([
+      tx.boardTemplate.findFirst({
+        where: { groupId },
+        orderBy: {
+          version: "desc"
+        },
+        select: {
+          version: true
+        }
+      }),
+      tx.boardTemplate.findFirst({
+        where: {
+          groupId,
+          isActive: true
+        },
+        select: {
+          id: true,
+          objectives: {
+            orderBy: {
+              ordinal: "asc"
+            },
+            select: {
+              id: true,
+              ordinal: true,
+              content: true
+            }
+          }
+        }
+      })
+    ]);
 
     await tx.boardTemplate.updateMany({
       where: {
@@ -207,6 +291,31 @@ export async function saveGroupTemplateForGroup(userId: string, groupId: string,
       }
     });
 
+    let syncSummary: {
+      changedOrdinals: number[];
+      remappedSquareCount: number;
+    } | null = null;
+
+    if (activeTemplate && boardCount > 0) {
+      syncSummary = await syncExistingBoardsForTemplateEdit(tx, groupId, activeTemplate.objectives, template.objectives);
+      await tx.boardEditEvent.create({
+        data: {
+          groupId,
+          actorUserId: userId,
+          templateFromId: activeTemplate.id,
+          templateToId: template.id,
+          warningAcked: input.warningAcknowledged,
+          metadataJson: JSON.stringify({
+            changedOrdinals: syncSummary.changedOrdinals,
+            remappedSquareCount: syncSummary.remappedSquareCount,
+            markStatePreservedOnReplacedObjectives: true,
+            affectedBoardCount: boardCount,
+            statsRecomputeRequired: syncSummary.changedOrdinals.length > 0
+          })
+        }
+      });
+    }
+
     await tx.group.update({
       where: { id: groupId },
       data: {
@@ -219,7 +328,11 @@ export async function saveGroupTemplateForGroup(userId: string, groupId: string,
       version: template.version,
       objectiveCount: template.objectives.length,
       freeSpacePosition: FREE_SPACE_POSITION,
-      freeSpaceMarkedByDefault: template.freeSpaceMarkedByDefault
+      freeSpaceMarkedByDefault: template.freeSpaceMarkedByDefault,
+      affectedBoardCount: boardCount,
+      changedObjectiveCount: syncSummary?.changedOrdinals.length ?? 0,
+      preservedMarkedReplacements: true,
+      statsRecomputeRequired: (syncSummary?.changedOrdinals.length ?? 0) > 0
     };
   });
 }

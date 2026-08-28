@@ -9,6 +9,10 @@
 - E5-S3 board visibility: added a read-only member board route with group-membership access control.
 - E6-S1 safety guard: template editor now shows a warning modal before post-start saves.
 - Saving template edits after boards exist now requires explicit confirmation in both UI and API.
+- E6-S2 mark preservation: existing player board layouts now stay stable when templates are edited mid-game.
+- Replaced objectives now preserve each square's existing mark state (marked stays marked, unmarked stays unmarked).
+- E6-S3 auditing: template edits after game start now record board edit events with actor, template transition, and impact metadata.
+- Template save responses now include affected-board and recomputation metadata for downstream leaderboard freshness handling.
 
 ## 0.4.4
 - Board template UX now uses a dedicated free-space objective input and 24 regular objectives.
