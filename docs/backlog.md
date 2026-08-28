@@ -107,9 +107,10 @@ Priority key:
 
 ## Epic E8: Quality, Security, and Operations (P1)
 ### Story E8-S1: Test coverage
-- [ ] T49 Unit tests for shuffle, bingo, blackout, score (TODO)
+- [x] T49 Unit tests for shuffle, bingo, blackout, score (DONE)
 - [ ] T50 Unit tests for mid-game edit mark-preservation rules (TODO)
 - [ ] T51 Integration tests for auth/group/join/play/leaderboard (TODO)
+- [ ] T61 Require test additions for all behavior-changing feature work (TODO)
 
 ### Story E8-S2: Security and resilience
 - [ ] T52 Add authorization checks per group/resource (TODO)

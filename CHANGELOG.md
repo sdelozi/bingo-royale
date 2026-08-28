@@ -28,6 +28,8 @@ and this project adheres to Semantic Versioning where applicable.
 - Group creation API and groups page UI with creator auto-assigned as admin.
 - Unique invite-code and share-token generation for new groups.
 - Group list view showing role, invite code, and share link token path.
+- Test baseline for middleware auth redirects, auth register API route, group service logic, and groups API route.
+- Testing policy document and PR checklist item requiring tests for behavior-changing work.
 
 ### Changed
 - Planning docs expanded with roadmap, backlog, and ADR-0001.

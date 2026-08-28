@@ -75,5 +75,8 @@ function generateShareToken(): string {
 }
 
 function isUniqueConstraintError(error: unknown): boolean {
-  return error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002";
+  return (
+    error instanceof Prisma.PrismaClientKnownRequestError ||
+    (typeof error === "object" && error !== null && "code" in error && error.code === "P2002")
+  );
 }

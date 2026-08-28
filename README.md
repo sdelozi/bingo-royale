@@ -11,6 +11,7 @@ Foundation and auth baseline work are in progress.
 - ADR-0001 (platform + auth): [docs/adr/0001-platform-and-auth.md](docs/adr/0001-platform-and-auth.md)
 - Architecture notes: [docs/architecture.md](docs/architecture.md)
 - Local setup: [docs/development.md](docs/development.md)
+- Testing policy: [docs/testing-policy.md](docs/testing-policy.md)
 
 ## v1 Snapshot
 - Web app first (5x5 boards)
