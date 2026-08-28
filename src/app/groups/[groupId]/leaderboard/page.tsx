@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
+import { GroupLeaderboardLiveTable } from "@/components/groups/group-leaderboard-live-table";
 import { getCurrentUser } from "@/server/auth/session";
 import { getGroupLeaderboardForUser } from "@/server/services/groups/get-group-leaderboard";
 import { GroupAccessError } from "@/server/services/groups/template-management";
@@ -23,37 +24,11 @@ export default async function GroupLeaderboardPage({ params }: GroupLeaderboardP
     return (
       <main>
         <h1>{leaderboard.groupName} leaderboard</h1>
-        <p>Last updated: {leaderboard.generatedAt.toLocaleString()}</p>
-        <p>
-          <Link href={`/groups/${leaderboard.groupId}/leaderboard`}>Refresh leaderboard</Link>
-        </p>
-
-        <table>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Role</th>
-              <th>Score</th>
-              <th>Bingos</th>
-              <th>Blackout</th>
-              <th>Board</th>
-            </tr>
-          </thead>
-          <tbody>
-            {leaderboard.rows.map((row) => (
-              <tr key={row.userId}>
-                <td>{row.displayName}</td>
-                <td>{row.role}</td>
-                <td>{row.score}</td>
-                <td>{row.bingoCount}</td>
-                <td>{row.blackout ? "Yes" : "No"}</td>
-                <td>
-                  {row.boardHref ? <Link href={row.boardHref}>View board</Link> : "No board yet"}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <GroupLeaderboardLiveTable
+          groupId={leaderboard.groupId}
+          initialRows={leaderboard.rows}
+          initialGeneratedAt={leaderboard.generatedAt.toISOString()}
+        />
 
         <p>
           <Link href={`/groups/${leaderboard.groupId}`}>Back to group</Link>

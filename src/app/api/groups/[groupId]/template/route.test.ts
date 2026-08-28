@@ -130,4 +130,19 @@ describe("POST /api/groups/[groupId]/template", () => {
     expect(saveGroupTemplateForGroup).toHaveBeenCalledWith("user-1", "group-1", payload);
     expect(response.status).toBe(200);
   });
+
+  it("returns 500 on unexpected failures", async () => {
+    vi.mocked(getAuthSession).mockResolvedValueOnce({ user: { id: "user-1" } } as never);
+    vi.mocked(saveGroupTemplateForGroup).mockRejectedValueOnce(new Error("db down"));
+
+    const response = await POST(
+      new Request("http://localhost/api/groups/group-1/template", {
+        method: "POST",
+        body: JSON.stringify({})
+      }),
+      { params: { groupId: "group-1" } }
+    );
+
+    expect(response.status).toBe(500);
+  });
 });

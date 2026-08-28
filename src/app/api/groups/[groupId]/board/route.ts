@@ -2,17 +2,48 @@ import { NextResponse } from "next/server";
 import { getAuthSession } from "@/server/auth/session";
 import {
   GroupAccessError,
-  GroupBoardTemplateMissingError,
   PlayerBoardSquareNotFoundError,
   ZodError,
   updatePlayerBoardMark
 } from "@/server/services/groups/board-marking";
+import { GroupBoardTemplateMissingError, getOrCreatePlayerBoardForGroup } from "@/server/services/groups/player-board";
 
 type Params = {
   params: {
     groupId: string;
   };
 };
+
+export async function GET(_request: Request, { params }: Params) {
+  const session = await getAuthSession();
+  const userId = session?.user?.id;
+
+  if (!userId) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  try {
+    const board = await getOrCreatePlayerBoardForGroup(userId, params.groupId);
+
+    return NextResponse.json(
+      {
+        ...board,
+        generatedAt: new Date()
+      },
+      { status: 200 }
+    );
+  } catch (error) {
+    if (error instanceof GroupAccessError) {
+      return NextResponse.json({ error: "Board not found." }, { status: 404 });
+    }
+
+    if (error instanceof GroupBoardTemplateMissingError) {
+      return NextResponse.json({ error: error.message }, { status: 409 });
+    }
+
+    return NextResponse.json({ error: "Unable to load board right now." }, { status: 500 });
+  }
+}
 
 export async function PATCH(request: Request, { params }: Params) {
   const session = await getAuthSession();

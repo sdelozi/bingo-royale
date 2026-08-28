@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
-import { PlayerBoardGrid } from "@/components/groups/player-board-grid";
+import { GroupBoardLivePanel } from "@/components/groups/group-board-live-panel";
 import { getCurrentUser } from "@/server/auth/session";
 import { GroupAccessError } from "@/server/services/groups/template-management";
 import {
@@ -28,13 +28,14 @@ export default async function GroupBoardPage({ params }: GroupBoardPageProps) {
       <main>
         <h1>Your board: {board.groupName}</h1>
         <p>This layout is generated once per player and stays stable for the trip.</p>
-        <p>
-          Score: {board.stats.score} | Bingos: {board.stats.bingoCount} | Blackout: {board.stats.blackout ? "Yes" : "No"}
-        </p>
+        <GroupBoardLivePanel
+          groupId={board.groupId}
+          initialSquares={board.squares}
+          initialStats={board.stats}
+          initialGeneratedAt={new Date().toISOString()}
+        />
 
-        <PlayerBoardGrid groupId={board.groupId} squares={board.squares} />
-
-        <p>Mark your own board here. Leaderboard views ship next.</p>
+        <p>Mark your own board here and watch freshness indicators while polling is active.</p>
         <p>
           <Link href={`/groups/${board.groupId}`}>Back to group</Link>
         </p>

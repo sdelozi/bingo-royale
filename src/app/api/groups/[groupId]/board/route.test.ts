@@ -1,12 +1,13 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { getAuthSession } from "@/server/auth/session";
 import {
-  GroupBoardTemplateMissingError,
+  GroupAccessError,
   PlayerBoardSquareNotFoundError,
   ZodError,
   updatePlayerBoardMark
 } from "@/server/services/groups/board-marking";
-import { PATCH } from "./route";
+import { GroupBoardTemplateMissingError, getOrCreatePlayerBoardForGroup } from "@/server/services/groups/player-board";
+import { GET, PATCH } from "./route";
 
 vi.mock("@/server/auth/session", () => ({
   getAuthSession: vi.fn()
@@ -15,12 +16,91 @@ vi.mock("@/server/auth/session", () => ({
 vi.mock("@/server/services/groups/board-marking", () => ({
   updatePlayerBoardMark: vi.fn(),
   GroupAccessError: class GroupAccessError extends Error {},
-  GroupBoardTemplateMissingError: class GroupBoardTemplateMissingError extends Error {},
   PlayerBoardSquareNotFoundError: class PlayerBoardSquareNotFoundError extends Error {},
   ZodError: class ZodError extends Error {
     issues = [{ message: "Invalid mark update payload." }];
   }
 }));
+
+vi.mock("@/server/services/groups/player-board", () => ({
+  getOrCreatePlayerBoardForGroup: vi.fn(),
+  GroupBoardTemplateMissingError: class GroupBoardTemplateMissingError extends Error {}
+}));
+
+describe("GET /api/groups/[groupId]/board", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it("returns 401 for unauthenticated requests", async () => {
+    vi.mocked(getAuthSession).mockResolvedValueOnce(null as never);
+
+    const response = await GET(new Request("http://localhost/api/groups/group-1/board"), {
+      params: { groupId: "group-1" }
+    });
+
+    expect(response.status).toBe(401);
+  });
+
+  it("returns 404 when board access is denied", async () => {
+    vi.mocked(getAuthSession).mockResolvedValueOnce({ user: { id: "user-1" } } as never);
+    vi.mocked(getOrCreatePlayerBoardForGroup).mockRejectedValueOnce(new GroupAccessError() as never);
+
+    const response = await GET(new Request("http://localhost/api/groups/group-1/board"), {
+      params: { groupId: "group-1" }
+    });
+
+    expect(response.status).toBe(404);
+  });
+
+  it("returns 409 when board template has not been configured", async () => {
+    vi.mocked(getAuthSession).mockResolvedValueOnce({ user: { id: "user-1" } } as never);
+    vi.mocked(getOrCreatePlayerBoardForGroup).mockRejectedValueOnce(
+      new GroupBoardTemplateMissingError("A board template must be configured before player boards can be generated.") as never
+    );
+
+    const response = await GET(new Request("http://localhost/api/groups/group-1/board"), {
+      params: { groupId: "group-1" }
+    });
+
+    expect(response.status).toBe(409);
+  });
+
+  it("returns 500 on unexpected failures", async () => {
+    vi.mocked(getAuthSession).mockResolvedValueOnce({ user: { id: "user-1" } } as never);
+    vi.mocked(getOrCreatePlayerBoardForGroup).mockRejectedValueOnce(new Error("db down") as never);
+
+    const response = await GET(new Request("http://localhost/api/groups/group-1/board"), {
+      params: { groupId: "group-1" }
+    });
+
+    expect(response.status).toBe(500);
+  });
+
+  it("returns board payload with generated timestamp", async () => {
+    vi.mocked(getAuthSession).mockResolvedValueOnce({ user: { id: "user-1" } } as never);
+    vi.mocked(getOrCreatePlayerBoardForGroup).mockResolvedValueOnce({
+      boardId: "board-1",
+      groupId: "group-1",
+      groupName: "Trip",
+      createdAt: new Date("2026-08-28T00:00:00.000Z"),
+      squares: [],
+      stats: {
+        score: 3,
+        bingoCount: 1,
+        blackout: false
+      }
+    } as never);
+
+    const response = await GET(new Request("http://localhost/api/groups/group-1/board"), {
+      params: { groupId: "group-1" }
+    });
+
+    expect(response.status).toBe(200);
+    const body = (await response.json()) as { generatedAt?: string };
+    expect(body.generatedAt).toBeDefined();
+  });
+});
 
 describe("PATCH /api/groups/[groupId]/board", () => {
   beforeEach(() => {
@@ -104,5 +184,20 @@ describe("PATCH /api/groups/[groupId]/board", () => {
 
     expect(updatePlayerBoardMark).toHaveBeenCalledWith("user-1", "group-1", payload);
     expect(response.status).toBe(200);
+  });
+
+  it("returns 500 for unexpected failures", async () => {
+    vi.mocked(getAuthSession).mockResolvedValueOnce({ user: { id: "user-1" } } as never);
+    vi.mocked(updatePlayerBoardMark).mockRejectedValueOnce(new Error("db down"));
+
+    const response = await PATCH(
+      new Request("http://localhost/api/groups/group-1/board", {
+        method: "PATCH",
+        body: JSON.stringify({ position: 4, isMarked: true })
+      }),
+      { params: { groupId: "group-1" } }
+    );
+
+    expect(response.status).toBe(500);
   });
 });

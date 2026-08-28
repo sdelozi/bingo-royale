@@ -97,8 +97,8 @@ Priority key:
 
 ## Epic E7: Sync Strategy and Future Realtime Upgrade Path (P1)
 ### Story E7-S1: Polling v1
-- [ ] T44 Implement polling for leaderboard/board freshness (TODO)
-- [ ] T45 Add configurable polling intervals and backoff (TODO)
+- [x] T44 Implement polling for leaderboard/board freshness (DONE)
+- [x] T45 Add configurable polling intervals and backoff (DONE)
 
 ### Story E7-S2: Transport abstraction for future websockets
 - [ ] T46 Introduce sync service interface abstracting transport (TODO)

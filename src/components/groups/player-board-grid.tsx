@@ -2,7 +2,7 @@
 
 import React from "react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { PlayerBoardSquareState } from "@/server/services/groups/player-board";
 import styles from "./player-board-grid.module.css";
 
@@ -16,6 +16,12 @@ export function PlayerBoardGrid({ groupId, squares }: PlayerBoardGridProps) {
   const [boardSquares, setBoardSquares] = useState(squares);
   const [pendingPosition, setPendingPosition] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (pendingPosition === null) {
+      setBoardSquares(squares);
+    }
+  }, [pendingPosition, squares]);
 
   async function toggleSquare(position: number) {
     const previousSquares = boardSquares;

@@ -196,7 +196,7 @@ describe("template-management", () => {
     expect(result.freeSpaceMarkedByDefault).toBe(true);
     expect(result.affectedBoardCount).toBe(2);
     expect(result.changedObjectiveCount).toBe(1);
-    expect(result.preservedMarkedReplacements).toBe(true);
+    expect(result.replacedObjectiveMarkStatePolicy).toBe("preserve");
     expect(result.statsRecomputeRequired).toBe(true);
   });
 });

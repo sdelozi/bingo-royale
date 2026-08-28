@@ -54,4 +54,15 @@ describe("GET /api/groups/[groupId]/leaderboard", () => {
 
     expect(response.status).toBe(404);
   });
+
+  it("returns 500 for unexpected failures", async () => {
+    vi.mocked(getAuthSession).mockResolvedValueOnce({ user: { id: "user-1" } } as never);
+    vi.mocked(getGroupLeaderboardForUser).mockRejectedValueOnce(new Error("db down"));
+
+    const response = await GET(new Request("http://localhost/api/groups/group-1/leaderboard"), {
+      params: { groupId: "group-1" }
+    });
+
+    expect(response.status).toBe(500);
+  });
 });
