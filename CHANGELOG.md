@@ -5,6 +5,10 @@
 - Template save API and service validation now enforce complete templates with exactly one free-space.
 - Group detail page now links admins to template management.
 - Added coverage for template-management service and template API route behavior.
+- Fixed create-group form reset crash after successful submission.
+- Create-group success state now shows an immediate full share link instead of token-only output.
+- Template save confirmation no longer exposes internal version number in success copy.
+- Added component regression tests for create-group and template form submission UX.
 
 ## 0.3.4
 - Fixed join form runtime crash after successful invite-code submit.

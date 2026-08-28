@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -7,6 +8,7 @@ type CreatedGroup = {
   name: string;
   inviteCode: string;
   shareToken: string | null;
+  shareLink: string | null;
 };
 
 export function CreateGroupForm() {
@@ -17,10 +19,11 @@ export function CreateGroupForm() {
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    const form = event.currentTarget;
     setIsSubmitting(true);
     setError(null);
 
-    const formData = new FormData(event.currentTarget);
+    const formData = new FormData(form);
     const name = String(formData.get("name") ?? "").trim();
 
     const response = await fetch("/api/groups", {
@@ -39,14 +42,17 @@ export function CreateGroupForm() {
       return;
     }
 
+    const shareLink = data.shareToken ? `${window.location.origin}/join/${data.shareToken}` : null;
+
     setCreatedGroup({
       name: data.name,
       inviteCode: data.inviteCode,
-      shareToken: data.shareToken
+      shareToken: data.shareToken,
+      shareLink
     });
 
     setIsSubmitting(false);
-    event.currentTarget.reset();
+    form.reset();
     router.refresh();
   }
 
@@ -72,7 +78,7 @@ export function CreateGroupForm() {
         <div>
           <p>Created: {createdGroup.name}</p>
           <p>Invite code: {createdGroup.inviteCode}</p>
-          <p>Share token: {createdGroup.shareToken ?? "Not available"}</p>
+          <p>Share link: {createdGroup.shareLink ?? "Not available"}</p>
         </div>
       ) : null}
     </section>
