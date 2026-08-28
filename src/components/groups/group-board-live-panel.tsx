@@ -1,9 +1,10 @@
 "use client";
 
 import React from "react";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { PlayerBoardSquareState } from "@/server/services/groups/player-board";
-import { getDefaultPollingConfig, getNextPollDelay } from "@/lib/polling";
+import { fetchGroupBoardSnapshot } from "@/lib/sync/group-sync-drivers";
+import { createPollingSyncTransport } from "@/lib/sync/transport";
 import { PlayerBoardGrid } from "./player-board-grid";
 
 type GroupBoardLivePanelProps = {
@@ -17,93 +18,51 @@ type GroupBoardLivePanelProps = {
   };
 };
 
-type BoardResponse = {
-  generatedAt: string;
-  squares: PlayerBoardSquareState[];
-  stats: {
-    score: number;
-    bingoCount: number;
-    blackout: boolean;
-  };
-  error?: string;
-};
-
 export function GroupBoardLivePanel({
   groupId,
   initialSquares,
   initialGeneratedAt,
   initialStats
 }: GroupBoardLivePanelProps) {
-  const pollingConfig = useMemo(() => getDefaultPollingConfig(), []);
-  const delayRef = useRef<number>(pollingConfig.baseIntervalMs);
-  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const transport = useMemo(
+    () =>
+      createPollingSyncTransport({
+        fetchLatest: () => fetchGroupBoardSnapshot(groupId),
+        getErrorMessage: (error) => (error instanceof Error ? error.message : "Unable to refresh board.")
+      }),
+    [groupId]
+  );
 
   const [squares, setSquares] = useState(initialSquares);
   const [stats, setStats] = useState(initialStats);
   const [lastUpdated, setLastUpdated] = useState(new Date(initialGeneratedAt));
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const [nextRefreshMs, setNextRefreshMs] = useState(pollingConfig.baseIntervalMs);
+  const [nextRefreshMs, setNextRefreshMs] = useState(transport.getNextDelayMs());
   const [error, setError] = useState<string | null>(null);
 
-  const refresh = useCallback(async () => {
-    setIsRefreshing(true);
-
-    try {
-      const response = await fetch(`/api/groups/${groupId}/board`, {
-        method: "GET",
-        cache: "no-store"
-      });
-      const data = (await response.json()) as BoardResponse;
-
-      if (!response.ok) {
-        throw new Error(data.error ?? "Unable to refresh board.");
-      }
-
-      setSquares(data.squares ?? []);
-      setStats(data.stats);
-      setLastUpdated(new Date(data.generatedAt));
-      setError(null);
-      return true;
-    } catch (requestError) {
-      setError(requestError instanceof Error ? requestError.message : "Unable to refresh board.");
-      return false;
-    } finally {
-      setIsRefreshing(false);
-    }
-  }, [groupId]);
-
   useEffect(() => {
-    let isActive = true;
-
-    const scheduleNext = (delayMs: number) => {
-      setNextRefreshMs(delayMs);
-      timerRef.current = setTimeout(async () => {
-        const wasSuccessful = await refresh();
-
-        if (!isActive) {
-          return;
-        }
-
-        delayRef.current = getNextPollDelay(delayRef.current, wasSuccessful, pollingConfig);
-        scheduleNext(delayRef.current);
-      }, delayMs);
-    };
-
-    scheduleNext(pollingConfig.baseIntervalMs);
-
-    return () => {
-      isActive = false;
-
-      if (timerRef.current) {
-        clearTimeout(timerRef.current);
+    const stop = transport.start({
+      onData: (payload) => {
+        setSquares(payload.squares ?? []);
+        setStats(payload.stats);
+        setLastUpdated(new Date(payload.generatedAt));
+      },
+      onError: (message) => {
+        setError(message);
+      },
+      onRefreshingChange: (refreshing) => {
+        setIsRefreshing(refreshing);
+      },
+      onNextDelayChange: (delayMs) => {
+        setNextRefreshMs(delayMs);
       }
-    };
-  }, [pollingConfig, refresh]);
+    });
+
+    return stop;
+  }, [transport]);
 
   async function handleManualRefresh() {
-    delayRef.current = pollingConfig.baseIntervalMs;
-    setNextRefreshMs(pollingConfig.baseIntervalMs);
-    await refresh();
+    await transport.refreshNow();
   }
 
   return (
