@@ -22,6 +22,9 @@ and this project adheres to Semantic Versioning where applicable.
 - Auth.js baseline with Prisma-backed sessions, credentials auth, and optional Google OAuth.
 - Registration API plus sign-in, sign-out, and dashboard placeholder flows.
 - NextAuth-compatible Prisma schema extensions for users, accounts, sessions, and verification tokens.
+- Route middleware protection for dashboard, group, and board paths with callback-aware sign-in redirects.
+- Auth-aware redirects that send signed-in users away from sign-in/register pages to dashboard.
+- Initial protected placeholder pages for groups and board routes.
 
 ### Changed
 - Planning docs expanded with roadmap, backlog, and ADR-0001.

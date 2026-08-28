@@ -16,6 +16,12 @@ export default async function DashboardPage() {
       <p>Signed in as {user.name ?? user.email}.</p>
       <p>Your game dashboard will live here next.</p>
       <p>
+        <Link href="/groups">Go to groups</Link>
+      </p>
+      <p>
+        <Link href="/board">Go to board</Link>
+      </p>
+      <p>
         <Link href="/">Back home</Link>
       </p>
       <SignOutButton />

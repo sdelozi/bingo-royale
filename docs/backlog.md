@@ -33,8 +33,8 @@ Priority key:
 - [x] T10 Persist user session and profile retrieval (DONE)
 
 ### Story E2-S2: Route protection
-- [ ] T11 Protect authenticated routes (dashboard/group/board) (TODO)
-- [ ] T12 Add auth-aware redirects and error states (TODO)
+- [x] T11 Protect authenticated routes (dashboard/group/board) (DONE)
+- [x] T12 Add auth-aware redirects and error states (DONE)
 
 ## Epic E3: Groups, Roles, and Joining (P0)
 ### Story E3-S1: Group creation and ownership

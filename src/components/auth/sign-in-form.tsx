@@ -6,9 +6,10 @@ import { signIn } from "next-auth/react";
 type SignInFormProps = {
   googleEnabled: boolean;
   error?: string;
+  callbackUrl?: string;
 };
 
-export function SignInForm({ googleEnabled, error }: SignInFormProps) {
+export function SignInForm({ googleEnabled, error, callbackUrl = "/dashboard" }: SignInFormProps) {
   const [formError, setFormError] = useState<string | null>(error ?? null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -25,7 +26,7 @@ export function SignInForm({ googleEnabled, error }: SignInFormProps) {
       email,
       password,
       redirect: true,
-      callbackUrl: "/dashboard"
+      callbackUrl
     });
 
     if (result?.error) {
@@ -60,7 +61,7 @@ export function SignInForm({ googleEnabled, error }: SignInFormProps) {
 
       {googleEnabled ? (
         <p>
-          <button type="button" onClick={() => signIn("google", { callbackUrl: "/dashboard" })}>
+          <button type="button" onClick={() => signIn("google", { callbackUrl })}>
             Continue with Google
           </button>
         </p>
