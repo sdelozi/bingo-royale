@@ -3,7 +3,7 @@
 Browser-first multiplayer bingo for group trips.
 
 ## Current Status
-Foundation and auth baseline work are in progress.
+Epic 4 Story 1 (template management) is in progress.
 
 ## Key Docs
 - Roadmap: [docs/roadmap.md](docs/roadmap.md)
@@ -15,7 +15,7 @@ Foundation and auth baseline work are in progress.
 - Versioning: [docs/versioning.md](docs/versioning.md)
 
 ## Current Version
-- 0.3.4 (in progress)
+- 0.4.0 (in progress)
 
 ## v1 Snapshot
 - Web app first (5x5 boards)
@@ -31,6 +31,7 @@ Foundation and auth baseline work are in progress.
 - Group creation and join by invite code
 - Share-link group join route for authenticated users
 - Share-link callback is preserved through sign-in/register flows
+- Admin template editor with 25 objectives and one free-space selection
 
 ## Next Step
-Begin Epic 4 board template and player-board generation workflows.
+Build Epic 4 Story 2 player board generation and persistence workflows.

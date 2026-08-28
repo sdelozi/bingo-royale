@@ -1,6 +1,12 @@
 # Changelog
 
-## 0.3.4 (in progress)
+## 0.4.0 (in progress)
+- E4-S1 template management: admin template editor for 25 objectives and free-space selection.
+- Template save API and service validation now enforce complete templates with exactly one free-space.
+- Group detail page now links admins to template management.
+- Added coverage for template-management service and template API route behavior.
+
+## 0.3.4
 - Fixed join form runtime crash after successful invite-code submit.
 - Preserved share-link callbackUrl across sign-in and register flows so users return to join after authentication.
 - Clarified invalid share-link text to match current behavior (invalid only; expiry not implemented yet).
