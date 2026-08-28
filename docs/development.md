@@ -7,6 +7,8 @@
 ## Quick Start
 1. Create local env file:
 - Copy `.env.example` to `.env.local`.
+- Set `AUTH_SECRET` before starting the app.
+- Add Google OAuth credentials only if you want to test Google sign-in locally.
 
 2. Start PostgreSQL:
 - Run `docker compose up -d postgres`.
@@ -22,6 +24,10 @@
 
 6. Start app:
 - Run `npm run dev`.
+
+7. Test auth locally:
+- Register with email/password at `/auth/register`.
+- Sign in at `/auth/signin`.
 
 ## Helpful Commands
 - Open Prisma Studio: `npm run db:studio`

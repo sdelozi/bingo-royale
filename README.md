@@ -3,7 +3,7 @@
 Browser-first multiplayer bingo for group trips.
 
 ## Current Status
-Foundation work is in progress.
+Foundation and auth baseline work are in progress.
 
 ## Key Docs
 - Roadmap: [docs/roadmap.md](docs/roadmap.md)
@@ -19,5 +19,10 @@ Foundation work is in progress.
 - Invite-code/share-link group join
 - Leaderboard with score, bingos, blackout
 
+## Available Now
+- Email/password registration and sign-in
+- Auth.js session-backed sign-in/sign-out flow
+- Optional Google OAuth when provider credentials are configured
+
 ## Next Step
-Continue foundation work, then begin authentication and account flows.
+Build group creation, membership, and join flows.

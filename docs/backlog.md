@@ -27,10 +27,10 @@ Priority key:
 
 ## Epic E2: Authentication and Accounts (P0)
 ### Story E2-S1: Account lifecycle
-- [ ] T7 Implement sign-up/sign-in/sign-out flow (TODO)
-- [ ] T8 Implement Google OAuth provider (TODO)
-- [ ] T9 Implement optional credentials login flow (TODO)
-- [ ] T10 Persist user session and profile retrieval (TODO)
+- [x] T7 Implement sign-up/sign-in/sign-out flow (DONE)
+- [x] T8 Implement Google OAuth provider (DONE)
+- [x] T9 Implement optional credentials login flow (DONE)
+- [x] T10 Persist user session and profile retrieval (DONE)
 
 ### Story E2-S2: Route protection
 - [ ] T11 Protect authenticated routes (dashboard/group/board) (TODO)
