@@ -21,9 +21,9 @@ Priority key:
 - [ ] T60 Keep ADR-0001 updated as hosting/auth constraints evolve (TODO)
 
 ### Story E1-S2: Database and ORM baseline
-- [ ] T4 Define initial schema for users, groups, memberships, templates, player boards, marks (TODO)
-- [ ] T5 Add migration flow and seed strategy (TODO)
-- [ ] T6 Add local/dev DB bootstrap scripts (TODO)
+- [x] T4 Define initial schema for users, groups, memberships, templates, player boards, marks (DONE)
+- [x] T5 Add migration flow and seed strategy (DONE)
+- [x] T6 Add local/dev DB bootstrap scripts (DONE)
 
 ## Epic E2: Authentication and Accounts (P0)
 ### Story E2-S1: Account lifecycle

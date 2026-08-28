@@ -1,0 +1,141 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum MembershipRole {
+  ADMIN
+  PLAYER
+}
+
+model User {
+  id           String         @id @default(cuid())
+  email        String         @unique
+  displayName  String?
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  memberships  Membership[]
+  boards       PlayerBoard[]
+  marks        PlayerMark[]
+  createdGroup Group[]        @relation("CreatedGroups")
+  boardEdits   BoardEditEvent[]
+}
+
+model Group {
+  id                 String            @id @default(cuid())
+  name               String
+  inviteCode         String            @unique
+  shareToken         String?           @unique
+  creatorId          String
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+  currentTemplateId  String?
+
+  creator            User              @relation("CreatedGroups", fields: [creatorId], references: [id], onDelete: Restrict)
+  memberships        Membership[]
+  templates          BoardTemplate[]
+  boards             PlayerBoard[]
+  editEvents         BoardEditEvent[]
+  currentTemplate    BoardTemplate?    @relation("CurrentTemplate", fields: [currentTemplateId], references: [id], onDelete: SetNull)
+}
+
+model Membership {
+  id         String         @id @default(cuid())
+  groupId    String
+  userId     String
+  role       MembershipRole @default(PLAYER)
+  joinedAt   DateTime       @default(now())
+
+  group      Group          @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  user       User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([groupId, userId])
+}
+
+model BoardTemplate {
+  id                 String           @id @default(cuid())
+  groupId            String
+  version            Int
+  isActive           Boolean          @default(false)
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+
+  group              Group            @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  objectives         Objective[]
+  activeForGroup     Group[]          @relation("CurrentTemplate")
+
+  @@unique([groupId, version])
+}
+
+model Objective {
+  id               String         @id @default(cuid())
+  boardTemplateId  String
+  ordinal          Int
+  content          String
+  isFreeSpace      Boolean        @default(false)
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+
+  boardTemplate    BoardTemplate  @relation(fields: [boardTemplateId], references: [id], onDelete: Cascade)
+  boardSquares     PlayerBoardSquare[]
+
+  @@unique([boardTemplateId, ordinal])
+}
+
+model PlayerBoard {
+  id             String             @id @default(cuid())
+  groupId        String
+  userId         String
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+
+  group          Group              @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  user           User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  squares        PlayerBoardSquare[]
+
+  @@unique([groupId, userId])
+}
+
+model PlayerBoardSquare {
+  id               String         @id @default(cuid())
+  playerBoardId    String
+  position         Int
+  objectiveId      String
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+
+  playerBoard      PlayerBoard    @relation(fields: [playerBoardId], references: [id], onDelete: Cascade)
+  objective        Objective      @relation(fields: [objectiveId], references: [id], onDelete: Restrict)
+  mark             PlayerMark?
+
+  @@unique([playerBoardId, position])
+}
+
+model PlayerMark {
+  id                   String           @id @default(cuid())
+  playerBoardSquareId  String           @unique
+  userId               String
+  isMarked             Boolean          @default(false)
+  updatedAt            DateTime         @updatedAt
+
+  square               PlayerBoardSquare @relation(fields: [playerBoardSquareId], references: [id], onDelete: Cascade)
+  user                 User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model BoardEditEvent {
+  id             String    @id @default(cuid())
+  groupId        String
+  actorUserId    String
+  templateFromId String?
+  templateToId   String?
+  warningAcked   Boolean   @default(false)
+  metadataJson   String?
+  createdAt      DateTime  @default(now())
+
+  group          Group     @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  actor          User      @relation(fields: [actorUserId], references: [id], onDelete: Restrict)
+}
