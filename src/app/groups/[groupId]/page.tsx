@@ -33,7 +33,12 @@ export default async function GroupDetailPage({ params }: GroupDetailPageProps) 
       <p>Share link: {shareLink ?? "Not available"}</p>
 
       {membership.isCreator ? (
-        <p>Admin actions: manage board configuration and group settings (coming next).</p>
+        <>
+          <p>Admin actions: manage board configuration and group settings.</p>
+          <p>
+            <Link href={`/groups/${membership.groupId}/template`}>Edit board template</Link>
+          </p>
+        </>
       ) : (
         <p>Player actions: play board and view leaderboard (coming next).</p>
       )}

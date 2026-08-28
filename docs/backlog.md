@@ -52,9 +52,9 @@ Priority key:
 
 ## Epic E4: Board Templates and Player Boards (P0)
 ### Story E4-S1: Template management
-- [ ] T20 Admin creates/edits 25 objectives (TODO)
-- [ ] T21 Enforce exactly one free-space objective (TODO)
-- [ ] T22 Validate template completeness before activation (TODO)
+- [x] T20 Admin creates/edits 25 objectives (DONE)
+- [x] T21 Enforce exactly one free-space objective (DONE)
+- [x] T22 Validate template completeness before activation (DONE)
 
 ### Story E4-S2: Player board generation
 - [ ] T23 Build deterministic/persisted shuffle for each player board (TODO)
