@@ -40,7 +40,7 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
         callbackUrl={callbackUrl}
       />
       <p>
-        Need an account? <Link href="/auth/register">Create one</Link>
+        Need an account? <Link href={`/auth/register?callbackUrl=${encodeURIComponent(callbackUrl)}`}>Create one</Link>
       </p>
     </main>
   );

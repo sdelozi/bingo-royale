@@ -30,6 +30,7 @@
 7. Test auth locally:
 - Register with email/password at `/auth/register`.
 - Sign in at `/auth/signin`.
+- For `/join/{shareToken}` flows while logged out, auth now preserves callback and returns to the join link after sign-in/register.
 
 ## Helpful Commands
 - Open Prisma Studio: `npm run db:studio`

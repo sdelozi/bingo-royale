@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -17,11 +18,12 @@ export function JoinGroupForm() {
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    const form = event.currentTarget;
     setError(null);
     setJoined(null);
     setIsSubmitting(true);
 
-    const formData = new FormData(event.currentTarget);
+    const formData = new FormData(form);
     const inviteCode = String(formData.get("inviteCode") ?? "").trim();
 
     const response = await fetch("/api/groups/join", {
@@ -47,7 +49,7 @@ export function JoinGroupForm() {
     });
 
     setIsSubmitting(false);
-    event.currentTarget.reset();
+    form.reset();
     router.refresh();
   }
 
