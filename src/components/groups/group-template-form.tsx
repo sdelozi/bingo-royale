@@ -22,7 +22,7 @@ export function GroupTemplateForm({
   const [freeSpaceOrdinal, setFreeSpaceOrdinal] = useState<number>(initialFreeSpaceOrdinal);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [savedVersion, setSavedVersion] = useState<number | null>(null);
+  const [isSaved, setIsSaved] = useState(false);
 
   const objectiveCount = useMemo(() => objectives.length, [objectives]);
 
@@ -33,7 +33,7 @@ export function GroupTemplateForm({
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError(null);
-    setSavedVersion(null);
+    setIsSaved(false);
     setIsSubmitting(true);
 
     const payload = {
@@ -49,7 +49,7 @@ export function GroupTemplateForm({
       body: JSON.stringify(payload)
     });
 
-    const data = (await response.json()) as { error?: string; version?: number };
+    const data = (await response.json()) as { error?: string };
 
     if (!response.ok) {
       setError(data.error ?? "Unable to save board template.");
@@ -57,7 +57,7 @@ export function GroupTemplateForm({
       return;
     }
 
-    setSavedVersion(data.version ?? null);
+    setIsSaved(true);
     setIsSubmitting(false);
     router.refresh();
   }
@@ -105,7 +105,7 @@ export function GroupTemplateForm({
       </form>
 
       {error ? <p>{error}</p> : null}
-      {savedVersion ? <p>Template saved as version {savedVersion}.</p> : null}
+      {isSaved ? <p>Template saved.</p> : null}
     </section>
   );
 }
