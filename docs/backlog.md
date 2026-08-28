@@ -57,14 +57,14 @@ Priority key:
 - [x] T22 Validate template completeness before activation (DONE)
 
 ### Story E4-S2: Player board generation
-- [ ] T23 Build deterministic/persisted shuffle for each player board (TODO)
-- [ ] T24 Preserve free-space placement rule (TODO)
-- [ ] T25 Prevent re-generation after initial board creation (TODO)
+- [x] T23 Build deterministic/persisted shuffle for each player board (DONE)
+- [x] T24 Preserve free-space placement rule (DONE)
+- [x] T25 Prevent re-generation after initial board creation (DONE)
 
 ### Story E4-S3: Board play interactions
-- [ ] T26 Implement mark/unmark API with server validation (TODO)
-- [ ] T27 Build interactive 5x5 board UI with optimistic updates (TODO)
-- [ ] T28 Persist and reload board state across sessions (TODO)
+- [x] T26 Implement mark/unmark API with server validation (DONE)
+- [x] T27 Build interactive 5x5 board UI with optimistic updates (DONE)
+- [x] T28 Persist and reload board state across sessions (DONE)
 
 ## Epic E5: Leaderboard and Board Visibility (P0)
 ### Story E5-S1: Derived stats

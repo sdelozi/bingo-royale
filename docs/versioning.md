@@ -1,8 +1,8 @@
 # Versioning
 
 ## Current baseline
-- Current development version: 0.3.2
-- Rationale: core work through Epic 3 Story 2 is complete (group creation and join flows).
+- Current development version: 0.4.3
+- Rationale: core work through Epic 4 Story 3 is complete, plus stability fixes for auth/register behavior during local database outages.
 
 ## Rules until first release
 - Stay on major version 0 until first release.

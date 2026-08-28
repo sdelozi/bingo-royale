@@ -39,4 +39,28 @@ describe("RegisterForm", () => {
 
     fetchMock.mockRestore();
   });
+
+  it("shows a friendly fallback error when register returns non-JSON", async () => {
+    const fetchMock = vi.spyOn(globalThis, "fetch").mockResolvedValueOnce({
+      ok: false,
+      json: async () => {
+        throw new SyntaxError("Unexpected end of JSON input");
+      }
+    } as Response);
+
+    render(<RegisterForm callbackUrl="/dashboard" />);
+
+    fireEvent.change(screen.getByLabelText("Name"), { target: { value: "Tester" } });
+    fireEvent.change(screen.getByLabelText("Email"), { target: { value: "tester@example.com" } });
+    fireEvent.change(screen.getByLabelText("Password"), { target: { value: "password123" } });
+
+    fireEvent.submit(screen.getByRole("button", { name: "Create account" }).closest("form") as HTMLFormElement);
+
+    await waitFor(() => {
+      expect(screen.getByText("Unable to create account right now. Please try again.")).toBeInTheDocument();
+      expect(signIn).not.toHaveBeenCalled();
+    });
+
+    fetchMock.mockRestore();
+  });
 });

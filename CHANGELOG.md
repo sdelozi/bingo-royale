@@ -1,6 +1,26 @@
 # Changelog
 
-## 0.4.0 (in progress)
+## 0.4.3 (in progress)
+- Fixed auth resilience when local DB is unavailable so credential sign-in no longer redirects to raw `/api/auth/error` pages.
+- Register API now returns structured JSON for temporary backend failures instead of default HTML 500 responses.
+- Register form now handles non-JSON error responses safely and shows a friendly fallback message.
+- Added regression coverage for auth DB-unavailable and non-JSON failure paths.
+
+## 0.4.2
+- E4-S3 board play interactions: members can mark and unmark their own board tiles through a validated API.
+- Board UI now supports optimistic tile toggles and preserves progress across reloads and sessions.
+- Free-space tiles are treated as auto-marked and locked from manual toggling.
+- Added coverage for board mark service, board mark route, and interactive board UI behavior.
+- Added a Windows local startup script to bootstrap env files, Docker PostgreSQL, Prisma setup, seed data, and the dev server.
+- Added a Windows local shutdown script to stop local services, with optional Docker cleanup and dev-server stop flags.
+
+## 0.4.1
+- E4-S2 player board generation: persisted one-time per-player boards from the active group template.
+- Board generation keeps the designated free-space objective in place while deterministically shuffling the remaining objectives.
+- Group detail page now links members to their player board and explains when template setup is still required.
+- Added coverage for deterministic board generation and no-regeneration behavior.
+
+## 0.4.0
 - E4-S1 template management: admin template editor for 25 objectives and free-space selection.
 - Template save API and service validation now enforce complete templates with exactly one free-space.
 - Group detail page now links admins to template management.

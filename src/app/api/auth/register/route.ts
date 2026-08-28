@@ -10,30 +10,34 @@ const registerSchema = z.object({
 });
 
 export async function POST(request: Request) {
-  const body = await request.json();
-  const parsed = registerSchema.safeParse(body);
+  try {
+    const body = await request.json();
+    const parsed = registerSchema.safeParse(body);
 
-  if (!parsed.success) {
-    return NextResponse.json({ error: "Invalid registration details." }, { status: 400 });
-  }
-
-  const existingUser = await db.user.findUnique({
-    where: { email: parsed.data.email }
-  });
-
-  if (existingUser) {
-    return NextResponse.json({ error: "An account with that email already exists." }, { status: 409 });
-  }
-
-  const passwordHash = await hashPassword(parsed.data.password);
-
-  await db.user.create({
-    data: {
-      email: parsed.data.email,
-      name: parsed.data.name,
-      passwordHash
+    if (!parsed.success) {
+      return NextResponse.json({ error: "Invalid registration details." }, { status: 400 });
     }
-  });
 
-  return NextResponse.json({ ok: true }, { status: 201 });
+    const existingUser = await db.user.findUnique({
+      where: { email: parsed.data.email }
+    });
+
+    if (existingUser) {
+      return NextResponse.json({ error: "An account with that email already exists." }, { status: 409 });
+    }
+
+    const passwordHash = await hashPassword(parsed.data.password);
+
+    await db.user.create({
+      data: {
+        email: parsed.data.email,
+        name: parsed.data.name,
+        passwordHash
+      }
+    });
+
+    return NextResponse.json({ ok: true }, { status: 201 });
+  } catch {
+    return NextResponse.json({ error: "Registration is temporarily unavailable. Please try again shortly." }, { status: 503 });
+  }
 }

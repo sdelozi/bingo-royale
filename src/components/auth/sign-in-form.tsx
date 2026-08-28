@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { FormEvent, useState } from "react";
 import { signIn } from "next-auth/react";
 
@@ -25,14 +26,28 @@ export function SignInForm({ googleEnabled, error, callbackUrl = "/dashboard" }:
     const result = await signIn("credentials", {
       email,
       password,
-      redirect: true,
+      redirect: false,
       callbackUrl
     });
 
     if (result?.error) {
-      setFormError("Invalid email or password.");
+      if (result.error === "CredentialsSignin") {
+        setFormError("Invalid email or password.");
+      } else {
+        setFormError("Unable to sign in right now. Please try again.");
+      }
+
       setIsSubmitting(false);
+      return;
     }
+
+    if (result?.url) {
+      window.location.href = result.url;
+      return;
+    }
+
+    setFormError("Unable to sign in right now. Please try again.");
+    setIsSubmitting(false);
   }
 
   return (

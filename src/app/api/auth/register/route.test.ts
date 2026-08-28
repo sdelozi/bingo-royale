@@ -75,4 +75,21 @@ describe("POST /api/auth/register", () => {
     });
     expect(response.status).toBe(201);
   });
+
+  it("returns 503 when registration storage is temporarily unavailable", async () => {
+    vi.mocked(db.user.findUnique).mockRejectedValueOnce(new Error("db unavailable") as never);
+
+    const response = await POST(
+      new Request("http://localhost/api/auth/register", {
+        method: "POST",
+        body: JSON.stringify({
+          email: "person@example.com",
+          name: "Person",
+          password: "password123"
+        })
+      })
+    );
+
+    expect(response.status).toBe(503);
+  });
 });
