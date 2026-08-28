@@ -101,9 +101,9 @@ Priority key:
 - [x] T45 Add configurable polling intervals and backoff (DONE)
 
 ### Story E7-S2: Transport abstraction for future websockets
-- [ ] T46 Introduce sync service interface abstracting transport (TODO)
-- [ ] T47 Keep UI consumers transport-agnostic (TODO)
-- [ ] T48 Add technical spike doc for websocket migration path (TODO)
+- [x] T46 Introduce sync service interface abstracting transport (DONE)
+- [x] T47 Keep UI consumers transport-agnostic (DONE)
+- [x] T48 Add technical spike doc for websocket migration path (DONE)
 
 ## Epic E8: Quality, Security, and Operations (P1)
 ### Story E8-S1: Test coverage

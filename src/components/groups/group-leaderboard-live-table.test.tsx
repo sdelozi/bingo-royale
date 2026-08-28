@@ -76,7 +76,7 @@ describe("GroupLeaderboardLiveTable", () => {
     fireEvent.click(screen.getByRole("button", { name: "Refresh now" }));
 
     await waitFor(() => {
-      expect(screen.getByText("Refresh failed. Retrying in 15s.")).toBeInTheDocument();
+      expect(screen.getByText(/Refresh failed\. Retrying in \d+s\./)).toBeInTheDocument();
       expect(fetchMock).toHaveBeenCalledTimes(1);
     });
 

@@ -16,6 +16,9 @@
 - E7-S1 polling: board and leaderboard views now auto-refresh with configurable polling intervals and exponential backoff on refresh errors.
 - Added manual "Refresh now" controls and freshness indicators to board and leaderboard views.
 - Mid-game replacement fairness: replaced objectives now preserve prior mark state and expose clear preserve-policy metadata in template save responses.
+- E7-S2 transport abstraction: introduced a reusable sync transport interface with a polling implementation.
+- Board and leaderboard live views now consume transport callbacks instead of embedding transport logic directly.
+- Added ADR-0002 documenting the websocket migration path using the shared sync transport contract.
 
 ## 0.4.4
 - Board template UX now uses a dedicated free-space objective input and 24 regular objectives.

@@ -2,9 +2,10 @@
 
 import React from "react";
 import Link from "next/link";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { GroupLeaderboardRow } from "@/server/services/groups/get-group-leaderboard";
-import { getDefaultPollingConfig, getNextPollDelay } from "@/lib/polling";
+import { fetchGroupLeaderboardSnapshot } from "@/lib/sync/group-sync-drivers";
+import { createPollingSyncTransport } from "@/lib/sync/transport";
 
 type GroupLeaderboardLiveTableProps = {
   groupId: string;
@@ -12,85 +13,48 @@ type GroupLeaderboardLiveTableProps = {
   initialGeneratedAt: string;
 };
 
-type LeaderboardResponse = {
-  generatedAt: string;
-  rows: GroupLeaderboardRow[];
-  error?: string;
-};
-
 export function GroupLeaderboardLiveTable({
   groupId,
   initialRows,
   initialGeneratedAt
 }: GroupLeaderboardLiveTableProps) {
-  const pollingConfig = useMemo(() => getDefaultPollingConfig(), []);
-  const delayRef = useRef<number>(pollingConfig.baseIntervalMs);
-  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const transport = useMemo(
+    () =>
+      createPollingSyncTransport({
+        fetchLatest: () => fetchGroupLeaderboardSnapshot(groupId),
+        getErrorMessage: (error) => (error instanceof Error ? error.message : "Unable to refresh leaderboard.")
+      }),
+    [groupId]
+  );
 
   const [rows, setRows] = useState(initialRows);
   const [lastUpdated, setLastUpdated] = useState(new Date(initialGeneratedAt));
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const [nextRefreshMs, setNextRefreshMs] = useState(pollingConfig.baseIntervalMs);
+  const [nextRefreshMs, setNextRefreshMs] = useState(transport.getNextDelayMs());
   const [error, setError] = useState<string | null>(null);
 
-  const refresh = useCallback(async () => {
-    setIsRefreshing(true);
-
-    try {
-      const response = await fetch(`/api/groups/${groupId}/leaderboard`, {
-        method: "GET",
-        cache: "no-store"
-      });
-      const data = (await response.json()) as LeaderboardResponse;
-
-      if (!response.ok) {
-        throw new Error(data.error ?? "Unable to refresh leaderboard.");
-      }
-
-      setRows(data.rows ?? []);
-      setLastUpdated(new Date(data.generatedAt));
-      setError(null);
-      return true;
-    } catch (requestError) {
-      setError(requestError instanceof Error ? requestError.message : "Unable to refresh leaderboard.");
-      return false;
-    } finally {
-      setIsRefreshing(false);
-    }
-  }, [groupId]);
-
   useEffect(() => {
-    let isActive = true;
-
-    const scheduleNext = (delayMs: number) => {
-      setNextRefreshMs(delayMs);
-      timerRef.current = setTimeout(async () => {
-        const wasSuccessful = await refresh();
-
-        if (!isActive) {
-          return;
-        }
-
-        delayRef.current = getNextPollDelay(delayRef.current, wasSuccessful, pollingConfig);
-        scheduleNext(delayRef.current);
-      }, delayMs);
-    };
-
-    scheduleNext(pollingConfig.baseIntervalMs);
-
-    return () => {
-      isActive = false;
-
-      if (timerRef.current) {
-        clearTimeout(timerRef.current);
+    const stop = transport.start({
+      onData: (payload) => {
+        setRows(payload.rows ?? []);
+        setLastUpdated(new Date(payload.generatedAt));
+      },
+      onError: (message) => {
+        setError(message);
+      },
+      onRefreshingChange: (refreshing) => {
+        setIsRefreshing(refreshing);
+      },
+      onNextDelayChange: (delayMs) => {
+        setNextRefreshMs(delayMs);
       }
-    };
-  }, [pollingConfig, refresh]);
+    });
+
+    return stop;
+  }, [transport]);
 
   async function handleManualRefresh() {
-    delayRef.current = pollingConfig.baseIntervalMs;
-    setNextRefreshMs(pollingConfig.baseIntervalMs);
-    await refresh();
+    await transport.refreshNow();
   }
 
   return (
