@@ -331,7 +331,7 @@ export async function saveGroupTemplateForGroup(userId: string, groupId: string,
       freeSpaceMarkedByDefault: template.freeSpaceMarkedByDefault,
       affectedBoardCount: boardCount,
       changedObjectiveCount: syncSummary?.changedOrdinals.length ?? 0,
-      preservedMarkedReplacements: true,
+      replacedObjectiveMarkStatePolicy: "preserve" as const,
       statsRecomputeRequired: (syncSummary?.changedOrdinals.length ?? 0) > 0
     };
   });

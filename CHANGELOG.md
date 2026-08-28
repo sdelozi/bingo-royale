@@ -13,6 +13,9 @@
 - Replaced objectives now preserve each square's existing mark state (marked stays marked, unmarked stays unmarked).
 - E6-S3 auditing: template edits after game start now record board edit events with actor, template transition, and impact metadata.
 - Template save responses now include affected-board and recomputation metadata for downstream leaderboard freshness handling.
+- E7-S1 polling: board and leaderboard views now auto-refresh with configurable polling intervals and exponential backoff on refresh errors.
+- Added manual "Refresh now" controls and freshness indicators to board and leaderboard views.
+- Mid-game replacement fairness: replaced objectives now preserve prior mark state and expose clear preserve-policy metadata in template save responses.
 
 ## 0.4.4
 - Board template UX now uses a dedicated free-space objective input and 24 regular objectives.

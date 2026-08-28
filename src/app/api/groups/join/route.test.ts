@@ -73,4 +73,18 @@ describe("POST /api/groups/join", () => {
 
     expect(response.status).toBe(404);
   });
+
+  it("returns 500 on unexpected failures", async () => {
+    vi.mocked(getAuthSession).mockResolvedValueOnce({ user: { id: "user-1" } } as never);
+    vi.mocked(joinGroupForUser).mockRejectedValueOnce(new Error("db down"));
+
+    const response = await POST(
+      new Request("http://localhost/api/groups/join", {
+        method: "POST",
+        body: JSON.stringify({ inviteCode: "ABCD2345" })
+      })
+    );
+
+    expect(response.status).toBe(500);
+  });
 });

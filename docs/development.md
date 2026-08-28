@@ -36,6 +36,7 @@
 - Set `AUTH_SECRET` before starting the app.
 - Set `NEXTAUTH_URL=http://localhost:3000` for local auth callbacks.
 - Add Google OAuth credentials only if you want to test Google sign-in locally.
+- Optional: tune board/leaderboard polling with `NEXT_PUBLIC_POLL_INTERVAL_MS` and `NEXT_PUBLIC_POLL_MAX_INTERVAL_MS`.
 - Prisma CLI reads `.env` by default (not `.env.local`). Ensure `DATABASE_URL` is also available in `.env` or exported in your shell before running Prisma commands.
 
 2. Start PostgreSQL:
