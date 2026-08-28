@@ -73,13 +73,13 @@ Priority key:
 - [x] T31 Implement blackout detection (DONE)
 
 ### Story E5-S2: Group leaderboard
-- [ ] T32 Build leaderboard API for group members (TODO)
-- [ ] T33 Render table with board link, score, bingo count, blackout status (TODO)
-- [ ] T34 Add last-updated and refresh state indicators (TODO)
+- [x] T32 Build leaderboard API for group members (DONE)
+- [x] T33 Render table with board link, score, bingo count, blackout status (DONE)
+- [x] T34 Add last-updated and refresh state indicators (DONE)
 
 ### Story E5-S3: Player board viewing
-- [ ] T35 Implement read-only player board route/view (TODO)
-- [ ] T36 Add permissions so only group members can view (TODO)
+- [x] T35 Implement read-only player board route/view (DONE)
+- [x] T36 Add permissions so only group members can view (DONE)
 
 ## Epic E6: Mid-Game Template Editing Safety (P0)
 ### Story E6-S1: Warning and confirmation

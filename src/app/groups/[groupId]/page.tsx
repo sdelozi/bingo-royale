@@ -37,6 +37,10 @@ export default async function GroupDetailPage({ params }: GroupDetailPageProps) 
         <Link href={`/groups/${membership.groupId}/board`}>Open your board</Link>
       </p>
 
+      <p>
+        <Link href={`/groups/${membership.groupId}/leaderboard`}>View leaderboard</Link>
+      </p>
+
       {canManageTemplate ? (
         <>
           <p>Admin actions: manage board configuration and group settings.</p>
@@ -45,7 +49,7 @@ export default async function GroupDetailPage({ params }: GroupDetailPageProps) 
           </p>
         </>
       ) : (
-        <p>Player actions: play your board now and view leaderboard when that ships.</p>
+        <p>Player actions: play your board and check live standings from the leaderboard.</p>
       )}
 
       <p>

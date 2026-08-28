@@ -4,6 +4,9 @@
 - E5-S1 derived stats: player board state now includes score, bingo count, and blackout.
 - Board page now surfaces live derived stats from persisted mark state.
 - Added service coverage for derived stats computation from board marks.
+- E5-S2 leaderboard: added member leaderboard API and leaderboard page with score, bingo count, blackout, and board links.
+- Leaderboard now shows last-updated metadata and a manual refresh action.
+- E5-S3 board visibility: added a read-only member board route with group-membership access control.
 
 ## 0.4.4
 - Board template UX now uses a dedicated free-space objective input and 24 regular objectives.
