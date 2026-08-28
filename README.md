@@ -24,6 +24,8 @@ Foundation and auth baseline work are in progress.
 - Email/password registration and sign-in
 - Auth.js session-backed sign-in/sign-out flow
 - Optional Google OAuth when provider credentials are configured
+- Group creation and join by invite code
+- Share-link group join route for authenticated users
 
 ## Next Step
 Build group creation, membership, and join flows.
