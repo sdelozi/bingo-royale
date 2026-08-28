@@ -25,6 +25,9 @@ and this project adheres to Semantic Versioning where applicable.
 - Route middleware protection for dashboard, group, and board paths with callback-aware sign-in redirects.
 - Auth-aware redirects that send signed-in users away from sign-in/register pages to dashboard.
 - Initial protected placeholder pages for groups and board routes.
+- Group creation API and groups page UI with creator auto-assigned as admin.
+- Unique invite-code and share-token generation for new groups.
+- Group list view showing role, invite code, and share link token path.
 
 ### Changed
 - Planning docs expanded with roadmap, backlog, and ADR-0001.
