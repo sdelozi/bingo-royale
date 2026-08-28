@@ -12,6 +12,10 @@ Foundation and auth baseline work are in progress.
 - Architecture notes: [docs/architecture.md](docs/architecture.md)
 - Local setup: [docs/development.md](docs/development.md)
 - Testing policy: [docs/testing-policy.md](docs/testing-policy.md)
+- Versioning: [docs/versioning.md](docs/versioning.md)
+
+## Current Version
+- 0.3.3 (in progress)
 
 ## v1 Snapshot
 - Web app first (5x5 boards)
@@ -28,4 +32,4 @@ Foundation and auth baseline work are in progress.
 - Share-link group join route for authenticated users
 
 ## Next Step
-Build group creation, membership, and join flows.
+Begin Epic 4 board template and player-board generation workflows.

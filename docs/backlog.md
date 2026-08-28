@@ -47,8 +47,8 @@ Priority key:
 - [x] T17 Prevent duplicate membership entries (DONE)
 
 ### Story E3-S3: Dashboard and role-aware UX
-- [ ] T18 Implement user dashboard showing all groups (TODO)
-- [ ] T19 Show role badges and role-specific actions (TODO)
+- [x] T18 Implement user dashboard showing all groups (DONE)
+- [x] T19 Show role badges and role-specific actions (DONE)
 
 ## Epic E4: Board Templates and Player Boards (P0)
 ### Story E4-S1: Template management
@@ -111,6 +111,7 @@ Priority key:
 - [ ] T50 Unit tests for mid-game edit mark-preservation rules (TODO)
 - [ ] T51 Integration tests for auth/group/join/play/leaderboard (TODO)
 - [ ] T61 Require test additions for all behavior-changing feature work (TODO)
+- [x] T62 Establish semantic versioning workflow (epic->minor, story/fix->patch) and version-based changelog updates (DONE)
 
 ### Story E8-S2: Security and resilience
 - [ ] T52 Add authorization checks per group/resource (TODO)
