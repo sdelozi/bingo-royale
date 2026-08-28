@@ -13,11 +13,11 @@ Priority key:
 
 ## Epic E1: Project Foundation (P0)
 ### Story E1-S1: App skeleton and standards
-- [ ] T1 Define repo structure, linting, formatting, env conventions (TODO)
+- [x] T1 Define repo structure, linting, formatting, env conventions (DONE)
 - [x] T2 Set up TypeScript app framework baseline (DONE)
 - [x] T3 Add CI checks for lint + tests (DONE)
-- [ ] T58 Define service-layer boundaries to isolate domain logic from framework/infrastructure details (TODO)
-- [ ] T59 Define adapter interfaces for storage, notifications, and realtime transport (TODO)
+- [x] T58 Define service-layer boundaries to isolate domain logic from framework/infrastructure details (DONE)
+- [x] T59 Define adapter interfaces for storage, notifications, and realtime transport (DONE)
 - [ ] T60 Keep ADR-0001 updated as hosting/auth constraints evolve (TODO)
 
 ### Story E1-S2: Database and ORM baseline
