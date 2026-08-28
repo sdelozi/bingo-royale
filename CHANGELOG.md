@@ -1,6 +1,11 @@
 # Changelog
 
-## 0.4.4 (in progress)
+## 0.5.0 (in progress)
+- E5-S1 derived stats: player board state now includes score, bingo count, and blackout.
+- Board page now surfaces live derived stats from persisted mark state.
+- Added service coverage for derived stats computation from board marks.
+
+## 0.4.4
 - Board template UX now uses a dedicated free-space objective input and 24 regular objectives.
 - Free-space objective is now always placed in the center tile when generating player boards.
 - Added admin control for whether free space is pre-marked by default on newly generated boards.

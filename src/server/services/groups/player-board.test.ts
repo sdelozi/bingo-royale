@@ -99,31 +99,26 @@ describe("player-board", () => {
         id: "group-1",
         name: "Trip"
       },
-      squares: [
-        {
-          position: 0,
-          objective: {
-            content: "Objective 1",
-            isFreeSpace: false
-          },
-          mark: null
+      squares: Array.from({ length: 25 }, (_, position) => ({
+        position,
+        objective: {
+          content: `Objective ${position + 1}`,
+          isFreeSpace: position === 12
         },
-        {
-          position: 1,
-          objective: {
-            content: "Objective 2",
-            isFreeSpace: true
-          },
-          mark: null
-        }
-      ]
+        mark: null
+      }))
     } as never);
 
     const result = await getOrCreatePlayerBoardForGroup("user-1", "group-1");
 
     expect(result.boardId).toBe("board-1");
     expect(result.groupName).toBe("Trip");
-    expect(result.squares[1].isMarked).toBe(false);
+    expect(result.squares[12].isMarked).toBe(false);
+    expect(result.stats).toEqual({
+      score: 0,
+      bingoCount: 0,
+      blackout: false
+    });
     expect(db.$transaction).not.toHaveBeenCalled();
   });
 
@@ -168,6 +163,7 @@ describe("player-board", () => {
             name: "Trip",
             currentTemplate: {
               id: "template-1",
+              freeSpaceMarkedByDefault: false,
               objectives
             }
           })
@@ -186,6 +182,52 @@ describe("player-board", () => {
       isFreeSpace: true
     });
     expect(result.squares.filter((square) => square.isFreeSpace)).toHaveLength(1);
+    expect(result.stats).toEqual({
+      score: 0,
+      bingoCount: 0,
+      blackout: false
+    });
     expect(db.$transaction).toHaveBeenCalledTimes(1);
+  });
+
+  it("computes score, bingo count, and blackout from mark state", async () => {
+    vi.mocked(db.membership.findUnique).mockResolvedValueOnce({
+      group: {
+        id: "group-1",
+        name: "Trip",
+        currentTemplateId: "template-1"
+      }
+    } as never);
+
+    const rowAndColumnAndDiagonalMarks = new Set([0, 1, 2, 3, 4, 5, 10, 15, 20, 6, 12, 18, 24]);
+
+    vi.mocked(db.playerBoard.findUnique).mockResolvedValueOnce({
+      id: "board-2",
+      createdAt: new Date(),
+      group: {
+        id: "group-1",
+        name: "Trip"
+      },
+      squares: Array.from({ length: 25 }, (_, position) => ({
+        position,
+        objective: {
+          content: `Objective ${position + 1}`,
+          isFreeSpace: position === 12
+        },
+        mark: rowAndColumnAndDiagonalMarks.has(position)
+          ? {
+              isMarked: true
+            }
+          : null
+      }))
+    } as never);
+
+    const result = await getOrCreatePlayerBoardForGroup("user-1", "group-1");
+
+    expect(result.stats).toEqual({
+      score: 13,
+      bingoCount: 3,
+      blackout: false
+    });
   });
 });
