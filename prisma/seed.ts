@@ -11,7 +11,7 @@ async function main(): Promise<void> {
     update: {},
     create: {
       email: adminEmail,
-      displayName: "Trip Admin"
+      name: "Trip Admin"
     }
   });
 

@@ -19,9 +19,13 @@ and this project adheres to Semantic Versioning where applicable.
 - Architecture notes defining repository structure, service boundaries, and environment conventions.
 - Initial provider-agnostic adapter contracts for notifications, realtime, and file storage.
 - Shared server-side service context and centralized environment contract.
+- Auth.js baseline with Prisma-backed sessions, credentials auth, and optional Google OAuth.
+- Registration API plus sign-in, sign-out, and dashboard placeholder flows.
+- NextAuth-compatible Prisma schema extensions for users, accounts, sessions, and verification tokens.
 
 ### Changed
 - Planning docs expanded with roadmap, backlog, and ADR-0001.
+- Development docs and environment template updated for local auth setup.
 
 ### Fixed
 - _Nothing yet._
