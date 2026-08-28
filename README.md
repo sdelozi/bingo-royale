@@ -15,7 +15,7 @@ Foundation and auth baseline work are in progress.
 - Versioning: [docs/versioning.md](docs/versioning.md)
 
 ## Current Version
-- 0.3.3 (in progress)
+- 0.3.4 (in progress)
 
 ## v1 Snapshot
 - Web app first (5x5 boards)
@@ -30,6 +30,7 @@ Foundation and auth baseline work are in progress.
 - Optional Google OAuth when provider credentials are configured
 - Group creation and join by invite code
 - Share-link group join route for authenticated users
+- Share-link callback is preserved through sign-in/register flows
 
 ## Next Step
 Begin Epic 4 board template and player-board generation workflows.

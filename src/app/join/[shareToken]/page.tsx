@@ -13,7 +13,7 @@ export default async function JoinBySharePage({ params }: JoinBySharePageProps) 
   const user = await getCurrentUser();
 
   if (!user?.id) {
-    redirect("/auth/signin");
+    redirect(`/auth/signin?callbackUrl=${encodeURIComponent(`/join/${params.shareToken}`)}&error=auth_required`);
   }
 
   try {
@@ -34,7 +34,7 @@ export default async function JoinBySharePage({ params }: JoinBySharePageProps) 
       return (
         <main>
           <h1>Invalid share link</h1>
-          <p>This group link is invalid or expired.</p>
+          <p>This group link is invalid.</p>
           <p>
             <Link href="/groups">Back to groups</Link>
           </p>

@@ -1,6 +1,11 @@
 # Changelog
 
-## 0.3.3 (in progress)
+## 0.3.4 (in progress)
+- Fixed join form runtime crash after successful invite-code submit.
+- Preserved share-link callbackUrl across sign-in and register flows so users return to join after authentication.
+- Clarified invalid share-link text to match current behavior (invalid only; expiry not implemented yet).
+
+## 0.3.3
 - E3-S3 role-aware dashboard UX: dashboard now lists user groups with role-based actions.
 - Group detail page added for creator/admin versus player interaction paths.
 - Versioning policy introduced and changelog converted to a concise version-based format.

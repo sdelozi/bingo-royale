@@ -1,9 +1,14 @@
 "use client";
 
+import React from "react";
 import { FormEvent, useState } from "react";
 import { signIn } from "next-auth/react";
 
-export function RegisterForm() {
+type RegisterFormProps = {
+  callbackUrl?: string;
+};
+
+export function RegisterForm({ callbackUrl = "/dashboard" }: RegisterFormProps) {
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -38,7 +43,7 @@ export function RegisterForm() {
     await signIn("credentials", {
       email: payload.email,
       password: payload.password,
-      callbackUrl: "/dashboard"
+      callbackUrl
     });
   }
 
