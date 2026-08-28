@@ -90,8 +90,9 @@ describe("POST /api/groups/[groupId]/template", () => {
     vi.mocked(saveGroupTemplateForGroup).mockResolvedValueOnce({ version: 4 } as never);
 
     const payload = {
-      objectives: Array.from({ length: 25 }, (_, i) => `Objective ${i + 1}`),
-      freeSpaceOrdinal: 12
+      freeSpaceObjective: "Free space",
+      objectives: Array.from({ length: 24 }, (_, i) => `Objective ${i + 1}`),
+      freeSpaceMarkedByDefault: false
     };
 
     const response = await POST(

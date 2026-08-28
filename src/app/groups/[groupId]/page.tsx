@@ -24,6 +24,7 @@ export default async function GroupDetailPage({ params }: GroupDetailPageProps) 
   }
 
   const shareLink = membership.shareToken ? `${env.appUrl}/join/${membership.shareToken}` : null;
+  const canManageTemplate = membership.role === "ADMIN";
 
   return (
     <main>
@@ -32,7 +33,11 @@ export default async function GroupDetailPage({ params }: GroupDetailPageProps) 
       <p>Invite code: {membership.inviteCode}</p>
       <p>Share link: {shareLink ?? "Not available"}</p>
 
-      {membership.isCreator ? (
+      <p>
+        <Link href={`/groups/${membership.groupId}/board`}>Open your board</Link>
+      </p>
+
+      {canManageTemplate ? (
         <>
           <p>Admin actions: manage board configuration and group settings.</p>
           <p>
@@ -40,7 +45,7 @@ export default async function GroupDetailPage({ params }: GroupDetailPageProps) 
           </p>
         </>
       ) : (
-        <p>Player actions: play board and view leaderboard (coming next).</p>
+        <p>Player actions: play your board now and view leaderboard when that ships.</p>
       )}
 
       <p>

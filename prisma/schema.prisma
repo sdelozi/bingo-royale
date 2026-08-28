@@ -102,6 +102,7 @@ model BoardTemplate {
   groupId            String
   version            Int
   isActive           Boolean          @default(false)
+  freeSpaceMarkedByDefault Boolean    @default(false)
   createdAt          DateTime         @default(now())
   updatedAt          DateTime         @updatedAt
 

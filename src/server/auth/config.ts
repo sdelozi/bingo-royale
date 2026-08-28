@@ -26,9 +26,15 @@ const providers: NextAuthOptions["providers"] = [
         return null;
       }
 
-      const user = await db.user.findUnique({
-        where: { email: parsed.data.email }
-      });
+      let user;
+
+      try {
+        user = await db.user.findUnique({
+          where: { email: parsed.data.email }
+        });
+      } catch {
+        return null;
+      }
 
       if (!user?.passwordHash) {
         return null;

@@ -12,6 +12,15 @@ export function RegisterForm({ callbackUrl = "/dashboard" }: RegisterFormProps) 
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  async function readErrorMessage(response: Response) {
+    try {
+      const data = (await response.json()) as { error?: string };
+      return data.error ?? "Unable to create account.";
+    } catch {
+      return "Unable to create account right now. Please try again.";
+    }
+  }
+
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setIsSubmitting(true);
@@ -32,10 +41,8 @@ export function RegisterForm({ callbackUrl = "/dashboard" }: RegisterFormProps) 
       body: JSON.stringify(payload)
     });
 
-    const data = (await response.json()) as { error?: string };
-
     if (!response.ok) {
-      setError(data.error ?? "Unable to create account.");
+      setError(await readErrorMessage(response));
       setIsSubmitting(false);
       return;
     }

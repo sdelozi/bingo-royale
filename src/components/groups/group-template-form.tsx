@@ -6,25 +6,30 @@ import { useRouter } from "next/navigation";
 
 type GroupTemplateFormProps = {
   groupId: string;
+  initialFreeSpaceObjective: string;
   initialObjectives: string[];
-  initialFreeSpaceOrdinal: number;
+  initialFreeSpaceMarkedByDefault: boolean;
   currentVersion: number;
 };
 
 export function GroupTemplateForm({
   groupId,
+  initialFreeSpaceObjective,
   initialObjectives,
-  initialFreeSpaceOrdinal,
+  initialFreeSpaceMarkedByDefault,
   currentVersion
 }: GroupTemplateFormProps) {
   const router = useRouter();
+  const [freeSpaceObjective, setFreeSpaceObjective] = useState<string>(initialFreeSpaceObjective);
   const [objectives, setObjectives] = useState<string[]>(initialObjectives);
-  const [freeSpaceOrdinal, setFreeSpaceOrdinal] = useState<number>(initialFreeSpaceOrdinal);
+  const [freeSpaceMarkedByDefault, setFreeSpaceMarkedByDefault] = useState<boolean>(
+    initialFreeSpaceMarkedByDefault
+  );
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isSaved, setIsSaved] = useState(false);
 
-  const objectiveCount = useMemo(() => objectives.length, [objectives]);
+  const objectiveCount = useMemo(() => objectives.length + 1, [objectives]);
 
   function updateObjective(index: number, value: string) {
     setObjectives((previous) => previous.map((item, i) => (i === index ? value : item)));
@@ -37,8 +42,9 @@ export function GroupTemplateForm({
     setIsSubmitting(true);
 
     const payload = {
+      freeSpaceObjective: freeSpaceObjective.trim(),
       objectives: objectives.map((objective) => objective.trim()),
-      freeSpaceOrdinal
+      freeSpaceMarkedByDefault
     };
 
     const response = await fetch(`/api/groups/${groupId}/template`, {
@@ -66,9 +72,34 @@ export function GroupTemplateForm({
     <section>
       <h2>Board template</h2>
       <p>Current version: {currentVersion}</p>
-      <p>Provide exactly 25 objectives and choose one free-space tile.</p>
+      <p>Provide exactly 25 objectives. Free space is always rendered in the center tile.</p>
 
       <form onSubmit={handleSubmit}>
+        <p>
+          <label htmlFor="free-space-objective">Free-space objective (center tile)</label>
+          <br />
+          <input
+            id="free-space-objective"
+            type="text"
+            value={freeSpaceObjective}
+            onChange={(event) => setFreeSpaceObjective(event.target.value)}
+            maxLength={140}
+            required
+          />
+        </p>
+
+        <p>
+          <label>
+            <input
+              type="checkbox"
+              checked={freeSpaceMarkedByDefault}
+              onChange={(event) => setFreeSpaceMarkedByDefault(event.target.checked)}
+            />
+            Mark free-space as completed by default for new player boards
+          </label>
+        </p>
+
+        <h3>Other objectives</h3>
         <ol>
           {objectives.map((objective, index) => (
             <li key={index}>
@@ -82,15 +113,6 @@ export function GroupTemplateForm({
                 maxLength={140}
                 required
               />
-              <label>
-                <input
-                  type="radio"
-                  name="free-space"
-                  checked={freeSpaceOrdinal === index}
-                  onChange={() => setFreeSpaceOrdinal(index)}
-                />
-                Free space
-              </label>
             </li>
           ))}
         </ol>

@@ -5,6 +5,32 @@
 - Docker Desktop (for local PostgreSQL)
 
 ## Quick Start
+### One-command Windows startup
+- Run `npm run start:local`.
+- The script will:
+	- create `.env` and `.env.local` from `.env.example` if they do not exist
+	- generate a local `AUTH_SECRET` if the placeholder value is still present
+	- start local PostgreSQL with Docker
+	- generate Prisma client
+	- apply committed migrations (or fall back to `db:push` if no migrations exist)
+	- seed demo data
+	- start the Next.js dev server
+- Useful flags when running the script directly:
+	- `./scripts/start-local.ps1 -SkipDevServer`
+	- `./scripts/start-local.ps1 -SkipSeed`
+	- `./scripts/start-local.ps1 -ForceInstall`
+
+### One-command Windows shutdown
+- Run `npm run stop:local`.
+- Default behavior:
+	- stops the local `postgres` Docker service
+	- keeps data volumes and other containers intact
+- Useful flags when running shutdown directly:
+	- `./scripts/stop-local.ps1 -StopDevServer`
+	- `./scripts/stop-local.ps1 -Down`
+	- `./scripts/stop-local.ps1 -Down -RemoveVolumes`
+	- `./scripts/stop-local.ps1 -Down -RemoveOrphans`
+
 1. Create local env file:
 - Copy `.env.example` to `.env.local`.
 - Set `AUTH_SECRET` before starting the app.
@@ -36,3 +62,4 @@
 - Open Prisma Studio: `npm run db:studio`
 - Push schema without migration files: `npm run db:push`
 - Deploy existing migrations: `npm run db:migrate:deploy`
+- Full local shutdown and cleanup: `npm run stop:local`
