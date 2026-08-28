@@ -3,6 +3,7 @@ import { getAuthSession } from "@/server/auth/session";
 import {
   GroupAccessError,
   GroupForbiddenError,
+  TemplateEditConfirmationRequiredError,
   ZodError,
   saveGroupTemplateForGroup
 } from "@/server/services/groups/template-management";
@@ -36,6 +37,17 @@ export async function POST(request: Request, { params }: Params) {
 
     if (error instanceof GroupForbiddenError) {
       return NextResponse.json({ error: "Only admins can manage templates." }, { status: 403 });
+    }
+
+    if (error instanceof TemplateEditConfirmationRequiredError) {
+      return NextResponse.json(
+        {
+          error: error.message,
+          requiresConfirmation: true,
+          impactedBoardCount: error.impactedBoardCount
+        },
+        { status: 409 }
+      );
     }
 
     return NextResponse.json({ error: "Unable to save board template right now." }, { status: 500 });

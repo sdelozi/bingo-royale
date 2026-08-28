@@ -6,6 +6,7 @@ import {
   GroupAccessError,
   GroupForbiddenError,
   REGULAR_OBJECTIVE_COUNT,
+  TemplateEditConfirmationRequiredError,
   buildTemplateObjectives,
   getGroupTemplateEditorData,
   parseTemplateInput,
@@ -16,6 +17,9 @@ vi.mock("@/server/db/client", () => ({
   db: {
     membership: {
       findUnique: vi.fn()
+    },
+    playerBoard: {
+      count: vi.fn()
     },
     $transaction: vi.fn()
   }
@@ -77,6 +81,9 @@ describe("template-management", () => {
       group: {
         id: "group-1",
         name: "Trip",
+        _count: {
+          boards: 0
+        },
         currentTemplate: null
       }
     } as never);
@@ -86,11 +93,27 @@ describe("template-management", () => {
     expect(result.objectives).toHaveLength(24);
     expect(result.freeSpaceObjective).toBe("Free space");
     expect(result.freeSpaceMarkedByDefault).toBe(false);
+    expect(result.hasExistingBoards).toBe(false);
     expect(result.currentVersion).toBe(0);
+  });
+
+  it("requires confirmation when boards already exist", async () => {
+    vi.mocked(db.membership.findUnique).mockResolvedValueOnce({ role: MembershipRole.ADMIN } as never);
+    vi.mocked(db.playerBoard.count).mockResolvedValueOnce(3 as never);
+
+    await expect(
+      saveGroupTemplateForGroup("user-1", "group-1", {
+        freeSpaceObjective: "Center free",
+        objectives: Array.from({ length: 24 }, (_, i) => `Objective ${i + 1}`),
+        freeSpaceMarkedByDefault: false,
+        warningAcknowledged: false
+      })
+    ).rejects.toBeInstanceOf(TemplateEditConfirmationRequiredError);
   });
 
   it("saves as a new active version and updates current template pointer", async () => {
     vi.mocked(db.membership.findUnique).mockResolvedValueOnce({ role: MembershipRole.ADMIN } as never);
+    vi.mocked(db.playerBoard.count).mockResolvedValueOnce(2 as never);
 
     vi.mocked(db.$transaction).mockImplementationOnce(async (callback: never) => {
       const tx = {
@@ -115,7 +138,8 @@ describe("template-management", () => {
     const result = await saveGroupTemplateForGroup("user-1", "group-1", {
       freeSpaceObjective: "Center free",
       objectives: Array.from({ length: 24 }, (_, i) => `Objective ${i + 1}`),
-      freeSpaceMarkedByDefault: true
+      freeSpaceMarkedByDefault: true,
+      warningAcknowledged: true
     });
 
     expect(result.version).toBe(3);

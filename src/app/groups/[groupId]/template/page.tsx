@@ -32,6 +32,7 @@ export default async function GroupTemplatePage({ params }: GroupTemplatePagePro
           initialFreeSpaceObjective={data.freeSpaceObjective}
           initialObjectives={data.objectives}
           initialFreeSpaceMarkedByDefault={data.freeSpaceMarkedByDefault}
+          hasExistingBoards={data.hasExistingBoards}
           currentVersion={data.currentVersion}
         />
         <p>

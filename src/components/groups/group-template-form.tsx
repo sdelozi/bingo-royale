@@ -9,6 +9,7 @@ type GroupTemplateFormProps = {
   initialFreeSpaceObjective: string;
   initialObjectives: string[];
   initialFreeSpaceMarkedByDefault: boolean;
+  hasExistingBoards: boolean;
   currentVersion: number;
 };
 
@@ -17,6 +18,7 @@ export function GroupTemplateForm({
   initialFreeSpaceObjective,
   initialObjectives,
   initialFreeSpaceMarkedByDefault,
+  hasExistingBoards,
   currentVersion
 }: GroupTemplateFormProps) {
   const router = useRouter();
@@ -28,6 +30,7 @@ export function GroupTemplateForm({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isSaved, setIsSaved] = useState(false);
+  const [isConfirmingPostStartEdit, setIsConfirmingPostStartEdit] = useState(false);
 
   const objectiveCount = useMemo(() => objectives.length + 1, [objectives]);
 
@@ -37,6 +40,14 @@ export function GroupTemplateForm({
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+
+    if (hasExistingBoards && !isConfirmingPostStartEdit) {
+      setError(null);
+      setIsSaved(false);
+      setIsConfirmingPostStartEdit(true);
+      return;
+    }
+
     setError(null);
     setIsSaved(false);
     setIsSubmitting(true);
@@ -44,7 +55,8 @@ export function GroupTemplateForm({
     const payload = {
       freeSpaceObjective: freeSpaceObjective.trim(),
       objectives: objectives.map((objective) => objective.trim()),
-      freeSpaceMarkedByDefault
+      freeSpaceMarkedByDefault,
+      warningAcknowledged: !hasExistingBoards || isConfirmingPostStartEdit
     };
 
     const response = await fetch(`/api/groups/${groupId}/template`, {
@@ -58,12 +70,17 @@ export function GroupTemplateForm({
     const data = (await response.json()) as { error?: string };
 
     if (!response.ok) {
+      if (response.status === 409) {
+        setIsConfirmingPostStartEdit(true);
+      }
+
       setError(data.error ?? "Unable to save board template.");
       setIsSubmitting(false);
       return;
     }
 
     setIsSaved(true);
+    setIsConfirmingPostStartEdit(false);
     setIsSubmitting(false);
     router.refresh();
   }
@@ -119,11 +136,28 @@ export function GroupTemplateForm({
 
         <p>Total objectives: {objectiveCount}</p>
 
-        <p>
-          <button type="submit" disabled={isSubmitting}>
-            {isSubmitting ? "Saving..." : "Save template"}
-          </button>
-        </p>
+        {isConfirmingPostStartEdit ? (
+          <div role="dialog" aria-modal="true">
+            <p>
+              Warning: saving now may affect in-progress boards. Unchanged squares stay as-is, while changed objectives may
+              alter active player boards.
+            </p>
+            <p>
+              <button type="submit" disabled={isSubmitting}>
+                {isSubmitting ? "Saving..." : "I understand, save template"}
+              </button>{" "}
+              <button type="button" disabled={isSubmitting} onClick={() => setIsConfirmingPostStartEdit(false)}>
+                Cancel
+              </button>
+            </p>
+          </div>
+        ) : (
+          <p>
+            <button type="submit" disabled={isSubmitting}>
+              {isSubmitting ? "Saving..." : "Save template"}
+            </button>
+          </p>
+        )}
       </form>
 
       {error ? <p>{error}</p> : null}

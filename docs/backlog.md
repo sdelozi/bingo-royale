@@ -83,8 +83,8 @@ Priority key:
 
 ## Epic E6: Mid-Game Template Editing Safety (P0)
 ### Story E6-S1: Warning and confirmation
-- [ ] T37 Show warning modal before saving template edits post-start (TODO)
-- [ ] T38 Require explicit confirmation on impact warning (TODO)
+- [x] T37 Show warning modal before saving template edits post-start (DONE)
+- [x] T38 Require explicit confirmation on impact warning (DONE)
 
 ### Story E6-S2: Mark-preservation logic
 - [ ] T39 Keep all unaffected marks intact (TODO)
