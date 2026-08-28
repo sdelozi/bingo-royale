@@ -9,6 +9,7 @@ Planning is complete and implementation has not started yet.
 - Roadmap: [docs/roadmap.md](docs/roadmap.md)
 - Backlog: [docs/backlog.md](docs/backlog.md)
 - ADR-0001 (platform + auth): [docs/adr/0001-platform-and-auth.md](docs/adr/0001-platform-and-auth.md)
+- Local setup: [docs/development.md](docs/development.md)
 
 ## v1 Snapshot
 - Web app first (5x5 boards)
