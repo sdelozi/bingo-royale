@@ -39,6 +39,11 @@ export default async function GroupsPage() {
                     <strong>{group.groupName}</strong>
                   </p>
                   <p>Role: {group.role}</p>
+                  <p>
+                    <Link href={`/groups/${group.groupId}`}>
+                      {group.isCreator ? "Manage group" : "Open group"}
+                    </Link>
+                  </p>
                   <p>Invite code: {group.inviteCode}</p>
                   <p>Share link: {shareLink ?? "Not available"}</p>
                 </li>
