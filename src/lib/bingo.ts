@@ -17,7 +17,11 @@ const WINNING_LINES: number[][] = [
 
 export function calculateScore(marks: BoardMarks): number {
   validateBoardLength(marks);
-  return marks.filter(Boolean).length;
+  const markedSquares = marks.filter(Boolean).length;
+  const bingoCount = countBingos(marks);
+  const blackout = isBlackout(marks);
+
+  return markedSquares + bingoCount * 5 + (blackout ? 15 : 0);
 }
 
 export function countBingos(marks: BoardMarks): number {

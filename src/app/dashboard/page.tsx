@@ -45,9 +45,6 @@ export default async function DashboardPage() {
         <Link href="/groups">Go to groups</Link>
       </p>
       <p>
-        <Link href="/board">Go to board</Link>
-      </p>
-      <p>
         <Link href="/">Back home</Link>
       </p>
       <SignOutButton />

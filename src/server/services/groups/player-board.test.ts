@@ -225,7 +225,7 @@ describe("player-board", () => {
     const result = await getOrCreatePlayerBoardForGroup("user-1", "group-1");
 
     expect(result.stats).toEqual({
-      score: 13,
+      score: 28,
       bingoCount: 3,
       blackout: false
     });

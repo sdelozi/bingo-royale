@@ -20,14 +20,13 @@ function createSquares() {
   }));
 }
 
-function getTileButton(tileNumber: number) {
-  const label = `Tile ${tileNumber}Objective ${tileNumber}`;
+function getTileButtonByObjective(objectiveLabel: string) {
   const button = screen
     .getAllByRole("button")
-    .find((candidate) => (candidate.textContent ?? "").replace(/\s+/g, "").includes(label.replace(/\s+/g, "")));
+    .find((candidate) => (candidate.textContent ?? "").includes(objectiveLabel));
 
   if (!button) {
-    throw new Error(`Unable to find button for ${label}.`);
+    throw new Error(`Unable to find button for ${objectiveLabel}.`);
   }
 
   return button;
@@ -46,7 +45,7 @@ describe("PlayerBoardGrid", () => {
 
     render(<PlayerBoardGrid groupId="group-1" squares={createSquares()} />);
 
-    const tileButton = getTileButton(1);
+    const tileButton = getTileButtonByObjective("Objective 1");
     fireEvent.click(tileButton);
 
     expect(tileButton).toHaveAttribute("aria-pressed", "true");
@@ -69,7 +68,7 @@ describe("PlayerBoardGrid", () => {
 
     render(<PlayerBoardGrid groupId="group-1" squares={createSquares()} />);
 
-    const tileButton = getTileButton(1);
+    const tileButton = getTileButtonByObjective("Objective 1");
     fireEvent.click(tileButton);
 
     expect(tileButton).toHaveAttribute("aria-pressed", "true");
@@ -90,5 +89,26 @@ describe("PlayerBoardGrid", () => {
 
     expect(freeSpaceButton).not.toBeDisabled();
     expect(freeSpaceButton).toHaveAttribute("aria-pressed", "false");
+  });
+
+  it("coalesces rapid toggles to final local state", async () => {
+    const fetchMock = vi.spyOn(globalThis, "fetch").mockResolvedValue({
+      ok: true,
+      json: async () => ({ position: 0, isMarked: false })
+    } as Response);
+
+    render(<PlayerBoardGrid groupId="group-1" squares={createSquares()} />);
+
+    const tileButton = getTileButtonByObjective("Objective 1");
+    fireEvent.click(tileButton);
+    fireEvent.click(tileButton);
+
+    await waitFor(() => {
+      expect(tileButton).toHaveAttribute("aria-pressed", "false");
+      expect(tileButton).toHaveTextContent("Open");
+      expect(fetchMock).toHaveBeenCalled();
+    });
+
+    fetchMock.mockRestore();
   });
 });

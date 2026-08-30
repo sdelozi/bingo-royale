@@ -1,7 +1,8 @@
 "use client";
 
 import React from "react";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { calculateScore, countBingos, isBlackout } from "@/lib/bingo";
 import type { PlayerBoardSquareState } from "@/server/services/groups/player-board";
 import { fetchGroupBoardSnapshot } from "@/lib/sync/group-sync-drivers";
 import { createPollingSyncTransport } from "@/lib/sync/transport";
@@ -39,6 +40,27 @@ export function GroupBoardLivePanel({
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [nextRefreshMs, setNextRefreshMs] = useState(transport.getNextDelayMs());
   const [error, setError] = useState<string | null>(null);
+
+  const updateStatsFromSquares = useCallback((nextSquares: PlayerBoardSquareState[]) => {
+    const marks = nextSquares.map((square) => square.isMarked);
+    const nextStats = {
+      score: calculateScore(marks),
+      bingoCount: countBingos(marks),
+      blackout: isBlackout(marks)
+    };
+
+    setStats((currentStats) => {
+      if (
+        currentStats.score === nextStats.score &&
+        currentStats.bingoCount === nextStats.bingoCount &&
+        currentStats.blackout === nextStats.blackout
+      ) {
+        return currentStats;
+      }
+
+      return nextStats;
+    });
+  }, []);
 
   useEffect(() => {
     const stop = transport.start({
@@ -78,7 +100,7 @@ export function GroupBoardLivePanel({
         </button>
       </p>
 
-      <PlayerBoardGrid groupId={groupId} squares={squares} />
+      <PlayerBoardGrid groupId={groupId} squares={squares} onSquaresChange={updateStatsFromSquares} />
     </section>
   );
 }

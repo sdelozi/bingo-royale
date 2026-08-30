@@ -1,8 +1,8 @@
 # Versioning
 
 ## Current baseline
-- Current development version: 0.5.0
-- Rationale: Epic 5 has started with E5-S1 derived stats wired into player board state and UI.
+- Current development version: 0.5.1
+- Rationale: User-testing polish and bug-fix updates landed across board UX, sync behavior, and leaderboard scoring/ranking.
 
 ## Rules until first release
 - Stay on major version 0 until first release.

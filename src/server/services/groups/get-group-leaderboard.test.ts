@@ -42,6 +42,7 @@ describe("getGroupLeaderboardForUser", () => {
             {
               id: "board-1",
               createdAt: new Date("2026-08-28T00:00:00.000Z"),
+              updatedAt: new Date("2026-08-28T00:10:00.000Z"),
               squares: Array.from({ length: 25 }, (_, position) => ({
                 position,
                 mark: {
@@ -76,7 +77,7 @@ describe("getGroupLeaderboardForUser", () => {
         displayName: "Alice",
         role: MembershipRole.PLAYER,
         joinedAt: new Date("2026-08-28T00:00:00.000Z"),
-        score: 25,
+        score: 100,
         bingoCount: 12,
         blackout: true,
         boardHref: "/groups/group-1/boards/u1"
@@ -92,5 +93,95 @@ describe("getGroupLeaderboardForUser", () => {
         boardHref: null
       }
     ]);
+  });
+
+  it("sorts by blackout, then bingo count, then score, then earliest achieved", async () => {
+    vi.mocked(db.membership.findUnique).mockResolvedValueOnce({
+      group: {
+        id: "group-1",
+        name: "Weekend Trip"
+      }
+    } as never);
+
+    const createSquares = (markedIndexes: number[]) =>
+      Array.from({ length: 25 }, (_, position) => ({
+        position,
+        mark: markedIndexes.includes(position) ? { isMarked: true } : null
+      }));
+
+    vi.mocked(db.membership.findMany).mockResolvedValueOnce([
+      {
+        user: {
+          id: "u1",
+          name: "Blackout",
+          email: "u1@example.com",
+          boards: [
+            {
+              id: "board-1",
+              createdAt: new Date("2026-08-28T00:00:00.000Z"),
+              updatedAt: new Date("2026-08-28T00:05:00.000Z"),
+              squares: createSquares(Array.from({ length: 25 }, (_, index) => index))
+            }
+          ]
+        },
+        role: MembershipRole.PLAYER,
+        joinedAt: new Date("2026-08-28T00:00:00.000Z")
+      },
+      {
+        user: {
+          id: "u2",
+          name: "More Bingos",
+          email: "u2@example.com",
+          boards: [
+            {
+              id: "board-2",
+              createdAt: new Date("2026-08-28T00:00:00.000Z"),
+              updatedAt: new Date("2026-08-28T00:20:00.000Z"),
+              squares: createSquares([0, 1, 2, 3, 4, 5, 10, 15, 20])
+            }
+          ]
+        },
+        role: MembershipRole.PLAYER,
+        joinedAt: new Date("2026-08-28T00:00:00.000Z")
+      },
+      {
+        user: {
+          id: "u3",
+          name: "Same Bingos Less Score",
+          email: "u3@example.com",
+          boards: [
+            {
+              id: "board-3",
+              createdAt: new Date("2026-08-28T00:00:00.000Z"),
+              updatedAt: new Date("2026-08-28T00:10:00.000Z"),
+              squares: createSquares([0, 1, 2, 3, 4])
+            }
+          ]
+        },
+        role: MembershipRole.PLAYER,
+        joinedAt: new Date("2026-08-28T00:00:00.000Z")
+      },
+      {
+        user: {
+          id: "u4",
+          name: "Tie Earlier",
+          email: "u4@example.com",
+          boards: [
+            {
+              id: "board-4",
+              createdAt: new Date("2026-08-28T00:00:00.000Z"),
+              updatedAt: new Date("2026-08-28T00:01:00.000Z"),
+              squares: createSquares([0, 1, 2, 3, 4])
+            }
+          ]
+        },
+        role: MembershipRole.PLAYER,
+        joinedAt: new Date("2026-08-28T00:00:00.000Z")
+      }
+    ] as never);
+
+    const result = await getGroupLeaderboardForUser("viewer", "group-1");
+
+    expect(result.rows.map((row) => row.userId)).toEqual(["u1", "u2", "u4", "u3"]);
   });
 });

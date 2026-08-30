@@ -1,13 +1,5 @@
-import Link from "next/link";
+import { redirect } from "next/navigation";
 
 export default function BoardPage() {
-  return (
-    <main>
-      <h1>Board</h1>
-      <p>Your playable board view is coming soon.</p>
-      <p>
-        <Link href="/dashboard">Back to dashboard</Link>
-      </p>
-    </main>
-  );
+  redirect("/groups");
 }
