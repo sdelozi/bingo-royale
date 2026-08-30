@@ -1,6 +1,13 @@
 # Changelog
 
-## 0.5.0 (in progress)
+## 0.5.1 (in progress)
+- User-testing polish: removed confusing dashboard board entry-point and redirected the legacy global board route to groups.
+- Board UX polish: increased tile readability, removed tile numbering labels, and aligned read-only board visuals with playable tiles.
+- Scoring and leaderboard update: switched to weighted score calculation and ranked by blackout, bingo count, score, then earliest achievement timestamp.
+- Interaction reliability: fixed rapid-toggle coalescing and optimistic rollback behavior so local state stays responsive and server sync remains correct.
+- Added and updated coverage for board interactions, leaderboard ordering, and weighted scoring expectations.
+
+## 0.5.0
 - E5-S1 derived stats: player board state now includes score, bingo count, and blackout.
 - Board page now surfaces live derived stats from persisted mark state.
 - Added service coverage for derived stats computation from board marks.

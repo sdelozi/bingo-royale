@@ -2,42 +2,59 @@
 
 import React from "react";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { PlayerBoardSquareState } from "@/server/services/groups/player-board";
 import styles from "./player-board-grid.module.css";
 
 type PlayerBoardGridProps = {
   groupId: string;
   squares: PlayerBoardSquareState[];
+  onSquaresChange?: (squares: PlayerBoardSquareState[]) => void;
 };
 
-export function PlayerBoardGrid({ groupId, squares }: PlayerBoardGridProps) {
+export function PlayerBoardGrid({ groupId, squares, onSquaresChange }: PlayerBoardGridProps) {
   const router = useRouter();
   const [boardSquares, setBoardSquares] = useState(squares);
-  const [pendingPosition, setPendingPosition] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const inFlightRef = useRef(false);
+  const boardSquaresRef = useRef(boardSquares);
+  const serverSquaresRef = useRef(squares);
+  const desiredMarksRef = useRef<Map<number, boolean>>(new Map());
 
   useEffect(() => {
-    if (pendingPosition === null) {
+    boardSquaresRef.current = boardSquares;
+  }, [boardSquares]);
+
+  useEffect(() => {
+    if (!inFlightRef.current) {
       setBoardSquares(squares);
+      boardSquaresRef.current = squares;
+      serverSquaresRef.current = squares;
+      desiredMarksRef.current = new Map(squares.map((square) => [square.position, square.isMarked]));
     }
-  }, [pendingPosition, squares]);
+  }, [squares]);
 
-  async function toggleSquare(position: number) {
-    const previousSquares = boardSquares;
-    const square = previousSquares.find((item) => item.position === position);
-
-    if (!square || pendingPosition !== null) {
+  async function flushPendingUpdates() {
+    if (inFlightRef.current) {
       return;
     }
 
-    const nextMarkedState = !square.isMarked;
+    const changedSquare = serverSquaresRef.current.find((square) => {
+      const desired = desiredMarksRef.current.get(square.position);
+      return typeof desired === "boolean" && desired !== square.isMarked;
+    });
 
-    setError(null);
-    setPendingPosition(position);
-    setBoardSquares((currentSquares) =>
-      currentSquares.map((item) => (item.position === position ? { ...item, isMarked: nextMarkedState } : item))
-    );
+    if (!changedSquare) {
+      return;
+    }
+
+    const targetMarkedState = desiredMarksRef.current.get(changedSquare.position);
+
+    if (typeof targetMarkedState !== "boolean") {
+      return;
+    }
+
+    inFlightRef.current = true;
 
     try {
       const response = await fetch(`/api/groups/${groupId}/board`, {
@@ -46,8 +63,8 @@ export function PlayerBoardGrid({ groupId, squares }: PlayerBoardGridProps) {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          position,
-          isMarked: nextMarkedState
+          position: changedSquare.position,
+          isMarked: targetMarkedState
         })
       });
 
@@ -58,20 +75,63 @@ export function PlayerBoardGrid({ groupId, squares }: PlayerBoardGridProps) {
       }
 
       if (typeof data.position === "number" && typeof data.isMarked === "boolean") {
-        setBoardSquares((currentSquares) =>
-          currentSquares.map((item) =>
-            item.position === data.position ? { ...item, isMarked: data.isMarked ?? item.isMarked } : item
-          )
+        const nextSquares = boardSquaresRef.current.map((item) =>
+          item.position === data.position ? { ...item, isMarked: data.isMarked } : item
         );
+        const nextServerSquares = serverSquaresRef.current.map((item) =>
+          item.position === data.position ? { ...item, isMarked: data.isMarked } : item
+        );
+        boardSquaresRef.current = nextSquares;
+        serverSquaresRef.current = nextServerSquares;
+        setBoardSquares(nextSquares);
+        onSquaresChange?.(nextSquares);
       }
 
-      router.refresh();
+      setError(null);
     } catch (requestError) {
-      setBoardSquares(previousSquares);
+      setBoardSquares(squares);
+      boardSquaresRef.current = squares;
+      serverSquaresRef.current = squares;
+      desiredMarksRef.current = new Map(squares.map((square) => [square.position, square.isMarked]));
       setError(requestError instanceof Error ? requestError.message : "Unable to update board mark.");
     } finally {
-      setPendingPosition(null);
+      inFlightRef.current = false;
+
+      if (
+        boardSquaresRef.current.some((square) => {
+          const desired = desiredMarksRef.current.get(square.position);
+          return typeof desired === "boolean" && desired !== square.isMarked;
+        })
+      ) {
+        void flushPendingUpdates();
+      } else {
+        router.refresh();
+      }
     }
+  }
+
+  async function toggleSquare(position: number) {
+    const square = boardSquares.find((item) => item.position === position);
+
+    if (!square) {
+      return;
+    }
+
+    const currentDesired = desiredMarksRef.current.get(position) ?? square.isMarked;
+    const nextMarkedState = !currentDesired;
+
+    setError(null);
+    desiredMarksRef.current.set(position, nextMarkedState);
+    setBoardSquares((currentSquares) => {
+      const nextSquares = currentSquares.map((item) =>
+        item.position === position ? { ...item, isMarked: nextMarkedState } : item
+      );
+      boardSquaresRef.current = nextSquares;
+      onSquaresChange?.(nextSquares);
+      return nextSquares;
+    });
+
+    void flushPendingUpdates();
   }
 
   const rows = Array.from({ length: 5 }, (_, rowIndex) => boardSquares.slice(rowIndex * 5, rowIndex * 5 + 5));
@@ -85,8 +145,6 @@ export function PlayerBoardGrid({ groupId, squares }: PlayerBoardGridProps) {
           {rows.map((row, rowIndex) => (
             <tr key={rowIndex}>
               {row.map((square) => {
-                const isPending = pendingPosition === square.position;
-
                 return (
                   <td key={square.position} className={styles.boardGridCell}>
                     <button
@@ -94,13 +152,10 @@ export function PlayerBoardGrid({ groupId, squares }: PlayerBoardGridProps) {
                       type="button"
                       onClick={() => toggleSquare(square.position)}
                       aria-pressed={square.isMarked}
-                      disabled={isPending || pendingPosition !== null}
                     >
-                      <strong>{square.isFreeSpace ? "Free space" : `Tile ${square.position + 1}`}</strong>
-                      <br />
-                      <span>{square.content}</span>
-                      <br />
-                      <span>{square.isMarked ? "Marked" : "Open"}</span>
+                      {square.isFreeSpace ? <strong>Free space</strong> : null}
+                      <span className={styles.boardGridContent}>{square.content}</span>
+                      <span className={styles.boardGridStatus}>{square.isMarked ? "Marked" : "Open"}</span>
                     </button>
                   </td>
                 );

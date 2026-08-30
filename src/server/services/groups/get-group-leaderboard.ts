@@ -6,6 +6,7 @@ import { GROUP_OBJECTIVE_COUNT, GroupAccessError } from "./template-management";
 type LeaderboardBoard = {
   id: string;
   createdAt: Date;
+  updatedAt: Date;
   squares: Array<{
     position: number;
     mark: {
@@ -93,6 +94,7 @@ export async function getGroupLeaderboardForUser(userId: string, groupId: string
             select: {
               id: true,
               createdAt: true,
+              updatedAt: true,
               squares: {
                 select: {
                   position: true,
@@ -114,33 +116,36 @@ export async function getGroupLeaderboardForUser(userId: string, groupId: string
     .map((member) => {
       const board = member.user.boards[0];
       const stats = mapBoardStats(board);
+      const achievedAt = board?.updatedAt ?? member.joinedAt;
 
       return {
         userId: member.user.id,
         displayName: member.user.name?.trim() || member.user.email,
         role: member.role,
         joinedAt: member.joinedAt,
+        achievedAt,
         score: stats.score,
         bingoCount: stats.bingoCount,
         blackout: stats.blackout,
         boardHref: board ? `/groups/${groupId}/boards/${member.user.id}` : null
-      } satisfies GroupLeaderboardRow;
+      };
     })
     .sort((left, right) => {
-      if (right.score !== left.score) {
-        return right.score - left.score;
+      if (left.blackout !== right.blackout) {
+        return Number(right.blackout) - Number(left.blackout);
       }
 
       if (right.bingoCount !== left.bingoCount) {
         return right.bingoCount - left.bingoCount;
       }
 
-      if (left.blackout !== right.blackout) {
-        return Number(right.blackout) - Number(left.blackout);
+      if (right.score !== left.score) {
+        return right.score - left.score;
       }
 
-      return left.joinedAt.getTime() - right.joinedAt.getTime();
-    });
+      return left.achievedAt.getTime() - right.achievedAt.getTime();
+    })
+    .map(({ achievedAt: _achievedAt, ...row }) => row satisfies GroupLeaderboardRow);
 
   return {
     groupId: membership.group.id,

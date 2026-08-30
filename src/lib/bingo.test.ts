@@ -2,9 +2,13 @@ import { describe, expect, it } from "vitest";
 import { calculateScore, countBingos, isBlackout } from "./bingo";
 
 describe("bingo scoring helpers", () => {
-  it("calculates score by counting marked squares", () => {
-    const marks = Array.from({ length: 25 }, (_, index) => index < 7);
-    expect(calculateScore(marks)).toBe(7);
+  it("calculates score with bingo and blackout bonuses", () => {
+    const marks = new Array<boolean>(25).fill(false);
+    [0, 1, 2, 3, 4].forEach((index) => {
+      marks[index] = true;
+    });
+
+    expect(calculateScore(marks)).toBe(10);
   });
 
   it("counts row, column, and diagonal bingos", () => {
@@ -33,6 +37,7 @@ describe("bingo scoring helpers", () => {
 
     expect(isBlackout(partial)).toBe(false);
     expect(isBlackout(full)).toBe(true);
+    expect(calculateScore(full)).toBe(100);
   });
 
   it("throws for invalid board size", () => {

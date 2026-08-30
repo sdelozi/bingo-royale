@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
+import { ReadOnlyBoardGrid } from "@/components/groups/read-only-board-grid";
 import { getCurrentUser } from "@/server/auth/session";
 import { db } from "@/server/db/client";
 
@@ -100,30 +101,19 @@ export default async function GroupMemberBoardPage({ params }: GroupMemberBoardP
     );
   }
 
-  const rows = Array.from({ length: 5 }, (_, rowIndex) => board.squares.slice(rowIndex * 5, rowIndex * 5 + 5));
+  const squares = board.squares.map((square) => ({
+    position: square.position,
+    content: square.objective.content,
+    isFreeSpace: square.objective.isFreeSpace,
+    isMarked: square.mark?.isMarked ?? false
+  }));
 
   return (
     <main>
       <h1>{displayName}&apos;s board</h1>
       <p>Read-only view for members.</p>
 
-      <table>
-        <tbody>
-          {rows.map((row, rowIndex) => (
-            <tr key={rowIndex}>
-              {row.map((square) => (
-                <td key={square.position}>
-                  <strong>{square.objective.isFreeSpace ? "Free space" : `Tile ${square.position + 1}`}</strong>
-                  <br />
-                  <span>{square.objective.content}</span>
-                  <br />
-                  <span>{square.mark?.isMarked ? "Marked" : "Open"}</span>
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <ReadOnlyBoardGrid squares={squares} />
 
       <p>
         <Link href={`/groups/${targetMembership.group.id}/leaderboard`}>Back to leaderboard</Link>

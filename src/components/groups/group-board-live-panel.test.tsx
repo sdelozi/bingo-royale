@@ -4,7 +4,29 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { GroupBoardLivePanel } from "./group-board-live-panel";
 
 vi.mock("./player-board-grid", () => ({
-  PlayerBoardGrid: ({ squares }: { squares: Array<{ content: string }> }) => <div>{squares[0]?.content ?? "No squares"}</div>
+  PlayerBoardGrid: ({
+    squares,
+    onSquaresChange
+  }: {
+    squares: Array<{ content: string; position: number; isMarked: boolean; isFreeSpace: boolean }>;
+    onSquaresChange?: (squares: Array<{ position: number; content: string; isMarked: boolean; isFreeSpace: boolean }>) => void;
+  }) => (
+    <div>
+      <button
+        type="button"
+        onClick={() =>
+          onSquaresChange?.(
+            squares.map((square) =>
+              square.position === 0 ? { ...square, isMarked: !square.isMarked } : square
+            )
+          )
+        }
+      >
+        Toggle local
+      </button>
+      <div>{squares[0]?.content ?? "No squares"}</div>
+    </div>
+  )
 }));
 
 describe("GroupBoardLivePanel", () => {
@@ -62,5 +84,39 @@ describe("GroupBoardLivePanel", () => {
     });
 
     fetchMock.mockRestore();
+  });
+
+  it("updates stats immediately when local square state changes", async () => {
+    render(
+      <GroupBoardLivePanel
+        groupId="group-1"
+        initialGeneratedAt="2026-08-28T00:00:00.000Z"
+        initialSquares={[
+          {
+            position: 0,
+            content: "Initial square",
+            isFreeSpace: false,
+            isMarked: false
+          },
+          ...Array.from({ length: 24 }, (_, index) => ({
+            position: index + 1,
+            content: `Objective ${index + 2}`,
+            isFreeSpace: index + 1 === 12,
+            isMarked: false
+          }))
+        ]}
+        initialStats={{
+          score: 0,
+          bingoCount: 0,
+          blackout: false
+        }}
+      />
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "Toggle local" }));
+
+    await waitFor(() => {
+      expect(screen.getByText(/Score: 1/)).toBeInTheDocument();
+    });
   });
 });
