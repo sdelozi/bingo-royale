@@ -109,7 +109,7 @@ Priority key:
 ### Story E8-S1: Test coverage
 - [x] T49 Unit tests for shuffle, bingo, blackout, score (DONE)
 - [x] T50 Unit tests for mid-game edit mark-preservation rules (DONE)
-- [ ] T51 Integration tests for auth/group/join/play/leaderboard (TODO)
+- [x] T51 Integration tests for auth/group/join/play/leaderboard (DONE)
 - [ ] T61 Require test additions for all behavior-changing feature work (TODO)
 - [x] T62 Establish semantic versioning workflow (epic->minor, story/fix->patch) and version-based changelog updates (DONE)
 
