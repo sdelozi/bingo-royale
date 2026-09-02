@@ -9,6 +9,7 @@
 - Leaderboard table now presents precedence metrics left-to-right as Name, Role, Bingos, Score, Blackout, Board.
 - Added and updated coverage for board interactions, leaderboard ordering, and weighted scoring expectations.
 - Added integration-flow service coverage for group create/join/play/leaderboard plus unauthorized leaderboard access and duplicate-join idempotency checks.
+- Enforced behavior-change test accountability in PRs with a CI gate that requires the test-update checklist acknowledgment when source behavior files change.
 
 ## 0.5.0
 - E5-S1 derived stats: player board state now includes score, bingo count, and blackout.

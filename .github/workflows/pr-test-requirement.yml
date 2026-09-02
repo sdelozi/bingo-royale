@@ -1,0 +1,65 @@
+name: PR Test Requirement
+
+on:
+  pull_request:
+    branches:
+      - develop
+    types:
+      - opened
+      - edited
+      - synchronize
+      - reopened
+
+jobs:
+  require-test-ack:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+    steps:
+      - name: Require test checklist for behavior changes
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const pr = context.payload.pull_request;
+
+            if (!pr) {
+              core.info("No pull request context found. Skipping.");
+              return;
+            }
+
+            const files = await github.paginate(github.rest.pulls.listFiles, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: pr.number,
+              per_page: 100
+            });
+
+            const isTestFile = (filename) =>
+              filename.endsWith(".test.ts") ||
+              filename.endsWith(".test.tsx") ||
+              filename.includes("/__tests__/");
+
+            const affectsBehavior = files.some((file) => {
+              const isCodePath = file.filename.startsWith("src/") || file.filename === "middleware.ts";
+              const isChange = ["added", "modified", "renamed", "copied"].includes(file.status);
+
+              return isCodePath && isChange && !isTestFile(file.filename);
+            });
+
+            if (!affectsBehavior) {
+              core.info("No behavior-changing source files detected. Skipping checklist enforcement.");
+              return;
+            }
+
+            const body = pr.body || "";
+            const hasCheckedTestAck = /- \[[xX]\] tests added or updated for behavior changes/.test(body);
+
+            if (!hasCheckedTestAck) {
+              core.setFailed(
+                "This PR modifies behavior-changing source files. Check the PR checklist item: 'tests added or updated for behavior changes'."
+              );
+              return;
+            }
+
+            core.info("Required test checklist item is checked.");

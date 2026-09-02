@@ -110,7 +110,7 @@ Priority key:
 - [x] T49 Unit tests for shuffle, bingo, blackout, score (DONE)
 - [x] T50 Unit tests for mid-game edit mark-preservation rules (DONE)
 - [x] T51 Integration tests for auth/group/join/play/leaderboard (DONE)
-- [ ] T61 Require test additions for all behavior-changing feature work (TODO)
+- [x] T61 Require test additions for all behavior-changing feature work (DONE)
 - [x] T62 Establish semantic versioning workflow (epic->minor, story/fix->patch) and version-based changelog updates (DONE)
 
 ### Story E8-S2: Security and resilience
