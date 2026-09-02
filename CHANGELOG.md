@@ -8,6 +8,7 @@
 - User-testing follow-up: removed the manual refresh button from the Your board panel and simplified board-page helper copy.
 - Leaderboard table now presents precedence metrics left-to-right as Name, Role, Bingos, Score, Blackout, Board.
 - Added and updated coverage for board interactions, leaderboard ordering, and weighted scoring expectations.
+- Added integration-flow service coverage for group create/join/play/leaderboard plus unauthorized leaderboard access and duplicate-join idempotency checks.
 
 ## 0.5.0
 - E5-S1 derived stats: player board state now includes score, bingo count, and blackout.
