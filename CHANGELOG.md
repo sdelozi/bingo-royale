@@ -5,6 +5,8 @@
 - Board UX polish: increased tile readability, removed tile numbering labels, and aligned read-only board visuals with playable tiles.
 - Scoring and leaderboard update: switched to weighted score calculation and ranked by blackout, bingo count, score, then earliest achievement timestamp.
 - Interaction reliability: fixed rapid-toggle coalescing and optimistic rollback behavior so local state stays responsive and server sync remains correct.
+- User-testing follow-up: removed the manual refresh button from the Your board panel and simplified board-page helper copy.
+- Leaderboard table now presents precedence metrics left-to-right as Name, Role, Bingos, Score, Blackout, Board.
 - Added and updated coverage for board interactions, leaderboard ordering, and weighted scoring expectations.
 
 ## 0.5.0

@@ -1,6 +1,6 @@
 import React from "react";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { GroupBoardLivePanel } from "./group-board-live-panel";
 
 vi.mock("./player-board-grid", () => ({
@@ -34,7 +34,15 @@ describe("GroupBoardLivePanel", () => {
     vi.clearAllMocks();
   });
 
-  it("refreshes stats and squares on manual refresh", async () => {
+  afterEach(() => {
+    delete process.env.NEXT_PUBLIC_POLL_INTERVAL_MS;
+    delete process.env.NEXT_PUBLIC_POLL_MAX_INTERVAL_MS;
+  });
+
+  it("refreshes stats and squares through background polling", async () => {
+    process.env.NEXT_PUBLIC_POLL_INTERVAL_MS = "1";
+    process.env.NEXT_PUBLIC_POLL_MAX_INTERVAL_MS = "1";
+
     const fetchMock = vi.spyOn(globalThis, "fetch").mockResolvedValueOnce({
       ok: true,
       json: async () => ({
@@ -75,7 +83,7 @@ describe("GroupBoardLivePanel", () => {
       />
     );
 
-    fireEvent.click(screen.getByRole("button", { name: "Refresh now" }));
+    expect(screen.queryByRole("button", { name: "Refresh now" })).not.toBeInTheDocument();
 
     await waitFor(() => {
       expect(fetchMock).toHaveBeenCalledTimes(1);

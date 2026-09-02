@@ -72,8 +72,8 @@ export function GroupLeaderboardLiveTable({
           <tr>
             <th>Name</th>
             <th>Role</th>
-            <th>Score</th>
             <th>Bingos</th>
+            <th>Score</th>
             <th>Blackout</th>
             <th>Board</th>
           </tr>
@@ -83,8 +83,8 @@ export function GroupLeaderboardLiveTable({
             <tr key={row.userId}>
               <td>{row.displayName}</td>
               <td>{row.role}</td>
-              <td>{row.score}</td>
               <td>{row.bingoCount}</td>
+              <td>{row.score}</td>
               <td>{row.blackout ? "Yes" : "No"}</td>
               <td>{row.boardHref ? <Link href={row.boardHref}>View board</Link> : "No board yet"}</td>
             </tr>

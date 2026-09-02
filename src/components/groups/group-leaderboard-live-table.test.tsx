@@ -82,4 +82,18 @@ describe("GroupLeaderboardLiveTable", () => {
 
     fetchMock.mockRestore();
   });
+
+  it("renders leaderboard columns in precedence order", () => {
+    render(
+      <GroupLeaderboardLiveTable
+        groupId="group-1"
+        initialGeneratedAt="2026-08-28T00:00:00.000Z"
+        initialRows={[]}
+      />
+    );
+
+    const headers = screen.getAllByRole("columnheader").map((header) => header.textContent?.trim() ?? "");
+
+    expect(headers).toEqual(["Name", "Role", "Bingos", "Score", "Blackout", "Board"]);
+  });
 });

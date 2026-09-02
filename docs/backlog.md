@@ -136,10 +136,6 @@ Priority key:
 - [ ] A3 Document deployment-agnostic env var contract and secrets model (TODO)
 - [ ] A4 Add smoke tests runnable across at least two hosting targets before provider lock-in (TODO)
 
-## Recent Completion Notes
-- 2026-08-30: User-testing polish batch completed (DONE)
-- Included: dashboard/board navigation clarity, tile readability and label cleanup, immediate local board/stat updates, read-only board visual parity, weighted leaderboard scoring/ranking update, and rapid-toggle coalescing fix.
-- Validation: full test suite passed (`27` files, `101` tests).
 
 ## Suggested execution order
 1. E1 -> E2 -> E3

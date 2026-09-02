@@ -37,7 +37,6 @@ export function GroupBoardLivePanel({
   const [squares, setSquares] = useState(initialSquares);
   const [stats, setStats] = useState(initialStats);
   const [lastUpdated, setLastUpdated] = useState(new Date(initialGeneratedAt));
-  const [isRefreshing, setIsRefreshing] = useState(false);
   const [nextRefreshMs, setNextRefreshMs] = useState(transport.getNextDelayMs());
   const [error, setError] = useState<string | null>(null);
 
@@ -72,8 +71,8 @@ export function GroupBoardLivePanel({
       onError: (message) => {
         setError(message);
       },
-      onRefreshingChange: (refreshing) => {
-        setIsRefreshing(refreshing);
+      onRefreshingChange: () => {
+        // Board polling runs in the background; no user-facing loading state is needed here.
       },
       onNextDelayChange: (delayMs) => {
         setNextRefreshMs(delayMs);
@@ -83,22 +82,13 @@ export function GroupBoardLivePanel({
     return stop;
   }, [transport]);
 
-  async function handleManualRefresh() {
-    await transport.refreshNow();
-  }
-
   return (
     <section>
       <p>
         Score: {stats.score} | Bingos: {stats.bingoCount} | Blackout: {stats.blackout ? "Yes" : "No"}
       </p>
       <p>Last updated: {lastUpdated.toLocaleString()}</p>
-      <p>{error ? `Refresh failed. Retrying in ${Math.ceil(nextRefreshMs / 1000)}s.` : `Auto-refresh every ${Math.ceil(nextRefreshMs / 1000)}s.`}</p>
-      <p>
-        <button type="button" onClick={handleManualRefresh} disabled={isRefreshing}>
-          {isRefreshing ? "Refreshing..." : "Refresh now"}
-        </button>
-      </p>
+      {error ? <p>Board sync issue. Retrying in {Math.ceil(nextRefreshMs / 1000)}s.</p> : null}
 
       <PlayerBoardGrid groupId={groupId} squares={squares} onSquaresChange={updateStatsFromSquares} />
     </section>
