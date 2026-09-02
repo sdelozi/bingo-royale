@@ -35,7 +35,7 @@ export default async function GroupBoardPage({ params }: GroupBoardPageProps) {
           initialGeneratedAt={new Date().toISOString()}
         />
 
-        <p>Mark your own board here and watch freshness indicators while polling is active.</p>
+        <p>Mark your own board here.</p>
         <p>
           <Link href={`/groups/${board.groupId}`}>Back to group</Link>
         </p>
