@@ -119,9 +119,9 @@ Priority key:
 - [x] T54 Add robust error handling and structured logs (DONE)
 
 ### Story E8-S3: Deployment readiness
-- [ ] T55 Build deployment checklist and environment variable matrix (TODO)
-- [ ] T56 Configure production DB migrations strategy (TODO)
-- [ ] T57 Add observability basics (health checks, key metrics) (TODO)
+- [x] T55 Build deployment checklist and environment variable matrix (DONE)
+- [x] T56 Configure production DB migrations strategy (DONE)
+- [x] T57 Add observability basics (health checks, key metrics) (DONE)
 
 ## Decision Gates (Must be closed before implementation starts)
 - [x] DG-01 Confirm auth implementation provider/library details (DONE: Auth.js with Google OAuth + optional credentials for v1)

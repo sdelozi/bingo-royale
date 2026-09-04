@@ -1,3 +1,5 @@
+import { incrementCounter } from "@/server/observability/metrics";
+
 type RateLimitPolicy = {
   windowMs: number;
   maxRequests: number;
@@ -77,6 +79,8 @@ export function enforceRateLimit(input: RateLimitInput) {
   if (current.count >= policy.maxRequests) {
     const elapsedMs = now - current.windowStartMs;
     const retryAfterSeconds = Math.max(1, Math.ceil((policy.windowMs - elapsedMs) / 1000));
+    incrementCounter("rate_limit.exceeded_total");
+    incrementCounter(`rate_limit.exceeded_scope.${input.scope}`);
     throw new RateLimitExceededError(retryAfterSeconds);
   }
 

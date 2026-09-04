@@ -64,3 +64,10 @@
 - Push schema without migration files: `npm run db:push`
 - Deploy existing migrations: `npm run db:migrate:deploy`
 - Full local shutdown and cleanup: `npm run stop:local`
+
+## Operational Endpoints
+- Health check: `GET /api/health`
+- Metrics snapshot: `GET /api/metrics`
+
+## Release Operations
+- Deployment checklist, environment matrix, and migration strategy: [docs/deployment-readiness.md](docs/deployment-readiness.md)

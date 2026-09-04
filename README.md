@@ -3,7 +3,7 @@
 Browser-first multiplayer bingo for group trips.
 
 ## Current Status
-Epic 4 Story 1 (template management) is in progress.
+Epic 8 Story 3 (deployment readiness) is in progress.
 
 ## Key Docs
 - Roadmap: [docs/roadmap.md](docs/roadmap.md)
@@ -11,11 +11,12 @@ Epic 4 Story 1 (template management) is in progress.
 - ADR-0001 (platform + auth): [docs/adr/0001-platform-and-auth.md](docs/adr/0001-platform-and-auth.md)
 - Architecture notes: [docs/architecture.md](docs/architecture.md)
 - Local setup: [docs/development.md](docs/development.md)
+- Deployment readiness runbook: [docs/deployment-readiness.md](docs/deployment-readiness.md)
 - Testing policy: [docs/testing-policy.md](docs/testing-policy.md)
 - Versioning: [docs/versioning.md](docs/versioning.md)
 
 ## Current Version
-- 0.4.0 (in progress)
+- 0.5.1 (in progress)
 
 ## v1 Snapshot
 - Web app first (5x5 boards)
@@ -34,4 +35,4 @@ Epic 4 Story 1 (template management) is in progress.
 - Admin template editor with 25 objectives and one free-space selection
 
 ## Next Step
-Build Epic 4 Story 2 player board generation and persistence workflows.
+Complete Epic 8 Story 3 deployment readiness and merge to develop.
