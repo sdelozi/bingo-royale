@@ -2,6 +2,8 @@ import { ZodError } from "zod";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { POST } from "./route";
 import { getAuthSession } from "@/server/auth/session";
+import { logError } from "@/server/observability/logger";
+import { RateLimitExceededError, enforceRateLimit } from "@/server/rate-limit/request-rate-limit";
 import { GroupNotFoundError, joinGroupForUser } from "@/server/services/groups/join-group";
 
 vi.mock("@/server/auth/session", () => ({
@@ -11,6 +13,28 @@ vi.mock("@/server/auth/session", () => ({
 vi.mock("@/server/services/groups/join-group", () => ({
   joinGroupForUser: vi.fn(),
   GroupNotFoundError: class GroupNotFoundError extends Error {}
+}));
+
+vi.mock("@/server/rate-limit/request-rate-limit", () => ({
+  enforceRateLimit: vi.fn(),
+  rateLimitPolicies: {
+    groupJoin: {
+      windowMs: 60_000,
+      maxRequests: 30
+    }
+  },
+  RateLimitExceededError: class RateLimitExceededError extends Error {
+    retryAfterSeconds: number;
+
+    constructor(retryAfterSeconds: number) {
+      super("Too many requests.");
+      this.retryAfterSeconds = retryAfterSeconds;
+    }
+  }
+}));
+
+vi.mock("@/server/observability/logger", () => ({
+  logError: vi.fn()
 }));
 
 describe("POST /api/groups/join", () => {
@@ -86,5 +110,24 @@ describe("POST /api/groups/join", () => {
     );
 
     expect(response.status).toBe(500);
+    expect(logError).toHaveBeenCalledTimes(1);
+  });
+
+  it("returns 429 when join rate limit is exceeded", async () => {
+    vi.mocked(getAuthSession).mockResolvedValueOnce({ user: { id: "user-1" } } as never);
+    vi.mocked(enforceRateLimit).mockImplementationOnce(() => {
+      throw new RateLimitExceededError(7);
+    });
+
+    const response = await POST(
+      new Request("http://localhost/api/groups/join", {
+        method: "POST",
+        body: JSON.stringify({ inviteCode: "ABCD2345" })
+      })
+    );
+
+    expect(response.status).toBe(429);
+    expect(response.headers.get("Retry-After")).toBe("7");
+    expect(joinGroupForUser).not.toHaveBeenCalled();
   });
 });

@@ -26,11 +26,13 @@ export async function getUserGroup(userId: string, groupId: string) {
     return null;
   }
 
+  const canViewInviteCredentials = membership.role === "ADMIN";
+
   return {
     groupId: membership.group.id,
     groupName: membership.group.name,
-    inviteCode: membership.group.inviteCode,
-    shareToken: membership.group.shareToken,
+    inviteCode: canViewInviteCredentials ? membership.group.inviteCode : null,
+    shareToken: canViewInviteCredentials ? membership.group.shareToken : null,
     role: membership.role,
     joinedAt: membership.joinedAt,
     createdAt: membership.group.createdAt,

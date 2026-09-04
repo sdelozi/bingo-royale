@@ -20,14 +20,18 @@ export async function listGroupsForUser(userId: string) {
     }
   });
 
-  return memberships.map((membership) => ({
-    groupId: membership.group.id,
-    groupName: membership.group.name,
-    inviteCode: membership.group.inviteCode,
-    shareToken: membership.group.shareToken,
-    role: membership.role,
-    joinedAt: membership.joinedAt,
-    createdAt: membership.group.createdAt,
-    isCreator: membership.group.creatorId === userId
-  }));
+  return memberships.map((membership) => {
+    const canViewInviteCredentials = membership.role === "ADMIN";
+
+    return {
+      groupId: membership.group.id,
+      groupName: membership.group.name,
+      inviteCode: canViewInviteCredentials ? membership.group.inviteCode : null,
+      shareToken: canViewInviteCredentials ? membership.group.shareToken : null,
+      role: membership.role,
+      joinedAt: membership.joinedAt,
+      createdAt: membership.group.createdAt,
+      isCreator: membership.group.creatorId === userId
+    };
+  });
 }

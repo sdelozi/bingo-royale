@@ -54,4 +54,35 @@ describe("getUserGroup", () => {
       isCreator: true
     });
   });
+
+  it("redacts invite credentials for non-admin members", async () => {
+    const joinedAt = new Date("2026-08-28T00:00:00.000Z");
+    const createdAt = new Date("2026-08-27T00:00:00.000Z");
+
+    vi.mocked(db.membership.findUnique).mockResolvedValueOnce({
+      role: MembershipRole.PLAYER,
+      joinedAt,
+      group: {
+        id: "group-1",
+        name: "Weekend Trip",
+        inviteCode: "ABCD2345",
+        shareToken: "token",
+        creatorId: "user-admin",
+        createdAt
+      }
+    } as never);
+
+    const result = await getUserGroup("user-player", "group-1");
+
+    expect(result).toEqual({
+      groupId: "group-1",
+      groupName: "Weekend Trip",
+      inviteCode: null,
+      shareToken: null,
+      role: MembershipRole.PLAYER,
+      joinedAt,
+      createdAt,
+      isCreator: false
+    });
+  });
 });

@@ -1,5 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { getAuthSession } from "@/server/auth/session";
+import { logError } from "@/server/observability/logger";
+import { RateLimitExceededError, enforceRateLimit } from "@/server/rate-limit/request-rate-limit";
 import {
   GroupAccessError,
   PlayerBoardSquareNotFoundError,
@@ -25,6 +27,28 @@ vi.mock("@/server/services/groups/board-marking", () => ({
 vi.mock("@/server/services/groups/player-board", () => ({
   getOrCreatePlayerBoardForGroup: vi.fn(),
   GroupBoardTemplateMissingError: class GroupBoardTemplateMissingError extends Error {}
+}));
+
+vi.mock("@/server/rate-limit/request-rate-limit", () => ({
+  enforceRateLimit: vi.fn(),
+  rateLimitPolicies: {
+    boardMark: {
+      windowMs: 60_000,
+      maxRequests: 120
+    }
+  },
+  RateLimitExceededError: class RateLimitExceededError extends Error {
+    retryAfterSeconds: number;
+
+    constructor(retryAfterSeconds: number) {
+      super("Too many requests.");
+      this.retryAfterSeconds = retryAfterSeconds;
+    }
+  }
+}));
+
+vi.mock("@/server/observability/logger", () => ({
+  logError: vi.fn()
 }));
 
 describe("GET /api/groups/[groupId]/board", () => {
@@ -75,6 +99,7 @@ describe("GET /api/groups/[groupId]/board", () => {
     });
 
     expect(response.status).toBe(500);
+    expect(logError).toHaveBeenCalledTimes(1);
   });
 
   it("returns board payload with generated timestamp", async () => {
@@ -199,5 +224,25 @@ describe("PATCH /api/groups/[groupId]/board", () => {
     );
 
     expect(response.status).toBe(500);
+    expect(logError).toHaveBeenCalledTimes(1);
+  });
+
+  it("returns 429 when board mark rate limit is exceeded", async () => {
+    vi.mocked(getAuthSession).mockResolvedValueOnce({ user: { id: "user-1" } } as never);
+    vi.mocked(enforceRateLimit).mockImplementationOnce(() => {
+      throw new RateLimitExceededError(9);
+    });
+
+    const response = await PATCH(
+      new Request("http://localhost/api/groups/group-1/board", {
+        method: "PATCH",
+        body: JSON.stringify({ position: 4, isMarked: true })
+      }),
+      { params: { groupId: "group-1" } }
+    );
+
+    expect(response.status).toBe(429);
+    expect(response.headers.get("Retry-After")).toBe("9");
+    expect(updatePlayerBoardMark).not.toHaveBeenCalled();
   });
 });
