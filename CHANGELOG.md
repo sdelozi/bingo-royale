@@ -10,6 +10,9 @@
 - Added and updated coverage for board interactions, leaderboard ordering, and weighted scoring expectations.
 - Added integration-flow service coverage for group create/join/play/leaderboard plus unauthorized leaderboard access and duplicate-join idempotency checks.
 - Enforced behavior-change test accountability in PRs with a CI gate that requires the test-update checklist acknowledgment when source behavior files change.
+- Hardened group-resource authorization by redacting invite code/share-link credentials for non-admin members in group and dashboard reads.
+- Added request rate limiting for sensitive endpoints (`/api/auth/register`, `/api/groups/join`, and board mark updates on `/api/groups/[groupId]/board`) with `429` and `Retry-After` handling.
+- Added structured error logging for unexpected API failures across group and auth routes to improve operational diagnostics.
 
 ## 0.5.0
 - E5-S1 derived stats: player board state now includes score, bingo count, and blackout.

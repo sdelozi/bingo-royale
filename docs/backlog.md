@@ -114,9 +114,9 @@ Priority key:
 - [x] T62 Establish semantic versioning workflow (epic->minor, story/fix->patch) and version-based changelog updates (DONE)
 
 ### Story E8-S2: Security and resilience
-- [ ] T52 Add authorization checks per group/resource (TODO)
-- [ ] T53 Add rate limits for sensitive endpoints (join/auth/mark) (TODO)
-- [ ] T54 Add robust error handling and structured logs (TODO)
+- [x] T52 Add authorization checks per group/resource (DONE)
+- [x] T53 Add rate limits for sensitive endpoints (join/auth/mark) (DONE)
+- [x] T54 Add robust error handling and structured logs (DONE)
 
 ### Story E8-S3: Deployment readiness
 - [ ] T55 Build deployment checklist and environment variable matrix (TODO)

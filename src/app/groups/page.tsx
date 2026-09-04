@@ -31,7 +31,8 @@ export default async function GroupsPage() {
         ) : (
           <ul>
             {groups.map((group) => {
-              const shareLink = group.shareToken ? `${env.appUrl}/join/${group.shareToken}` : null;
+              const canViewInviteCredentials = group.role === "ADMIN";
+              const shareLink = canViewInviteCredentials && group.shareToken ? `${env.appUrl}/join/${group.shareToken}` : null;
 
               return (
                 <li key={group.groupId}>
@@ -44,8 +45,8 @@ export default async function GroupsPage() {
                       {group.isCreator ? "Manage group" : "Open group"}
                     </Link>
                   </p>
-                  <p>Invite code: {group.inviteCode}</p>
-                  <p>Share link: {shareLink ?? "Not available"}</p>
+                  <p>Invite code: {canViewInviteCredentials ? group.inviteCode : "Admin only"}</p>
+                  <p>Share link: {canViewInviteCredentials ? (shareLink ?? "Not available") : "Admin only"}</p>
                 </li>
               );
             })}

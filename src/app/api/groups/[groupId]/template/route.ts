@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { logError } from "@/server/observability/logger";
 import { getAuthSession } from "@/server/auth/session";
 import {
   GroupAccessError,
@@ -49,6 +50,12 @@ export async function POST(request: Request, { params }: Params) {
         { status: 409 }
       );
     }
+
+    logError("api.groups.template.save.unexpected_error", error, {
+      route: "/api/groups/[groupId]/template",
+      method: "POST",
+      groupId: params.groupId
+    });
 
     return NextResponse.json({ error: "Unable to save board template right now." }, { status: 500 });
   }

@@ -23,15 +23,15 @@ export default async function GroupDetailPage({ params }: GroupDetailPageProps) 
     notFound();
   }
 
-  const shareLink = membership.shareToken ? `${env.appUrl}/join/${membership.shareToken}` : null;
   const canManageTemplate = membership.role === "ADMIN";
+  const shareLink = canManageTemplate && membership.shareToken ? `${env.appUrl}/join/${membership.shareToken}` : null;
 
   return (
     <main>
       <h1>{membership.groupName}</h1>
       <p>Role: {membership.role}</p>
-      <p>Invite code: {membership.inviteCode}</p>
-      <p>Share link: {shareLink ?? "Not available"}</p>
+      <p>Invite code: {canManageTemplate ? membership.inviteCode : "Admin only"}</p>
+      <p>Share link: {canManageTemplate ? (shareLink ?? "Not available") : "Admin only"}</p>
 
       <p>
         <Link href={`/groups/${membership.groupId}/board`}>Open your board</Link>

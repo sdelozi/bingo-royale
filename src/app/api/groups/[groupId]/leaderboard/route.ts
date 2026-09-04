@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { logError } from "@/server/observability/logger";
 import { getAuthSession } from "@/server/auth/session";
 import { getGroupLeaderboardForUser } from "@/server/services/groups/get-group-leaderboard";
 import { GroupAccessError } from "@/server/services/groups/template-management";
@@ -24,6 +25,12 @@ export async function GET(_request: Request, { params }: Params) {
     if (error instanceof GroupAccessError) {
       return NextResponse.json({ error: "Group not found." }, { status: 404 });
     }
+
+    logError("api.groups.leaderboard.unexpected_error", error, {
+      route: "/api/groups/[groupId]/leaderboard",
+      method: "GET",
+      groupId: params.groupId
+    });
 
     return NextResponse.json({ error: "Unable to load leaderboard right now." }, { status: 500 });
   }

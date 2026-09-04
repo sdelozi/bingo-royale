@@ -1,5 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { POST } from "./route";
+import { logError } from "@/server/observability/logger";
+import { RateLimitExceededError, enforceRateLimit } from "@/server/rate-limit/request-rate-limit";
 import { db } from "@/server/db/client";
 import { hashPassword } from "@/server/auth/password";
 
@@ -14,6 +16,28 @@ vi.mock("@/server/db/client", () => ({
 
 vi.mock("@/server/auth/password", () => ({
   hashPassword: vi.fn()
+}));
+
+vi.mock("@/server/rate-limit/request-rate-limit", () => ({
+  enforceRateLimit: vi.fn(),
+  rateLimitPolicies: {
+    authRegister: {
+      windowMs: 60_000,
+      maxRequests: 10
+    }
+  },
+  RateLimitExceededError: class RateLimitExceededError extends Error {
+    retryAfterSeconds: number;
+
+    constructor(retryAfterSeconds: number) {
+      super("Too many requests.");
+      this.retryAfterSeconds = retryAfterSeconds;
+    }
+  }
+}));
+
+vi.mock("@/server/observability/logger", () => ({
+  logError: vi.fn()
 }));
 
 describe("POST /api/auth/register", () => {
@@ -91,5 +115,27 @@ describe("POST /api/auth/register", () => {
     );
 
     expect(response.status).toBe(503);
+    expect(logError).toHaveBeenCalledTimes(1);
+  });
+
+  it("returns 429 when registration rate limit is exceeded", async () => {
+    vi.mocked(enforceRateLimit).mockImplementationOnce(() => {
+      throw new RateLimitExceededError(11);
+    });
+
+    const response = await POST(
+      new Request("http://localhost/api/auth/register", {
+        method: "POST",
+        body: JSON.stringify({
+          email: "person@example.com",
+          name: "Person",
+          password: "password123"
+        })
+      })
+    );
+
+    expect(response.status).toBe(429);
+    expect(response.headers.get("Retry-After")).toBe("11");
+    expect(db.user.findUnique).not.toHaveBeenCalled();
   });
 });

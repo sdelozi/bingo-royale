@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { ZodError } from "zod";
+import { logError } from "@/server/observability/logger";
 import { getAuthSession } from "@/server/auth/session";
 import { createGroupForUser } from "@/server/services/groups/create-group";
 
@@ -19,6 +20,11 @@ export async function POST(request: Request) {
     if (error instanceof ZodError) {
       return NextResponse.json({ error: "Please provide a valid group name." }, { status: 400 });
     }
+
+    logError("api.groups.create.unexpected_error", error, {
+      route: "/api/groups",
+      method: "POST"
+    });
 
     return NextResponse.json({ error: "Unable to create group right now." }, { status: 500 });
   }
