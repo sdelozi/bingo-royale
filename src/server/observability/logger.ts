@@ -1,3 +1,5 @@
+import { incrementCounter } from "./metrics";
+
 type StructuredLogContext = Record<string, unknown>;
 
 function toErrorPayload(error: unknown) {
@@ -17,6 +19,9 @@ function toErrorPayload(error: unknown) {
 }
 
 export function logError(event: string, error: unknown, context: StructuredLogContext = {}) {
+  incrementCounter("errors.unexpected_total");
+  incrementCounter(`errors.event.${event}`);
+
   const payload = {
     level: "error",
     timestamp: new Date().toISOString(),

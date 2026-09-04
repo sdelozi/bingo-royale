@@ -1,9 +1,11 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { RateLimitExceededError, enforceRateLimit, resetRateLimitStateForTests } from "./request-rate-limit";
+import { getMetricsSnapshot, resetMetricsForTests } from "@/server/observability/metrics";
 
 describe("request rate limiting", () => {
   beforeEach(() => {
     resetRateLimitStateForTests();
+    resetMetricsForTests();
     vi.restoreAllMocks();
   });
 
@@ -65,17 +67,6 @@ describe("request rate limiting", () => {
       }
     });
 
-    expect(() => {
-      enforceRateLimit({
-        scope: "auth-register",
-        request,
-        policy: {
-          windowMs: 30_000,
-          maxRequests: 2
-        }
-      });
-    }).toThrowError(RateLimitExceededError);
-
     try {
       enforceRateLimit({
         scope: "auth-register",
@@ -89,6 +80,10 @@ describe("request rate limiting", () => {
       expect(error).toBeInstanceOf(RateLimitExceededError);
       expect((error as RateLimitExceededError).retryAfterSeconds).toBe(10);
     }
+
+    const metrics = getMetricsSnapshot();
+    expect(metrics.counters["rate_limit.exceeded_total"]).toBe(1);
+    expect(metrics.counters["rate_limit.exceeded_scope.auth-register"]).toBe(1);
   });
 
   it("tracks limits per user when userId is provided", () => {

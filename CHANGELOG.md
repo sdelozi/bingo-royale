@@ -13,6 +13,8 @@
 - Hardened group-resource authorization by redacting invite code/share-link credentials for non-admin members in group and dashboard reads.
 - Added request rate limiting for sensitive endpoints (`/api/auth/register`, `/api/groups/join`, and board mark updates on `/api/groups/[groupId]/board`) with `429` and `Retry-After` handling.
 - Added structured error logging for unexpected API failures across group and auth routes to improve operational diagnostics.
+- Added deployment-readiness runbook covering release checklist, environment variable matrix, and production migration strategy.
+- Added observability basics with `GET /api/health` (app+DB health) and `GET /api/metrics` (uptime, memory, and in-memory counters).
 
 ## 0.5.0
 - E5-S1 derived stats: player board state now includes score, bingo count, and blackout.
