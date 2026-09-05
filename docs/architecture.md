@@ -19,8 +19,13 @@
 - Commit `.env.example`; do not commit real `.env*` secrets.
 - Prefer portable environment names over provider-specific names.
 - Access environment variables through `src/server/config/env.ts` rather than `process.env` scattered across the codebase.
+- Follow the deployment-agnostic env/secrets contract in `docs/env-contract.md`.
 
 ## Adapter Conventions
 - Start with no-op or local implementations when a provider is not yet selected.
 - Keep adapter interfaces narrow and task-oriented.
 - Avoid leaking provider SDK types into service modules.
+
+## Provider-Agnostic Governance
+- Provider and runtime portability guardrails are tracked in `docs/provider-agnostic-audit.md`.
+- CI enforces portability constraints through `npm run check:portability`.

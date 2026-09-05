@@ -1,0 +1,35 @@
+name: Hosting Smoke Targets
+
+on:
+  workflow_dispatch:
+    inputs:
+      target_a_url:
+        description: "Base URL for hosting target A (example: https://target-a.example.com)"
+        required: true
+        type: string
+      target_b_url:
+        description: "Base URL for hosting target B (example: https://target-b.example.com)"
+        required: true
+        type: string
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - label: target-a
+            url: ${{ inputs.target_a_url }}
+          - label: target-b
+            url: ${{ inputs.target_b_url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Run smoke probes
+        run: node ./scripts/smoke-hosting-target.mjs --label "${{ matrix.label }}" --url "${{ matrix.url }}"

@@ -15,6 +15,10 @@
 - Added structured error logging for unexpected API failures across group and auth routes to improve operational diagnostics.
 - Added deployment-readiness runbook covering release checklist, environment variable matrix, and production migration strategy.
 - Added observability basics with `GET /api/health` (app+DB health) and `GET /api/metrics` (uptime, memory, and in-memory counters).
+- Updated ADR-0001 with current hosting/auth constraint notes and explicit review triggers for provider-specific drift.
+- Added portability guardrails (`npm run check:portability`) and CI enforcement for env access and raw SQL restrictions.
+- Added deployment-agnostic environment and secrets contract documentation.
+- Added cross-target hosting smoke workflow requiring two deployment URLs before provider lock-in.
 
 ## 0.5.0
 - E5-S1 derived stats: player board state now includes score, bingo count, and blackout.

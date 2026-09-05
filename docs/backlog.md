@@ -18,7 +18,7 @@ Priority key:
 - [x] T3 Add CI checks for lint + tests (DONE)
 - [x] T58 Define service-layer boundaries to isolate domain logic from framework/infrastructure details (DONE)
 - [x] T59 Define adapter interfaces for storage, notifications, and realtime transport (DONE)
-- [ ] T60 Keep ADR-0001 updated as hosting/auth constraints evolve (TODO)
+- [x] T60 Keep ADR-0001 updated as hosting/auth constraints evolve (DONE)
 
 ### Story E1-S2: Database and ORM baseline
 - [x] T4 Define initial schema for users, groups, memberships, templates, player boards, marks (DONE)
@@ -131,10 +131,10 @@ Priority key:
 - [ ] N1 Add Apple OAuth provider support (TODO)
 
 ## Provider-Agnostic Readiness Tasks (P0)
-- [ ] A1 Keep runtime/platform-specific code isolated to infrastructure adapters (TODO)
-- [ ] A2 Restrict core DB usage to portable PostgreSQL + Prisma patterns (TODO)
-- [ ] A3 Document deployment-agnostic env var contract and secrets model (TODO)
-- [ ] A4 Add smoke tests runnable across at least two hosting targets before provider lock-in (TODO)
+- [x] A1 Keep runtime/platform-specific code isolated to infrastructure adapters (DONE)
+- [x] A2 Restrict core DB usage to portable PostgreSQL + Prisma patterns (DONE)
+- [x] A3 Document deployment-agnostic env var contract and secrets model (DONE)
+- [x] A4 Add smoke tests runnable across at least two hosting targets before provider lock-in (DONE)
 
 
 ## Suggested execution order

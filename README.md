@@ -12,6 +12,8 @@ Epic 8 Story 3 (deployment readiness) is in progress.
 - Architecture notes: [docs/architecture.md](docs/architecture.md)
 - Local setup: [docs/development.md](docs/development.md)
 - Deployment readiness runbook: [docs/deployment-readiness.md](docs/deployment-readiness.md)
+- Environment and secrets contract: [docs/env-contract.md](docs/env-contract.md)
+- Provider-agnostic readiness audit: [docs/provider-agnostic-audit.md](docs/provider-agnostic-audit.md)
 - Testing policy: [docs/testing-policy.md](docs/testing-policy.md)
 - Versioning: [docs/versioning.md](docs/versioning.md)
 
