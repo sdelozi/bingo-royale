@@ -122,3 +122,6 @@ This runbook covers Epic E8 Story E8-S3 tasks:
   - `/api/health` returns `{ status: "ok" }`
   - `/api/metrics` returns `{ status: "ok" }`
   - `/groups` responds with valid authenticated-route behavior (200 or redirect)
+
+## 7. Deployment Decision Reference
+- Environment split and config repository recommendation: [docs/deployment-strategy.md](docs/deployment-strategy.md)
