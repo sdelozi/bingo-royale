@@ -8,6 +8,10 @@ This contract defines deployment-agnostic configuration requirements for Bingo R
 - Resolve server-side env access through `src/server/config/env.ts`.
 - Restrict direct `process.env` access to approved configuration modules.
 
+## Environment Split
+- The same contract applies to both the free dev deployment and the cheap production deployment.
+- Environment-specific values must be injected externally; the app code must not depend on provider-specific config files.
+
 ## Variable Contract
 
 | Variable | Required | Secret | Example | Notes |

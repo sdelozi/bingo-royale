@@ -71,6 +71,7 @@
 
 ## Release Operations
 - Deployment checklist, environment matrix, and migration strategy: [docs/deployment-readiness.md](docs/deployment-readiness.md)
+- Deployment decision and environment split: [docs/deployment-strategy.md](docs/deployment-strategy.md)
 - Environment and secrets contract: [docs/env-contract.md](docs/env-contract.md)
 - Provider-agnostic readiness evidence: [docs/provider-agnostic-audit.md](docs/provider-agnostic-audit.md)
 - Cross-host smoke checks: GitHub Actions workflow `Hosting Smoke Targets` in `.github/workflows/hosting-smoke-targets.yml`

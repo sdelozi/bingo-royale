@@ -29,3 +29,4 @@
 ## Provider-Agnostic Governance
 - Provider and runtime portability guardrails are tracked in `docs/provider-agnostic-audit.md`.
 - CI enforces portability constraints through `npm run check:portability`.
+- Provider-specific deployment manifests and wiring should live in a separate deployment repo, not in the application repo.
