@@ -65,8 +65,14 @@ Two architecture choices needed to be finalized before implementation:
 - Keep all gameplay workflows covered by tests at service-layer boundaries.
 - Add cross-host smoke checks before locking production provider.
 
+## 2026-09-04 Follow-up Notes
+- Provider-agnostic guardrails are now enforced in CI via `npm run check:portability`.
+- Deployment checklist, environment contract, and production migration strategy are documented in `docs/deployment-readiness.md` and `docs/env-contract.md`.
+- Cross-host smoke checks are operationalized via the `Hosting Smoke Targets` workflow with two target URLs.
+
 ## Review Trigger
 Revisit this ADR if any of the following change:
 1. Team commits to a single hosting provider with required proprietary features.
 2. Authentication requirements change materially (for example enterprise SSO or strict provider mandates).
 3. Realtime requirements move from polling to mandatory low-latency push in v1.
+4. Team introduces required provider-specific infrastructure not isolated behind contracts.

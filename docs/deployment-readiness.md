@@ -108,6 +108,17 @@ This runbook covers Epic E8 Story E8-S3 tasks:
 ## 5. Operational Verification Commands
 - Validate build: `npm run build`
 - Validate tests: `npm run test`
+- Validate portability guardrails: `npm run check:portability`
 - Apply production migrations: `npm run db:migrate:deploy`
 - Health probe: `curl -i http://localhost:3000/api/health`
 - Metrics probe: `curl -i http://localhost:3000/api/metrics`
+
+## 6. Cross-Host Smoke Checks (A4)
+- Run workflow: `Hosting Smoke Targets` (`.github/workflows/hosting-smoke-targets.yml`).
+- Provide two independently deployed URLs as workflow inputs:
+  - `target_a_url`
+  - `target_b_url`
+- The workflow runs the same smoke probes against both targets:
+  - `/api/health` returns `{ status: "ok" }`
+  - `/api/metrics` returns `{ status: "ok" }`
+  - `/groups` responds with valid authenticated-route behavior (200 or redirect)
