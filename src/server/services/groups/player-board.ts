@@ -255,13 +255,15 @@ export async function getOrCreatePlayerBoardForGroup(userId: string, groupId: st
         }
       });
 
-      if (!group?.currentTemplate) {
+      const currentTemplate = group?.currentTemplate;
+
+      if (!currentTemplate) {
         throw new GroupBoardTemplateMissingError();
       }
 
       const boardSquares = buildDeterministicBoardSquares(
-        group.currentTemplate.objectives,
-        `${groupId}:${userId}:${group.currentTemplate.id}`
+        currentTemplate.objectives,
+        `${groupId}:${userId}:${currentTemplate.id}`
       );
 
       const createdBoard = await tx.playerBoard.create({
@@ -272,7 +274,7 @@ export async function getOrCreatePlayerBoardForGroup(userId: string, groupId: st
             create: boardSquares.map((square) => ({
               position: square.position,
               objectiveId: square.objectiveId,
-              ...(square.isFreeSpace && group.currentTemplate.freeSpaceMarkedByDefault
+              ...(square.isFreeSpace && currentTemplate.freeSpaceMarkedByDefault
                 ? {
                     mark: {
                       create: {

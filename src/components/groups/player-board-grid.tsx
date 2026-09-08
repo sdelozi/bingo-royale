@@ -75,11 +75,12 @@ export function PlayerBoardGrid({ groupId, squares, onSquaresChange }: PlayerBoa
       }
 
       if (typeof data.position === "number" && typeof data.isMarked === "boolean") {
+        const updatedMarkedState = data.isMarked;
         const nextSquares = boardSquaresRef.current.map((item) =>
-          item.position === data.position ? { ...item, isMarked: data.isMarked } : item
+          item.position === data.position ? { ...item, isMarked: updatedMarkedState } : item
         );
         const nextServerSquares = serverSquaresRef.current.map((item) =>
-          item.position === data.position ? { ...item, isMarked: data.isMarked } : item
+          item.position === data.position ? { ...item, isMarked: updatedMarkedState } : item
         );
         boardSquaresRef.current = nextSquares;
         serverSquaresRef.current = nextServerSquares;
