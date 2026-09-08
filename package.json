@@ -6,6 +6,7 @@
     "dev": "next dev",
     "start:local": "powershell -ExecutionPolicy Bypass -File ./scripts/start-local.ps1",
     "stop:local": "powershell -ExecutionPolicy Bypass -File ./scripts/stop-local.ps1",
+    "postinstall": "prisma generate",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
