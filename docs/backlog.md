@@ -136,9 +136,27 @@ Priority key:
 - [x] A3 Document deployment-agnostic env var contract and secrets model (DONE)
 - [x] A4 Add smoke tests runnable across at least two hosting targets before provider lock-in (DONE)
 
+## Epic E9: Deployment Execution and Environment Operations (P0)
+### Story E9-S1: Free dev deployment environment (test + early production fallback)
+- [x] T63 Create deployment repo baseline structure and ownership docs (DONE)
+- [ ] T64 Configure dev app hosting on free tier provider with provider-specific config externalized from app repo (IN-PROGRESS)
+- [ ] T65 Configure dev managed Postgres on free tier and connect app runtime env contract (IN-PROGRESS)
+- [ ] T66 Validate migrations, auth callbacks, health endpoint, and smoke probes on deployed dev URL (TODO)
+
+### Story E9-S2: Release process and promotion controls
+- [ ] T67 Define commit-to-deploy promotion flow (dev deploy first, optional prod promotion later) (TODO)
+- [ ] T68 Add deploy-repo checklists for rollout, rollback, and incident handling (TODO)
+- [ ] T69 Record first release validation run using dev deployment as temporary production environment (TODO)
+
+### Story E9-S3: Cheap paid production environment (when needed)
+- [ ] T70 Select production provider trigger criteria (user/traffic/reliability thresholds) (TODO)
+- [ ] T71 Stand up paid production environment using same env contract and smoke gates (TODO)
+- [ ] T72 Cut over from dev-only runtime to separate prod environment with documented rollback (TODO)
+
 
 ## Suggested execution order
 1. E1 -> E2 -> E3
 2. E4 -> E5
 3. E6
 4. E7 + E8
+5. E9
