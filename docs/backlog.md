@@ -11,6 +11,8 @@ Priority key:
 - P0 = must-have for v1
 - P1 = should-have for v1
 - P2 = post-v1 or stretch
+- K0 = must land on develop before cutting the Kimberly release branch
+- K1 = can continue on develop after the Kimberly release branch exists
 
 ## Epic E1: Project Foundation (P0)
 ### Story E1-S1: App skeleton and standards
@@ -154,59 +156,64 @@ Priority key:
 - [ ] T71 Stand up paid production environment using same env contract and smoke gates (PAUSED)
 - [ ] T72 Cut over from dev-only runtime to separate prod environment with documented rollback (PAUSED)
 
+## Kimberly Branch Cut Plan
+- Branch cut target: finish the shared mobile-first UX foundation and theme extension points below on `develop`, then cut the permanent Kimberly release branch for event-only branding/content work.
+- K0 before branch cut: T75, T76, T78, T79, T80, T81, T82, T83, T84, T93, T94, T95, T96, T97, T98, T99.
+- K1 after branch cut: T77, T85, T86, T87, T88, T89, T90, T100, T101, T102, plus paused E9 deployment-process follow-ups.
+
 ## Epic E10: V1 UI/UX Polish and Delight (P0)
 - Mobile-first guardrail for all E10 stories: no story is considered done unless primary flows are validated on phone viewport first and remain fully usable on desktop.
 
 ### Story E10-S1: Visual foundation and design tokens
 - [x] T73 Establish a visual direction for V1 (palette, typography pair, spacing scale, radii, shadows) with CSS variables and reusable token names (DONE)
 - [x] T74 Add app-wide shell styling baseline (page background treatment, card surfaces, elevation, border system) without changing core behaviors (DONE)
-- [ ] T75 Define reusable component variants for button, input, select, badge, alert, modal, table, tabs, and empty state (IN-PROGRESS)
+- [ ] T75 Define reusable component variants for button, input, select, badge, alert, modal, table, tabs, and empty state (IN-PROGRESS, K0)
 
 ### Story E10-S2: Information architecture and navigation clarity
-- [ ] T76 Improve header/navigation hierarchy (primary actions, user menu, signed-in context, group context) for quicker task completion (IN-PROGRESS)
-- [ ] T77 Add clear page headers and subheaders on dashboard/groups/leaderboard/template pages (TODO)
-- [ ] T78 Standardize section spacing and responsive breakpoints so key controls remain reachable on mobile during gameplay (IN-PROGRESS)
+- [ ] T76 Improve header/navigation hierarchy (primary actions, user menu, signed-in context, group context) for quicker task completion (IN-PROGRESS, K0)
+- [ ] T77 Add clear page headers and subheaders on dashboard/groups/leaderboard/template pages (TODO, K1)
+- [ ] T78 Standardize section spacing and responsive breakpoints so key controls remain reachable on mobile during gameplay (IN-PROGRESS, K0)
 
 ### Story E10-S3: Board gameplay experience polish
-- [ ] T79 Redesign interactive player board square states (idle/hover/pressed/marked/disabled) with strong visual contrast and playful feedback (IN-PROGRESS)
-- [ ] T80 Add quick feedback patterns for mark/unmark sync states (pending/success/error) with accessible non-blocking messaging (IN-PROGRESS)
-- [ ] T81 Improve readability and scannability of objectives on 5x5 grid across phone and desktop form factors (TODO)
+- [ ] T79 Redesign interactive player board square states (idle/hover/pressed/marked/disabled) with strong visual contrast and playful feedback (IN-PROGRESS, K0)
+- [ ] T80 Add quick feedback patterns for mark/unmark sync states (pending/success/error) with accessible non-blocking messaging (IN-PROGRESS, K0)
+- [ ] T81 Improve readability and scannability of objectives on 5x5 grid across phone and desktop form factors (TODO, K0)
 
 ### Story E10-S4: Leaderboard and group management polish
-- [ ] T83 Improve group list and group detail cards with clearer action affordances (join, open board, open template, invite context) (IN-PROGRESS)
-- [ ] T82 Improve leaderboard visual hierarchy (rank emphasis, score emphasis, status chips, last-updated signal) while preserving current data semantics (IN-PROGRESS)
-- [ ] T84 Add polished empty/loading/error states for dashboard, groups, board, and leaderboard views (IN-PROGRESS)
+- [ ] T83 Improve group list and group detail cards with clearer action affordances (join, open board, open template, invite context) (IN-PROGRESS, K0)
+- [ ] T82 Improve leaderboard visual hierarchy (rank emphasis, score emphasis, status chips, last-updated signal) while preserving current data semantics (IN-PROGRESS, K0)
+- [ ] T84 Add polished empty/loading/error states for dashboard, groups, board, and leaderboard views (IN-PROGRESS, K0)
 
 ### Story E10-S5: Accessibility, motion, and responsive quality bar
-- [ ] T85 Add keyboard-visible focus styles and verify full keyboard operability for core game flows (TODO)
-- [ ] T86 Ensure color contrast and text sizing pass baseline accessibility checks for core screens (TODO)
-- [ ] T87 Add lightweight purposeful motion (page transitions/staggered reveals/interaction feedback) with reduced-motion support (TODO)
+- [ ] T85 Add keyboard-visible focus styles and verify full keyboard operability for core game flows (TODO, K1)
+- [ ] T86 Ensure color contrast and text sizing pass baseline accessibility checks for core screens (TODO, K1)
+- [ ] T87 Add lightweight purposeful motion (page transitions/staggered reveals/interaction feedback) with reduced-motion support (TODO, K1)
 
 ### Story E10-S6: UX copy and conversion polish
-- [ ] T88 Refine auth/join/create-group copy for confidence and fun tone without changing backend behavior (TODO)
-- [ ] T89 Add contextual helper text and success confirmations for high-friction actions (join code, template save, registration) (TODO)
-- [ ] T90 Add an optional launch banner pattern that can be toggled per release/theme (TODO)
+- [ ] T88 Refine auth/join/create-group copy for confidence and fun tone without changing backend behavior (TODO, K1)
+- [ ] T89 Add contextual helper text and success confirmations for high-friction actions (join code, template save, registration) (TODO, K1)
+- [ ] T90 Add an optional launch banner pattern that can be toggled per release/theme (TODO, K1)
 
 ## Epic E11: Theme System and One-Off Event Release Path (P0)
 ### Story E11-S1: Theme architecture and switch mechanism
 - [x] T91 Introduce a theme contract (tokens + assets + optional overrides) that supports default and event-specific themes without branching app logic (DONE)
 - [x] T92 Implement runtime theme selection via env/config flag (for example: DEFAULT_THEME_KEY) with safe fallback to default theme (DONE)
-- [ ] T93 Isolate theme-specific assets (banners/backgrounds/iconography) under a predictable directory structure and loading convention (TODO)
+- [ ] T93 Isolate theme-specific assets (banners/backgrounds/iconography) under a predictable directory structure and loading convention (TODO, K0)
 
 ### Story E11-S2: Event customization capabilities (Kimberly branch-ready)
-- [ ] T94 Add extensibility points for themed header/footer/banner/background image slots per route group (TODO)
-- [ ] T95 Add themed typography hooks (font family tokens) so event branch can swap fonts without touching component logic (TODO)
-- [ ] T96 Add themed CTA/button style variants and decorative accents (stickers/badges/avatar frames) for party-specific flair (TODO)
+- [ ] T94 Add extensibility points for themed header/footer/banner/background image slots per route group (TODO, K0)
+- [ ] T95 Add themed typography hooks (font family tokens) so event branch can swap fonts without touching component logic (TODO, K0)
+- [ ] T96 Add themed CTA/button style variants and decorative accents (stickers/badges/avatar frames) for party-specific flair (TODO, K0)
 
 ### Story E11-S3: Safety rails for one-off branch strategy
-- [ ] T97 Document branch strategy for one-off event release (fork from develop, no back-merge policy, post-event archival checklist) (TODO)
-- [ ] T98 Keep core UX improvements merge-safe by landing structural/token work on develop before event-only content is added in branch (TODO)
-- [ ] T99 Add event-content checklist (image rights, content sizing, mobile crop behavior, fallback assets, cache busting) (TODO)
+- [ ] T97 Document branch strategy for one-off event release (fork from develop, no back-merge policy, post-event archival checklist) (TODO, K0)
+- [ ] T98 Keep core UX improvements merge-safe by landing structural/token work on develop before event-only content is added in branch (TODO, K0)
+- [ ] T99 Add event-content checklist (image rights, content sizing, mobile crop behavior, fallback assets, cache busting) (TODO, K0)
 
 ### Story E11-S4: Theme QA and release readiness
-- [ ] T100 Validate default theme and event theme parity for core flows (auth, group join, board play, leaderboard) (TODO)
-- [ ] T101 Validate event theme performance budget (image size, LCP impact, layout shift) on mobile network profiles (TODO)
-- [ ] T102 Add quick rollback path to default theme via config toggle and redeploy procedure (TODO)
+- [ ] T100 Validate default theme and event theme parity for core flows (auth, group join, board play, leaderboard) (TODO, K1)
+- [ ] T101 Validate event theme performance budget (image size, LCP impact, layout shift) on mobile network profiles (TODO, K1)
+- [ ] T102 Add quick rollback path to default theme via config toggle and redeploy procedure (TODO, K1)
 
 
 ## Suggested execution order

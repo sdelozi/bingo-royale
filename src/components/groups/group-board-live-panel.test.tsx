@@ -3,6 +3,11 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { GroupBoardLivePanel } from "./group-board-live-panel";
 
+function hasNormalizedText(expectedText: string) {
+  return (_content: string, element: Element | null) =>
+    element?.textContent?.replace(/\s+/g, "").trim() === expectedText;
+}
+
 vi.mock("./player-board-grid", () => ({
   PlayerBoardGrid: ({
     squares,
@@ -37,11 +42,13 @@ describe("GroupBoardLivePanel", () => {
   afterEach(() => {
     delete process.env.NEXT_PUBLIC_POLL_INTERVAL_MS;
     delete process.env.NEXT_PUBLIC_POLL_MAX_INTERVAL_MS;
+    vi.useRealTimers();
   });
 
   it("refreshes stats and squares through background polling", async () => {
-    process.env.NEXT_PUBLIC_POLL_INTERVAL_MS = "1";
-    process.env.NEXT_PUBLIC_POLL_MAX_INTERVAL_MS = "1";
+    vi.useFakeTimers();
+    process.env.NEXT_PUBLIC_POLL_INTERVAL_MS = "1000";
+    process.env.NEXT_PUBLIC_POLL_MAX_INTERVAL_MS = "1000";
 
     const fetchMock = vi.spyOn(globalThis, "fetch").mockResolvedValueOnce({
       ok: true,
@@ -85,9 +92,11 @@ describe("GroupBoardLivePanel", () => {
 
     expect(screen.queryByRole("button", { name: "Refresh now" })).not.toBeInTheDocument();
 
+    await vi.advanceTimersByTimeAsync(1000);
+
     await waitFor(() => {
       expect(fetchMock).toHaveBeenCalledTimes(1);
-      expect(screen.getByText(/Score: 9/)).toBeInTheDocument();
+      expect(screen.getByText(hasNormalizedText("Score9"))).toBeInTheDocument();
       expect(screen.getByText("Updated square")).toBeInTheDocument();
     });
 
@@ -124,7 +133,7 @@ describe("GroupBoardLivePanel", () => {
     fireEvent.click(screen.getByRole("button", { name: "Toggle local" }));
 
     await waitFor(() => {
-      expect(screen.getByText(/Score: 1/)).toBeInTheDocument();
+      expect(screen.getByText(hasNormalizedText("Score1"))).toBeInTheDocument();
     });
   });
 });
