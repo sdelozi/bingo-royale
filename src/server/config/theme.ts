@@ -1,4 +1,6 @@
-const THEME_KEYS = ["arcade-neon", "lake-bachelorette"] as const;
+import { env } from "@/server/config/env";
+
+const THEME_KEYS = ["arcade-neon", "lake-blue"] as const;
 
 type ThemeKey = (typeof THEME_KEYS)[number];
 
@@ -28,8 +30,8 @@ function getOptionalTrimmed(value: string | undefined): string | undefined {
 }
 
 export const themeConfig: ThemeConfig = {
-  key: resolveThemeKey(process.env.NEXT_PUBLIC_THEME_KEY),
-  bannerText: getOptionalTrimmed(process.env.NEXT_PUBLIC_THEME_BANNER_TEXT),
-  bannerImageUrl: getOptionalTrimmed(process.env.NEXT_PUBLIC_THEME_BANNER_IMAGE_URL),
-  footerNote: getOptionalTrimmed(process.env.NEXT_PUBLIC_THEME_FOOTER_NOTE)
+  key: resolveThemeKey(env.themeKey),
+  bannerText: getOptionalTrimmed(env.themeBannerText),
+  bannerImageUrl: getOptionalTrimmed(env.themeBannerImageUrl),
+  footerNote: getOptionalTrimmed(env.themeFooterNote)
 };

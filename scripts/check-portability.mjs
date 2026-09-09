@@ -7,6 +7,7 @@ const repoRoot = process.cwd();
 const srcRoot = join(repoRoot, "src");
 
 const allowedProcessEnvFiles = new Set([
+  "src/server/config/env-helpers.ts",
   "src/server/config/env.ts",
   "src/lib/polling.ts",
   "src/server/db/client.ts"

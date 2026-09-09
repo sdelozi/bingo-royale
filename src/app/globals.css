@@ -34,7 +34,7 @@
   --button-hover: linear-gradient(125deg, rgba(38, 242, 255, 0.28), rgba(255, 79, 216, 0.28));
 }
 
-body[data-theme="lake-bachelorette"] {
+body[data-theme="lake-blue"] {
   --bg: #e6f0ff;
   --bg-accent: #d2e5ff;
   --surface: rgba(255, 255, 255, 0.92);
@@ -66,6 +66,7 @@ body {
   padding: 0;
   margin: 0;
   min-height: 100%;
+  -webkit-text-size-adjust: 100%;
   font-family: var(--font-body);
   background:
     radial-gradient(circle at 10% 0%, rgba(38, 242, 255, 0.24), transparent 35%),
@@ -74,7 +75,7 @@ body {
   color: var(--text);
 }
 
-body[data-theme="lake-bachelorette"] {
+body[data-theme="lake-blue"] {
   background:
     repeating-linear-gradient(
       90deg,
@@ -97,7 +98,7 @@ body::before {
   opacity: 0.3;
 }
 
-body[data-theme="lake-bachelorette"]::before {
+body[data-theme="lake-blue"]::before {
   background-image: none;
   opacity: 0;
 }
@@ -271,9 +272,9 @@ select {
   color: var(--text);
 }
 
-body[data-theme="lake-bachelorette"] input,
-body[data-theme="lake-bachelorette"] textarea,
-body[data-theme="lake-bachelorette"] select {
+body[data-theme="lake-blue"] input,
+body[data-theme="lake-blue"] textarea,
+body[data-theme="lake-blue"] select {
   background: rgba(255, 255, 255, 0.86);
 }
 
@@ -358,6 +359,14 @@ tr:last-child td {
   table {
     display: block;
     overflow-x: auto;
+  }
+
+  input,
+  textarea,
+  select,
+  button {
+    width: 100%;
+    min-height: 44px;
   }
 }
 

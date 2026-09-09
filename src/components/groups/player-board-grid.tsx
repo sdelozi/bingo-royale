@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import type { PlayerBoardSquareState } from "@/server/services/groups/player-board";
 import styles from "./player-board-grid.module.css";
@@ -13,7 +12,6 @@ type PlayerBoardGridProps = {
 };
 
 export function PlayerBoardGrid({ groupId, squares, onSquaresChange }: PlayerBoardGridProps) {
-  const router = useRouter();
   const [boardSquares, setBoardSquares] = useState(squares);
   const [error, setError] = useState<string | null>(null);
   const inFlightRef = useRef(false);
@@ -105,8 +103,6 @@ export function PlayerBoardGrid({ groupId, squares, onSquaresChange }: PlayerBoa
         })
       ) {
         void flushPendingUpdates();
-      } else {
-        router.refresh();
       }
     }
   }

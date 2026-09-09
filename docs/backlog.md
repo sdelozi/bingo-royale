@@ -155,6 +155,8 @@ Priority key:
 - [ ] T72 Cut over from dev-only runtime to separate prod environment with documented rollback (PAUSED)
 
 ## Epic E10: V1 UI/UX Polish and Delight (P0)
+- Mobile-first guardrail for all E10 stories: no story is considered done unless primary flows are validated on phone viewport first and remain fully usable on desktop.
+
 ### Story E10-S1: Visual foundation and design tokens
 - [x] T73 Establish a visual direction for V1 (palette, typography pair, spacing scale, radii, shadows) with CSS variables and reusable token names (DONE)
 - [x] T74 Add app-wide shell styling baseline (page background treatment, card surfaces, elevation, border system) without changing core behaviors (DONE)

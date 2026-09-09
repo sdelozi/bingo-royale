@@ -3,14 +3,6 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { PlayerBoardGrid } from "./player-board-grid";
 
-const refresh = vi.fn();
-
-vi.mock("next/navigation", () => ({
-  useRouter: () => ({
-    refresh
-  })
-}));
-
 function createSquares() {
   return Array.from({ length: 25 }, (_, index) => ({
     position: index,
@@ -52,7 +44,6 @@ describe("PlayerBoardGrid", () => {
 
     await waitFor(() => {
       expect(fetchMock).toHaveBeenCalledTimes(1);
-      expect(refresh).toHaveBeenCalledTimes(1);
       expect(tileButton).toHaveAttribute("aria-pressed", "true");
       expect(tileButton).toHaveTextContent("Marked");
     });
