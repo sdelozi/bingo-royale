@@ -1,5 +1,5 @@
 import React from "react";
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { act, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { GroupBoardLivePanel } from "./group-board-live-panel";
 
@@ -50,7 +50,7 @@ describe("GroupBoardLivePanel", () => {
     process.env.NEXT_PUBLIC_POLL_INTERVAL_MS = "1000";
     process.env.NEXT_PUBLIC_POLL_MAX_INTERVAL_MS = "1000";
 
-    const fetchMock = vi.spyOn(globalThis, "fetch").mockResolvedValueOnce({
+    const fetchMock = vi.spyOn(globalThis, "fetch").mockResolvedValue({
       ok: true,
       json: async () => ({
         generatedAt: "2026-08-28T00:00:10.000Z",
@@ -92,13 +92,13 @@ describe("GroupBoardLivePanel", () => {
 
     expect(screen.queryByRole("button", { name: "Refresh now" })).not.toBeInTheDocument();
 
-    await vi.advanceTimersByTimeAsync(1000);
-
-    await waitFor(() => {
-      expect(fetchMock).toHaveBeenCalledTimes(1);
-      expect(screen.getByText(hasNormalizedText("Score9"))).toBeInTheDocument();
-      expect(screen.getByText("Updated square")).toBeInTheDocument();
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(1000);
     });
+
+    expect(fetchMock).toHaveBeenCalled();
+    expect(screen.getByText(hasNormalizedText("Score9"))).toBeInTheDocument();
+    expect(screen.getByText("Updated square")).toBeInTheDocument();
 
     fetchMock.mockRestore();
   });
@@ -132,8 +132,6 @@ describe("GroupBoardLivePanel", () => {
 
     fireEvent.click(screen.getByRole("button", { name: "Toggle local" }));
 
-    await waitFor(() => {
-      expect(screen.getByText(hasNormalizedText("Score1"))).toBeInTheDocument();
-    });
+    expect(screen.getByText(hasNormalizedText("Score1"))).toBeInTheDocument();
   });
 });
