@@ -60,7 +60,8 @@ if (env.googleClientId && env.googleClientSecret) {
   providers.unshift(
     GoogleProvider({
       clientId: env.googleClientId,
-      clientSecret: env.googleClientSecret
+      clientSecret: env.googleClientSecret,
+      allowDangerousEmailAccountLinking: env.googleAllowDangerousEmailAccountLinking
     })
   );
 }

@@ -23,6 +23,7 @@ This contract defines deployment-agnostic configuration requirements for Bingo R
 | `AUTH_SECRET` | Yes | Yes | random long string | Auth.js signing secret |
 | `GOOGLE_CLIENT_ID` | No | Yes | provider value | Optional Google OAuth |
 | `GOOGLE_CLIENT_SECRET` | No | Yes | provider value | Optional Google OAuth |
+| `GOOGLE_ALLOW_DANGEROUS_EMAIL_ACCOUNT_LINKING` | No | No | `false` | Optional: allow Google login to link with existing same-email credentials accounts |
 | `CREDENTIALS_PASSWORD_PEPPER` | No | Yes | random long string | Optional credentials hardening |
 | `NEXT_PUBLIC_POLL_INTERVAL_MS` | No | No | `15000` | UI polling base |
 | `NEXT_PUBLIC_POLL_MAX_INTERVAL_MS` | No | No | `120000` | UI polling max |
@@ -41,6 +42,12 @@ This contract defines deployment-agnostic configuration requirements for Bingo R
 - `DATABASE_URL`, `AUTH_SECRET`, and OAuth credentials are managed via host secret managers.
 - Secrets must not be printed in logs.
 - Secret rotation should happen before high-risk releases and after incident response.
+
+## Google OAuth Account Linking
+- Default behavior: Google OAuth will not automatically link to an existing same-email credentials account.
+- If users see `OAuthAccountNotLinked`, they signed up previously with a different method for that email.
+- To allow linking in this app, set `GOOGLE_ALLOW_DANGEROUS_EMAIL_ACCOUNT_LINKING=true` and redeploy.
+- Only enable this if you explicitly accept the account-linking risk tradeoff for your user base.
 
 ## Enforcement and Tooling
 - CI portability guardrail: `npm run check:portability`

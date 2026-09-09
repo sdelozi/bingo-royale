@@ -1,4 +1,4 @@
-import { getOptionalEnv, getRequiredEnv } from "@/server/config/env-helpers";
+import { getOptionalBooleanEnv, getOptionalEnv, getRequiredEnv } from "@/server/config/env-helpers";
 
 export const env = {
   nodeEnv: process.env.NODE_ENV ?? "development",
@@ -7,6 +7,7 @@ export const env = {
   authSecret: getRequiredEnv("AUTH_SECRET"),
   googleClientId: getOptionalEnv("GOOGLE_CLIENT_ID"),
   googleClientSecret: getOptionalEnv("GOOGLE_CLIENT_SECRET"),
+  googleAllowDangerousEmailAccountLinking: getOptionalBooleanEnv("GOOGLE_ALLOW_DANGEROUS_EMAIL_ACCOUNT_LINKING"),
   credentialsPasswordPepper: getOptionalEnv("CREDENTIALS_PASSWORD_PEPPER"),
   themeKey: getOptionalEnv("NEXT_PUBLIC_THEME_KEY"),
   themeBannerText: getOptionalEnv("NEXT_PUBLIC_THEME_BANNER_TEXT"),
