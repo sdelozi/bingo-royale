@@ -114,7 +114,7 @@ export function GroupLeaderboardLiveTable({
       {rows.length === 0 ? <p className="ui-empty-state">No leaderboard entries yet.</p> : null}
 
       <div className="ui-table-wrap">
-        <table className="ui-table">
+        <table className="ui-table is-leaderboard">
           <thead>
             <tr>
               <th>Rank</th>

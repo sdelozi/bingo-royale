@@ -63,4 +63,20 @@ describe("RegisterForm", () => {
 
     fetchMock.mockRestore();
   });
+
+  it("shows Google sign-in CTA when enabled and passes callbackUrl", async () => {
+    render(<RegisterForm callbackUrl="/join/token-123" googleEnabled />);
+
+    fireEvent.click(screen.getByRole("button", { name: "Continue with Google" }));
+
+    expect(signIn).toHaveBeenCalledWith("google", {
+      callbackUrl: "/join/token-123"
+    });
+  });
+
+  it("hides Google sign-in CTA when disabled", () => {
+    render(<RegisterForm callbackUrl="/dashboard" googleEnabled={false} />);
+
+    expect(screen.queryByRole("button", { name: "Continue with Google" })).not.toBeInTheDocument();
+  });
 });

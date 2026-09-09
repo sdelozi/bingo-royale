@@ -158,43 +158,45 @@ export function PlayerBoardGrid({ groupId, squares, onSquaresChange }: PlayerBoa
         </p>
       ) : null}
 
-      <table className={styles.boardGridTable}>
-        <tbody>
-          {rows.map((row, rowIndex) => (
-            <tr key={rowIndex}>
-              {row.map((square) => {
-                const isPending = pendingPositions.includes(square.position);
-                const humanPosition = square.position + 1;
-                const tileState = isPending ? "Syncing" : square.isMarked ? "Marked" : "Open";
-                const visualState = isPending ? "pending" : square.isMarked ? "marked" : "idle";
+      <div className="ui-table-wrap">
+        <table className={styles.boardGridTable}>
+          <tbody>
+            {rows.map((row, rowIndex) => (
+              <tr key={rowIndex}>
+                {row.map((square) => {
+                  const isPending = pendingPositions.includes(square.position);
+                  const humanPosition = square.position + 1;
+                  const tileState = isPending ? "Syncing" : square.isMarked ? "Marked" : "Open";
+                  const visualState = isPending ? "pending" : square.isMarked ? "marked" : "idle";
 
-                return (
-                  <td key={square.position} className={styles.boardGridCell}>
-                    <button
-                      className={styles.boardGridButton}
-                      type="button"
-                      onClick={() => toggleSquare(square.position)}
-                      aria-pressed={square.isMarked}
-                      aria-busy={isPending}
-                      data-pending={isPending}
-                      data-state={visualState}
-                      aria-label={`Square ${humanPosition}: ${square.content}. Status ${tileState}.`}
-                      title={square.content}
-                    >
-                      <span className={styles.boardGridMeta}>
-                        <span className={styles.boardGridIndex}>#{humanPosition}</span>
-                        {square.isFreeSpace ? <strong className={styles.boardGridFreeSpaceLabel}>Free space</strong> : null}
-                      </span>
-                      <span className={styles.boardGridContent}>{square.content}</span>
-                      <span className={styles.boardGridStatus}>{tileState}</span>
-                    </button>
-                  </td>
-                );
-              })}
-            </tr>
-          ))}
-        </tbody>
-      </table>
+                  return (
+                    <td key={square.position} className={styles.boardGridCell}>
+                      <button
+                        className={styles.boardGridButton}
+                        type="button"
+                        onClick={() => toggleSquare(square.position)}
+                        aria-pressed={square.isMarked}
+                        aria-busy={isPending}
+                        data-pending={isPending}
+                        data-state={visualState}
+                        aria-label={`Square ${humanPosition}: ${square.content}. Status ${tileState}.`}
+                        title={square.content}
+                      >
+                        <span className={styles.boardGridMeta}>
+                          <span className={styles.boardGridIndex}>#{humanPosition}</span>
+                          {square.isFreeSpace ? <strong className={styles.boardGridFreeSpaceLabel}>Free space</strong> : null}
+                        </span>
+                        <span className={styles.boardGridContent}>{square.content}</span>
+                        <span className={styles.boardGridStatus}>{tileState}</span>
+                      </button>
+                    </td>
+                  );
+                })}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </section>
   );
 }

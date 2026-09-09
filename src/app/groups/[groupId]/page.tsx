@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
-import { env } from "@/server/config/env";
 import { getCurrentUser } from "@/server/auth/session";
+import { getRequestOrigin } from "@/server/http/request-origin";
 import { getUserGroup } from "@/server/services/groups/get-user-group";
 
 type GroupDetailPageProps = {
@@ -24,7 +24,9 @@ export default async function GroupDetailPage({ params }: GroupDetailPageProps) 
   }
 
   const canManageTemplate = membership.role === "ADMIN";
-  const shareLink = canManageTemplate && membership.shareToken ? `${env.appUrl}/join/${membership.shareToken}` : null;
+  const requestOrigin = getRequestOrigin();
+  const shareLink =
+    canManageTemplate && membership.shareToken ? `${requestOrigin}/join/${membership.shareToken}` : null;
 
   return (
     <main className="ui-stack ui-page">

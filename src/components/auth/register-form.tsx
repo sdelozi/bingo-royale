@@ -6,9 +6,10 @@ import { signIn } from "next-auth/react";
 
 type RegisterFormProps = {
   callbackUrl?: string;
+  googleEnabled?: boolean;
 };
 
-export function RegisterForm({ callbackUrl = "/dashboard" }: RegisterFormProps) {
+export function RegisterForm({ callbackUrl = "/dashboard", googleEnabled = false }: RegisterFormProps) {
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -84,6 +85,14 @@ export function RegisterForm({ callbackUrl = "/dashboard" }: RegisterFormProps) 
           {isSubmitting ? "Creating account..." : "Create account"}
         </button>
       </div>
+
+      {googleEnabled ? (
+        <div className="ui-actions">
+          <button type="button" className="ui-button-secondary" onClick={() => signIn("google", { callbackUrl })}>
+            Continue with Google
+          </button>
+        </div>
+      ) : null}
     </form>
   );
 }

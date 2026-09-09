@@ -205,24 +205,24 @@ main {
   align-items: center;
   min-height: 2rem;
   padding: 0.35rem 0.7rem;
-  border-radius: var(--radius-pill);
-  border: 1px solid var(--line);
-  background: rgba(255, 255, 255, 0.08);
-  color: var(--text);
+  border-radius: 8px;
+  border: 1px dashed var(--line-soft);
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--muted);
   font-family: var(--font-accent);
   font-size: 0.75rem;
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
 }
 
 .app-banner-note {
   margin: 0.95rem 0 0;
   display: inline-block;
-  padding: 0.4rem 0.8rem;
-  border-radius: var(--radius-pill);
-  border: 1px solid var(--line);
-  background: rgba(255, 255, 255, 0.04);
+  padding: 0.42rem 0.75rem;
+  border-radius: 10px;
+  border-left: 3px solid var(--line);
+  background: rgba(255, 255, 255, 0.02);
   font-size: 0.9rem;
 }
 
@@ -290,10 +290,10 @@ main {
 .app-footer-accent {
   margin-bottom: 0.85rem;
   width: 100%;
-  min-height: 68px;
-  background-position: center bottom;
+  min-height: 88px;
+  background-position: center center;
   background-repeat: no-repeat;
-  background-size: 100% auto;
+  background-size: contain;
 }
 
 h1,
@@ -790,11 +790,18 @@ input[type="radio"] {
 .ui-table-wrap {
   width: 100%;
   overflow-x: auto;
+  padding-bottom: 0.2rem;
+  scrollbar-width: thin;
+  scrollbar-color: var(--line) transparent;
 }
 
 .ui-table {
   border-radius: 14px;
   overflow: hidden;
+}
+
+.ui-table.is-leaderboard {
+  min-width: 760px;
 }
 
 .ui-table-rank {
@@ -844,6 +851,22 @@ input[type="radio"] {
 .ui-score-value {
   font-weight: 800;
   font-size: 1.05rem;
+}
+
+.ui-celebration-toast {
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.42rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid rgba(98, 255, 157, 0.55);
+  background: rgba(98, 255, 157, 0.2);
+  color: var(--text);
+  font-family: var(--font-accent);
+  font-size: 0.79rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 ul,
@@ -1042,6 +1065,10 @@ tr:last-child td {
 
   .ui-stat-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .ui-table.is-leaderboard {
+    min-width: 680px;
   }
 
   input,

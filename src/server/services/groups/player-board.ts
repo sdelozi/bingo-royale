@@ -1,7 +1,10 @@
 import { createHash } from "crypto";
 import { db } from "@/server/db/client";
 import { calculateScore, countBingos, isBlackout } from "@/lib/bingo";
+import { getOptionalBooleanEnv } from "@/server/config/env-helpers";
 import { FREE_SPACE_POSITION, GROUP_OBJECTIVE_COUNT, GroupAccessError } from "./template-management";
+
+const enableFourCornersScoring = getOptionalBooleanEnv("NEXT_PUBLIC_ENABLE_FOUR_CORNERS_SCORING");
 
 type TemplateObjective = {
   id: string;
@@ -112,7 +115,7 @@ function mapPlayerBoard(record: PlayerBoardRecord) {
     createdAt: record.createdAt,
     squares,
     stats: {
-      score: calculateScore(marks),
+      score: calculateScore(marks, { enableFourCornersScoring }),
       bingoCount: countBingos(marks),
       blackout: isBlackout(marks)
     }

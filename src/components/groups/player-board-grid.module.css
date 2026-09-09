@@ -1,5 +1,6 @@
 .boardGridTable {
-  width: min(100%, 780px);
+  width: 100%;
+  min-width: 640px;
   table-layout: fixed;
   border-collapse: separate;
   border-spacing: 0;
@@ -177,6 +178,10 @@
 }
 
 @media (max-width: 640px) {
+  .boardGridTable {
+    min-width: 620px;
+  }
+
   .boardGridButton {
     height: 132px;
     padding: 0.56rem;

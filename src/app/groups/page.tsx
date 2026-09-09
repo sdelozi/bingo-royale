@@ -2,8 +2,8 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { CreateGroupForm } from "@/components/groups/create-group-form";
 import { JoinGroupForm } from "@/components/groups/join-group-form";
-import { env } from "@/server/config/env";
 import { getCurrentUser } from "@/server/auth/session";
+import { getRequestOrigin } from "@/server/http/request-origin";
 import { listGroupsForUser } from "@/server/services/groups/list-user-groups";
 
 export default async function GroupsPage() {
@@ -14,6 +14,7 @@ export default async function GroupsPage() {
   }
 
   const groups = await listGroupsForUser(user.id);
+  const requestOrigin = getRequestOrigin();
 
   return (
     <main className="ui-stack ui-page">
@@ -34,7 +35,8 @@ export default async function GroupsPage() {
           <ul className="ui-list">
             {groups.map((group) => {
               const canViewInviteCredentials = group.role === "ADMIN";
-              const shareLink = canViewInviteCredentials && group.shareToken ? `${env.appUrl}/join/${group.shareToken}` : null;
+              const shareLink =
+                canViewInviteCredentials && group.shareToken ? `${requestOrigin}/join/${group.shareToken}` : null;
 
               return (
                 <li key={group.groupId} className="ui-list-item">

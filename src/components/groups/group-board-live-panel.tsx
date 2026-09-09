@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { calculateScore, countBingos, isBlackout } from "@/lib/bingo";
 import type { PlayerBoardSquareState } from "@/server/services/groups/player-board";
 import { fetchGroupBoardSnapshot } from "@/lib/sync/group-sync-drivers";
@@ -17,13 +17,15 @@ type GroupBoardLivePanelProps = {
     bingoCount: number;
     blackout: boolean;
   };
+  enableFourCornersScoring: boolean;
 };
 
 export function GroupBoardLivePanel({
   groupId,
   initialSquares,
   initialGeneratedAt,
-  initialStats
+  initialStats,
+  enableFourCornersScoring
 }: GroupBoardLivePanelProps) {
   const transport = useMemo(
     () =>
@@ -39,11 +41,26 @@ export function GroupBoardLivePanel({
   const [lastUpdated, setLastUpdated] = useState(new Date(initialGeneratedAt));
   const [nextRefreshMs, setNextRefreshMs] = useState(transport.getNextDelayMs());
   const [error, setError] = useState<string | null>(null);
+  const [celebrationMessage, setCelebrationMessage] = useState<string | null>(null);
+  const previousBingoCountRef = useRef(initialStats.bingoCount);
+  const previousBlackoutRef = useRef(initialStats.blackout);
+  const celebrationTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  function showCelebration(message: string) {
+    if (celebrationTimeoutRef.current) {
+      clearTimeout(celebrationTimeoutRef.current);
+    }
+
+    setCelebrationMessage(message);
+    celebrationTimeoutRef.current = setTimeout(() => {
+      setCelebrationMessage(null);
+    }, 2200);
+  }
 
   const updateStatsFromSquares = useCallback((nextSquares: PlayerBoardSquareState[]) => {
     const marks = nextSquares.map((square) => square.isMarked);
     const nextStats = {
-      score: calculateScore(marks),
+      score: calculateScore(marks, { enableFourCornersScoring }),
       bingoCount: countBingos(marks),
       blackout: isBlackout(marks)
     };
@@ -59,6 +76,28 @@ export function GroupBoardLivePanel({
 
       return nextStats;
     });
+  }, [enableFourCornersScoring]);
+
+  useEffect(() => {
+    const previousBingoCount = previousBingoCountRef.current;
+    const previousBlackout = previousBlackoutRef.current;
+
+    if (stats.blackout && !previousBlackout) {
+      showCelebration("Blackout complete! Massive bonus secured.");
+    } else if (stats.bingoCount > previousBingoCount) {
+      showCelebration("Bingo! Bonus points awarded.");
+    }
+
+    previousBingoCountRef.current = stats.bingoCount;
+    previousBlackoutRef.current = stats.blackout;
+  }, [stats.bingoCount, stats.blackout]);
+
+  useEffect(() => {
+    return () => {
+      if (celebrationTimeoutRef.current) {
+        clearTimeout(celebrationTimeoutRef.current);
+      }
+    };
   }, []);
 
   useEffect(() => {
@@ -105,6 +144,11 @@ export function GroupBoardLivePanel({
         </div>
       </div>
       <p className="ui-muted">Last updated: {lastUpdated.toLocaleString()}</p>
+      {celebrationMessage ? (
+        <p className="ui-celebration-toast" role="status" aria-live="polite">
+          {celebrationMessage}
+        </p>
+      ) : null}
       {error ? <p className="ui-alert is-error">Board sync issue. Retrying in {Math.ceil(nextRefreshMs / 1000)}s.</p> : null}
 
       <PlayerBoardGrid groupId={groupId} squares={squares} onSquaresChange={updateStatsFromSquares} />
