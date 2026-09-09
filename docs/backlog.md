@@ -163,17 +163,17 @@ Priority key:
 - [ ] T75 Define reusable component variants for button, input, select, badge, alert, modal, table, tabs, and empty state (IN-PROGRESS)
 
 ### Story E10-S2: Information architecture and navigation clarity
-- [ ] T76 Improve header/navigation hierarchy (primary actions, user menu, signed-in context, group context) for quicker task completion (TODO)
+- [ ] T76 Improve header/navigation hierarchy (primary actions, user menu, signed-in context, group context) for quicker task completion (IN-PROGRESS)
 - [ ] T77 Add clear page headers and subheaders on dashboard/groups/leaderboard/template pages (TODO)
 - [ ] T78 Standardize section spacing and responsive breakpoints so key controls remain reachable on mobile during gameplay (IN-PROGRESS)
 
 ### Story E10-S3: Board gameplay experience polish
 - [ ] T79 Redesign interactive player board square states (idle/hover/pressed/marked/disabled) with strong visual contrast and playful feedback (IN-PROGRESS)
-- [ ] T80 Add quick feedback patterns for mark/unmark sync states (pending/success/error) with accessible non-blocking messaging (TODO)
+- [ ] T80 Add quick feedback patterns for mark/unmark sync states (pending/success/error) with accessible non-blocking messaging (IN-PROGRESS)
 - [ ] T81 Improve readability and scannability of objectives on 5x5 grid across phone and desktop form factors (TODO)
 
 ### Story E10-S4: Leaderboard and group management polish
-- [ ] T83 Improve group list and group detail cards with clearer action affordances (join, open board, open template, invite context) (TODO)
+- [ ] T83 Improve group list and group detail cards with clearer action affordances (join, open board, open template, invite context) (IN-PROGRESS)
 - [ ] T82 Improve leaderboard visual hierarchy (rank emphasis, score emphasis, status chips, last-updated signal) while preserving current data semantics (IN-PROGRESS)
 - [ ] T84 Add polished empty/loading/error states for dashboard, groups, board, and leaderboard views (IN-PROGRESS)
 

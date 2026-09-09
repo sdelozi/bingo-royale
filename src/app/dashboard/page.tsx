@@ -27,14 +27,24 @@ export default async function DashboardPage() {
           <ul className="ui-list">
             {groups.map((group) => (
               <li key={group.groupId} className="ui-list-item">
-                <p>
-                  <strong>{group.groupName}</strong> - {group.role}
-                </p>
-                <p>
-                  <Link href={`/groups/${group.groupId}`}>
-                    {getGroupDashboardActionLabel(group.isCreator)}
-                  </Link>
-                </p>
+                <div className="ui-stack-tight">
+                  <div className="ui-panel-title-row">
+                    <p className="ui-card-title">{group.groupName}</p>
+                    <span className={`ui-badge ${group.role === "ADMIN" ? "is-admin" : "is-player"}`}>{group.role}</span>
+                  </div>
+                  <p className="ui-card-copy ui-muted">Open the group, jump into your board, or check current standings.</p>
+                  <div className="ui-actions">
+                    <Link className="ui-link-button" href={`/groups/${group.groupId}`}>
+                      {getGroupDashboardActionLabel(group.isCreator)}
+                    </Link>
+                    <Link className="ui-link-button ui-link-button-secondary" href={`/groups/${group.groupId}/board`}>
+                      Open board
+                    </Link>
+                    <Link className="ui-link-button ui-link-button-secondary" href={`/groups/${group.groupId}/leaderboard`}>
+                      View leaderboard
+                    </Link>
+                  </div>
+                </div>
               </li>
             ))}
           </ul>
@@ -42,8 +52,8 @@ export default async function DashboardPage() {
       </section>
 
       <div className="ui-actions">
-        <Link href="/groups">Go to groups</Link>
-        <Link href="/">Back home</Link>
+        <Link className="ui-link-button" href="/groups">Go to groups</Link>
+        <Link className="ui-link-button ui-link-button-secondary" href="/">Back home</Link>
       </div>
       <SignOutButton />
     </main>

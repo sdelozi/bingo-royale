@@ -37,7 +37,8 @@ export default async function GroupBoardPage({ params }: GroupBoardPageProps) {
 
         <p className="ui-muted">Mark your own board here.</p>
         <div className="ui-actions">
-          <Link href={`/groups/${board.groupId}`}>Back to group</Link>
+          <Link className="ui-link-button" href={`/groups/${board.groupId}`}>Back to group</Link>
+          <Link className="ui-link-button ui-link-button-secondary" href={`/groups/${board.groupId}/leaderboard`}>View leaderboard</Link>
         </div>
       </main>
     );
@@ -46,9 +47,9 @@ export default async function GroupBoardPage({ params }: GroupBoardPageProps) {
       return (
         <main className="ui-stack">
           <h1>Board unavailable</h1>
-          <p>An admin needs to save the group board template before player boards can be generated.</p>
+          <p className="ui-empty-state">An admin needs to save the group board template before player boards can be generated.</p>
           <div className="ui-actions">
-            <Link href={`/groups/${params.groupId}`}>Back to group</Link>
+            <Link className="ui-link-button ui-link-button-secondary" href={`/groups/${params.groupId}`}>Back to group</Link>
           </div>
         </main>
       );

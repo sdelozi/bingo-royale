@@ -36,17 +36,38 @@ export default async function GroupsPage() {
 
               return (
                 <li key={group.groupId} className="ui-list-item">
-                  <p>
-                    <strong>{group.groupName}</strong>
-                  </p>
-                  <p>Role: {group.role}</p>
-                  <p>
-                    <Link href={`/groups/${group.groupId}`}>
-                      {group.isCreator ? "Manage group" : "Open group"}
-                    </Link>
-                  </p>
-                  <p>Invite code: {canViewInviteCredentials ? group.inviteCode : "Admin only"}</p>
-                  <p>Share link: {canViewInviteCredentials ? (shareLink ?? "Not available") : "Admin only"}</p>
+                  <div className="ui-stack-tight">
+                    <div className="ui-panel-title-row">
+                      <p className="ui-card-title">{group.groupName}</p>
+                      <span className={`ui-badge ${group.role === "ADMIN" ? "is-admin" : "is-player"}`}>{group.role}</span>
+                    </div>
+                    <div className="ui-meta-grid">
+                      <p className="ui-meta-item">
+                        <span className="ui-meta-key">Invite code</span>
+                        <span className="ui-meta-value">{canViewInviteCredentials ? group.inviteCode : "Admin only"}</span>
+                      </p>
+                      <p className="ui-meta-item">
+                        <span className="ui-meta-key">Share link</span>
+                        <span className="ui-meta-value">{canViewInviteCredentials ? (shareLink ?? "Not available") : "Admin only"}</span>
+                      </p>
+                    </div>
+                    <div className="ui-actions">
+                      <Link className="ui-link-button" href={`/groups/${group.groupId}`}>
+                        {group.isCreator ? "Manage group" : "Open group"}
+                      </Link>
+                      <Link className="ui-link-button ui-link-button-secondary" href={`/groups/${group.groupId}/board`}>
+                        Open board
+                      </Link>
+                      <Link className="ui-link-button ui-link-button-secondary" href={`/groups/${group.groupId}/leaderboard`}>
+                        View leaderboard
+                      </Link>
+                      {group.role === "ADMIN" ? (
+                        <Link className="ui-link-button ui-link-button-secondary" href={`/groups/${group.groupId}/template`}>
+                          Edit template
+                        </Link>
+                      ) : null}
+                    </div>
+                  </div>
                 </li>
               );
             })}
@@ -55,7 +76,7 @@ export default async function GroupsPage() {
       </section>
 
       <div className="ui-actions">
-        <Link href="/dashboard">Back to dashboard</Link>
+        <Link className="ui-link-button ui-link-button-secondary" href="/dashboard">Back to dashboard</Link>
       </div>
     </main>
   );

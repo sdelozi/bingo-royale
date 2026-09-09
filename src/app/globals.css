@@ -138,6 +138,17 @@ main {
   box-shadow: var(--shadow);
 }
 
+.app-header-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.app-brand-block {
+  min-width: 0;
+}
+
 .app-kicker {
   margin: 0;
   font-size: 0.75rem;
@@ -181,6 +192,30 @@ main {
   object-position: center;
   border-radius: 14px;
   border: 1px solid var(--line-soft);
+}
+
+.app-user-chip {
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.45rem 0.7rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--muted);
+  font-size: 0.88rem;
+  white-space: nowrap;
+}
+
+.app-nav {
+  margin-top: 1rem;
+}
+
+.app-nav-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
 }
 
 main {
@@ -271,6 +306,24 @@ section {
   background: rgba(255, 255, 255, 0.03);
 }
 
+.ui-panel-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.ui-card-title {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.ui-card-copy {
+  margin: 0;
+}
+
 .ui-form {
   display: grid;
   gap: 0.85rem;
@@ -306,6 +359,39 @@ input[type="radio"] {
   display: flex;
   flex-wrap: wrap;
   gap: 0.6rem;
+}
+
+.ui-link-button,
+.ui-link-button:visited {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0.62rem 0.96rem;
+  border-radius: 12px;
+  border: 1px solid var(--button-border);
+  background: var(--button-bg);
+  color: var(--text);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  transition: transform 180ms ease, background 180ms ease, box-shadow 180ms ease;
+}
+
+.ui-link-button:hover {
+  transform: translateY(-1px);
+  background: var(--button-hover);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.26);
+  text-decoration: none;
+}
+
+.ui-link-button-secondary,
+.ui-link-button-secondary:visited {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.ui-link-button-secondary:hover {
+  background: rgba(255, 255, 255, 0.12);
 }
 
 .ui-button-secondary {
@@ -454,6 +540,35 @@ input[type="radio"] {
   padding: 0.75rem;
 }
 
+.ui-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.55rem;
+}
+
+.ui-meta-item {
+  margin: 0;
+  padding: 0.55rem 0.6rem;
+  border-radius: 12px;
+  border: 1px solid var(--line-soft);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.ui-meta-key {
+  display: block;
+  color: var(--muted);
+  font-size: 0.74rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.ui-meta-value {
+  display: block;
+  margin-top: 0.2rem;
+  font-weight: 700;
+  word-break: break-word;
+}
+
 .ui-table-wrap {
   width: 100%;
   overflow-x: auto;
@@ -574,6 +689,22 @@ tr:last-child td {
     padding: 1rem;
   }
 
+  .app-header-top {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .app-user-chip {
+    width: 100%;
+    justify-content: center;
+    white-space: normal;
+    text-align: center;
+  }
+
+  .app-nav-links {
+    flex-direction: column;
+  }
+
   .app-title,
   h1 {
     letter-spacing: 0.03em;
@@ -590,12 +721,18 @@ tr:last-child td {
   }
 
   .ui-actions button,
-  .ui-actions a {
+  .ui-actions a,
+  .ui-link-button,
+  .ui-link-button-secondary {
     width: 100%;
   }
 
   .ui-list-item {
     padding: 0.7rem;
+  }
+
+  .ui-meta-grid {
+    grid-template-columns: 1fr;
   }
 
   .ui-stat-grid {
