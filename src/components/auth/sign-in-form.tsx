@@ -51,35 +51,37 @@ export function SignInForm({ googleEnabled, error, callbackUrl = "/dashboard" }:
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="ui-form">
       <h1>Sign in</h1>
 
-      {formError ? <p>{formError}</p> : null}
+      {formError ? (
+        <p className="ui-alert is-error" role="alert">
+          {formError}
+        </p>
+      ) : null}
 
-      <p>
+      <div className="ui-field">
         <label htmlFor="email">Email</label>
-        <br />
-        <input id="email" name="email" type="email" required />
-      </p>
+        <input id="email" name="email" type="email" required className="ui-input" />
+      </div>
 
-      <p>
+      <div className="ui-field">
         <label htmlFor="password">Password</label>
-        <br />
-        <input id="password" name="password" type="password" minLength={8} required />
-      </p>
+        <input id="password" name="password" type="password" minLength={8} required className="ui-input" />
+      </div>
 
-      <p>
+      <div className="ui-actions">
         <button type="submit" disabled={isSubmitting}>
           {isSubmitting ? "Signing in..." : "Sign in"}
         </button>
-      </p>
+      </div>
 
       {googleEnabled ? (
-        <p>
-          <button type="button" onClick={() => signIn("google", { callbackUrl })}>
+        <div className="ui-actions">
+          <button type="button" className="ui-button-secondary" onClick={() => signIn("google", { callbackUrl })}>
             Continue with Google
           </button>
-        </p>
+        </div>
       ) : null}
     </form>
   );

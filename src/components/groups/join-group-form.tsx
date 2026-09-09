@@ -54,25 +54,28 @@ export function JoinGroupForm() {
   }
 
   return (
-    <section>
+    <section className="ui-panel">
       <h2>Join with invite code</h2>
-      <form onSubmit={handleSubmit}>
-        <p>
+      <form onSubmit={handleSubmit} className="ui-form">
+        <div className="ui-field">
           <label htmlFor="invite-code">Invite code</label>
-          <br />
-          <input id="invite-code" name="inviteCode" type="text" minLength={1} maxLength={20} required />
-        </p>
-        <p>
+          <input id="invite-code" name="inviteCode" type="text" minLength={1} maxLength={20} required className="ui-input" />
+        </div>
+        <div className="ui-actions">
           <button type="submit" disabled={isSubmitting}>
             {isSubmitting ? "Joining..." : "Join group"}
           </button>
-        </p>
+        </div>
       </form>
 
-      {error ? <p>{error}</p> : null}
+      {error ? (
+        <p className="ui-alert is-error" role="alert">
+          {error}
+        </p>
+      ) : null}
 
       {joined ? (
-        <p>
+        <p className="ui-alert is-success">
           {joined.alreadyMember ? "You are already in" : "Joined"} {joined.groupName} (code: {joined.inviteCode}).
         </p>
       ) : null}

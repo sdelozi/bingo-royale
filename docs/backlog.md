@@ -160,12 +160,12 @@ Priority key:
 ### Story E10-S1: Visual foundation and design tokens
 - [x] T73 Establish a visual direction for V1 (palette, typography pair, spacing scale, radii, shadows) with CSS variables and reusable token names (DONE)
 - [x] T74 Add app-wide shell styling baseline (page background treatment, card surfaces, elevation, border system) without changing core behaviors (DONE)
-- [ ] T75 Define reusable component variants for button, input, select, badge, alert, modal, table, tabs, and empty state (TODO)
+- [ ] T75 Define reusable component variants for button, input, select, badge, alert, modal, table, tabs, and empty state (IN-PROGRESS)
 
 ### Story E10-S2: Information architecture and navigation clarity
 - [ ] T76 Improve header/navigation hierarchy (primary actions, user menu, signed-in context, group context) for quicker task completion (TODO)
 - [ ] T77 Add clear page headers and subheaders on dashboard/groups/leaderboard/template pages (TODO)
-- [ ] T78 Standardize section spacing and responsive breakpoints so key controls remain reachable on mobile during gameplay (TODO)
+- [ ] T78 Standardize section spacing and responsive breakpoints so key controls remain reachable on mobile during gameplay (IN-PROGRESS)
 
 ### Story E10-S3: Board gameplay experience polish
 - [ ] T79 Redesign interactive player board square states (idle/hover/pressed/marked/disabled) with strong visual contrast and playful feedback (IN-PROGRESS)

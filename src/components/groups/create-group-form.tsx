@@ -57,25 +57,28 @@ export function CreateGroupForm() {
   }
 
   return (
-    <section>
+    <section className="ui-panel">
       <h2>Create a group</h2>
-      <form onSubmit={handleSubmit}>
-        <p>
+      <form onSubmit={handleSubmit} className="ui-form">
+        <div className="ui-field">
           <label htmlFor="group-name">Group name</label>
-          <br />
-          <input id="group-name" name="name" type="text" minLength={1} maxLength={80} required />
-        </p>
-        <p>
+          <input id="group-name" name="name" type="text" minLength={1} maxLength={80} required className="ui-input" />
+        </div>
+        <div className="ui-actions">
           <button type="submit" disabled={isSubmitting}>
             {isSubmitting ? "Creating..." : "Create group"}
           </button>
-        </p>
+        </div>
       </form>
 
-      {error ? <p>{error}</p> : null}
+      {error ? (
+        <p className="ui-alert is-error" role="alert">
+          {error}
+        </p>
+      ) : null}
 
       {createdGroup ? (
-        <div>
+        <div className="ui-alert is-success">
           <p>Created: {createdGroup.name}</p>
           <p>Invite code: {createdGroup.inviteCode}</p>
           <p>Share link: {createdGroup.shareLink ?? "Not available"}</p>

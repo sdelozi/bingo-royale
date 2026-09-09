@@ -25,9 +25,9 @@ export default async function GroupBoardPage({ params }: GroupBoardPageProps) {
     const board = await getOrCreatePlayerBoardForGroup(user.id, params.groupId);
 
     return (
-      <main>
+      <main className="ui-stack">
         <h1>Your board: {board.groupName}</h1>
-        <p>This layout is generated once per player and stays stable over time.</p>
+        <p className="ui-muted">This layout is generated once per player and stays stable over time.</p>
         <GroupBoardLivePanel
           groupId={board.groupId}
           initialSquares={board.squares}
@@ -35,21 +35,21 @@ export default async function GroupBoardPage({ params }: GroupBoardPageProps) {
           initialGeneratedAt={new Date().toISOString()}
         />
 
-        <p>Mark your own board here.</p>
-        <p>
+        <p className="ui-muted">Mark your own board here.</p>
+        <div className="ui-actions">
           <Link href={`/groups/${board.groupId}`}>Back to group</Link>
-        </p>
+        </div>
       </main>
     );
   } catch (error) {
     if (error instanceof GroupBoardTemplateMissingError) {
       return (
-        <main>
+        <main className="ui-stack">
           <h1>Board unavailable</h1>
           <p>An admin needs to save the group board template before player boards can be generated.</p>
-          <p>
+          <div className="ui-actions">
             <Link href={`/groups/${params.groupId}`}>Back to group</Link>
-          </p>
+          </div>
         </main>
       );
     }

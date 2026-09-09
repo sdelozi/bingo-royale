@@ -16,26 +16,26 @@ export default async function GroupsPage() {
   const groups = await listGroupsForUser(user.id);
 
   return (
-    <main>
+    <main className="ui-stack">
       <h1>Groups</h1>
-      <p>Create a group and share the invite code or share link.</p>
+      <p className="ui-muted">Create or join groups, then open your board and leaderboard.</p>
 
       <CreateGroupForm />
       <JoinGroupForm />
 
-      <section>
+      <section className="ui-panel">
         <h2>Your groups</h2>
 
         {groups.length === 0 ? (
           <p>You have not joined or created any groups yet.</p>
         ) : (
-          <ul>
+          <ul className="ui-list">
             {groups.map((group) => {
               const canViewInviteCredentials = group.role === "ADMIN";
               const shareLink = canViewInviteCredentials && group.shareToken ? `${env.appUrl}/join/${group.shareToken}` : null;
 
               return (
-                <li key={group.groupId}>
+                <li key={group.groupId} className="ui-list-item">
                   <p>
                     <strong>{group.groupName}</strong>
                   </p>
@@ -54,9 +54,9 @@ export default async function GroupsPage() {
         )}
       </section>
 
-      <p>
+      <div className="ui-actions">
         <Link href="/dashboard">Back to dashboard</Link>
-      </p>
+      </div>
     </main>
   );
 }

@@ -58,39 +58,43 @@ export function GroupLeaderboardLiveTable({
   }
 
   return (
-    <section>
-      <p>Last updated: {lastUpdated.toLocaleString()}</p>
-      <p>{error ? `Refresh failed. Retrying in ${Math.ceil(nextRefreshMs / 1000)}s.` : `Auto-refresh every ${Math.ceil(nextRefreshMs / 1000)}s.`}</p>
-      <p>
-        <button type="button" onClick={handleManualRefresh} disabled={isRefreshing}>
+    <section className="ui-panel">
+      <p className="ui-muted">Last updated: {lastUpdated.toLocaleString()}</p>
+      <p className={error ? "ui-alert is-error" : "ui-alert"}>
+        {error ? `Refresh failed. Retrying in ${Math.ceil(nextRefreshMs / 1000)}s.` : `Auto-refresh every ${Math.ceil(nextRefreshMs / 1000)}s.`}
+      </p>
+      <div className="ui-actions">
+        <button type="button" className="ui-button-secondary" onClick={handleManualRefresh} disabled={isRefreshing}>
           {isRefreshing ? "Refreshing..." : "Refresh now"}
         </button>
-      </p>
+      </div>
 
-      <table>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Role</th>
-            <th>Bingos</th>
-            <th>Score</th>
-            <th>Blackout</th>
-            <th>Board</th>
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map((row) => (
-            <tr key={row.userId}>
-              <td>{row.displayName}</td>
-              <td>{row.role}</td>
-              <td>{row.bingoCount}</td>
-              <td>{row.score}</td>
-              <td>{row.blackout ? "Yes" : "No"}</td>
-              <td>{row.boardHref ? <Link href={row.boardHref}>View board</Link> : "No board yet"}</td>
+      <div className="ui-table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Role</th>
+              <th>Bingos</th>
+              <th>Score</th>
+              <th>Blackout</th>
+              <th>Board</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {rows.map((row) => (
+              <tr key={row.userId}>
+                <td>{row.displayName}</td>
+                <td>{row.role}</td>
+                <td>{row.bingoCount}</td>
+                <td>{row.score}</td>
+                <td>{row.blackout ? "Yes" : "No"}</td>
+                <td>{row.boardHref ? <Link href={row.boardHref}>View board</Link> : "No board yet"}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </section>
   );
 }

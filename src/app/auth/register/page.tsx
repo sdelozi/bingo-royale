@@ -19,9 +19,9 @@ export default async function RegisterPage({ searchParams }: RegisterPageProps) 
   const callbackUrl = searchParams?.callbackUrl ?? "/dashboard";
 
   return (
-    <main>
+    <main className="ui-stack">
       <RegisterForm callbackUrl={callbackUrl} />
-      <p>
+      <p className="ui-muted">
         Already have an account? <Link href={`/auth/signin?callbackUrl=${encodeURIComponent(callbackUrl)}`}>Sign in</Link>
       </p>
     </main>
