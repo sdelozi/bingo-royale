@@ -20,6 +20,14 @@ function getErrorMessage(error?: string): string | undefined {
     return "Please sign in to continue.";
   }
 
+  if (error === "OAuthAccountNotLinked") {
+    return "That email is already registered with a different sign-in method. Use your original method or enable account linking for Google OAuth.";
+  }
+
+  if (error === "OAuthSignin" || error === "OAuthCallback" || error === "OAuthCreateAccount") {
+    return "Google sign-in is currently unavailable. Check OAuth redirect URIs and Google client credentials.";
+  }
+
   return "Unable to sign in with that method.";
 }
 
