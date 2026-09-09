@@ -288,12 +288,12 @@ main {
 }
 
 .app-footer-accent {
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.85rem;
   width: 100%;
-  min-height: 54px;
-  background-position: left center;
+  min-height: 68px;
+  background-position: center bottom;
   background-repeat: no-repeat;
-  background-size: contain;
+  background-size: 100% auto;
 }
 
 h1,
@@ -432,6 +432,12 @@ section {
   flex-wrap: wrap;
 }
 
+.ui-panel-title-row + .ui-meta-grid,
+.ui-panel-title-row + .ui-status-line,
+.ui-panel-title-row + .ui-muted {
+  margin-top: 0.65rem;
+}
+
 .ui-card-title {
   margin: 0;
   font-size: 1.05rem;
@@ -440,6 +446,10 @@ section {
 
 .ui-card-copy {
   margin: 0;
+}
+
+.ui-card-copy + .ui-actions {
+  margin-top: 0.55rem;
 }
 
 .ui-form {
@@ -481,6 +491,13 @@ input[type="radio"] {
   display: flex;
   flex-wrap: wrap;
   gap: 0.6rem;
+}
+
+.ui-actions + .ui-stat-grid,
+.ui-stat-grid + .ui-table-wrap,
+.ui-status-line + .ui-muted,
+.ui-muted + .ui-actions {
+  margin-top: 0.75rem;
 }
 
 .ui-action-grid {
@@ -980,6 +997,11 @@ tr:last-child td {
   .ui-action-card,
   .ui-action-card:visited {
     min-height: 76px;
+  }
+
+  .app-footer-accent {
+    min-height: 56px;
+    background-size: cover;
   }
 
   .ui-page {
