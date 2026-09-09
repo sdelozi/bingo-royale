@@ -8,7 +8,7 @@ export default async function HomePage() {
   return (
     <main>
       <h1>Bingo Royale</h1>
-      <p>Browser-first multiplayer bingo for group trips.</p>
+      <p>Browser-first multiplayer bingo.</p>
 
       {user ? (
         <>

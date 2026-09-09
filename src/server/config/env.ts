@@ -1,18 +1,4 @@
-function getRequiredEnv(name: string): string {
-  const value = process.env[name];
-
-  if (!value) {
-    throw new Error(`Missing required environment variable: ${name}`);
-  }
-
-  return value;
-}
-
-function getOptionalEnv(name: string): string | undefined {
-  const value = process.env[name];
-
-  return value && value.length > 0 ? value : undefined;
-}
+import { getOptionalEnv, getRequiredEnv } from "@/server/config/env-helpers";
 
 export const env = {
   nodeEnv: process.env.NODE_ENV ?? "development",
@@ -21,5 +7,9 @@ export const env = {
   authSecret: getRequiredEnv("AUTH_SECRET"),
   googleClientId: getOptionalEnv("GOOGLE_CLIENT_ID"),
   googleClientSecret: getOptionalEnv("GOOGLE_CLIENT_SECRET"),
-  credentialsPasswordPepper: getOptionalEnv("CREDENTIALS_PASSWORD_PEPPER")
+  credentialsPasswordPepper: getOptionalEnv("CREDENTIALS_PASSWORD_PEPPER"),
+  themeKey: getOptionalEnv("NEXT_PUBLIC_THEME_KEY"),
+  themeBannerText: getOptionalEnv("NEXT_PUBLIC_THEME_BANNER_TEXT"),
+  themeBannerImageUrl: getOptionalEnv("NEXT_PUBLIC_THEME_BANNER_IMAGE_URL"),
+  themeFooterNote: getOptionalEnv("NEXT_PUBLIC_THEME_FOOTER_NOTE")
 };

@@ -27,7 +27,7 @@ export default async function GroupBoardPage({ params }: GroupBoardPageProps) {
     return (
       <main>
         <h1>Your board: {board.groupName}</h1>
-        <p>This layout is generated once per player and stays stable for the trip.</p>
+        <p>This layout is generated once per player and stays stable over time.</p>
         <GroupBoardLivePanel
           groupId={board.groupId}
           initialSquares={board.squares}
