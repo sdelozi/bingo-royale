@@ -512,6 +512,13 @@ input[type="radio"] {
   text-decoration: none;
 }
 
+.ui-action-card:focus-visible,
+.ui-tab-link:focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: 3px;
+  border-color: var(--primary);
+}
+
 .ui-action-card-title {
   margin: 0;
   font-family: var(--font-accent);
