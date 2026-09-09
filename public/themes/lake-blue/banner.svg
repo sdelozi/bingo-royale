@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 320" role="img" aria-labelledby="title desc">
+  <title id="title">Lake blue banner</title>
+  <desc id="desc">Soft blue banner with shoreline curves and airy clouds.</desc>
+  <defs>
+    <linearGradient id="sky" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0%" stop-color="#eef5ff"/>
+      <stop offset="100%" stop-color="#dcecff"/>
+    </linearGradient>
+    <linearGradient id="water" x1="0" x2="1" y1="0" y2="0">
+      <stop offset="0%" stop-color="#9fc4f5"/>
+      <stop offset="100%" stop-color="#3f77d3"/>
+    </linearGradient>
+  </defs>
+  <rect width="1400" height="320" fill="url(#sky)"/>
+  <g opacity="0.75" fill="#ffffff">
+    <ellipse cx="240" cy="74" rx="94" ry="24"/>
+    <ellipse cx="1110" cy="86" rx="112" ry="28"/>
+  </g>
+  <path d="M0 214C155 180 260 188 380 208S656 250 832 214 1114 148 1400 188V320H0Z" fill="#c8deff"/>
+  <path d="M0 232C168 214 296 236 458 250S776 264 946 232 1234 182 1400 210V320H0Z" fill="url(#water)" fill-opacity="0.78"/>
+</svg>

@@ -28,8 +28,14 @@ This contract defines deployment-agnostic configuration requirements for Bingo R
 | `NEXT_PUBLIC_POLL_MAX_INTERVAL_MS` | No | No | `120000` | UI polling max |
 | `NEXT_PUBLIC_THEME_KEY` | No | No | `arcade-neon` | Theme preset (`arcade-neon` or `lake-blue`) |
 | `NEXT_PUBLIC_THEME_BANNER_TEXT` | No | No | launch message | Optional top banner text |
-| `NEXT_PUBLIC_THEME_BANNER_IMAGE_URL` | No | No | `https://...` | Optional top banner image URL |
+| `NEXT_PUBLIC_THEME_BANNER_IMAGE_URL` | No | No | `/themes/lake-blue/banner.svg` | Optional top banner image override; local `public/` paths preferred |
 | `NEXT_PUBLIC_THEME_FOOTER_NOTE` | No | No | custom footer copy | Optional footer text override |
+
+## Theme Asset Convention
+- Default theme assets live under `public/themes/<theme-key>/`.
+- Stable shell asset names are `banner.svg`, `background.svg`, and `footer.svg`.
+- Route groups (`public`, `auth`, `app`) resolve against the active theme preset and can reuse or replace those assets without changing page components.
+- If `NEXT_PUBLIC_THEME_BANNER_IMAGE_URL` is set, use either a full URL or a root-relative asset path.
 
 ## Secrets Model
 - `DATABASE_URL`, `AUTH_SECRET`, and OAuth credentials are managed via host secret managers.

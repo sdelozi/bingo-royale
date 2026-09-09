@@ -5,6 +5,7 @@
 :root {
   --font-display: "Impact", "Haettenschweiler", "Arial Narrow Bold", "Trebuchet MS", sans-serif;
   --font-body: "Trebuchet MS", "Segoe UI", "Avenir Next", sans-serif;
+  --font-accent: "Bahnschrift", "Trebuchet MS", sans-serif;
 
   --bg: #060812;
   --bg-accent: #0f1733;
@@ -120,6 +121,24 @@ a:hover {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  overflow: clip;
+}
+
+.app-shell-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  opacity: 0.24;
+  mix-blend-mode: screen;
+}
+
+body[data-theme="lake-blue"] .app-shell-backdrop {
+  opacity: 0.3;
+  mix-blend-mode: multiply;
 }
 
 .app-header,
@@ -127,6 +146,8 @@ a:hover {
 main {
   width: min(980px, calc(100% - 2rem));
   margin: 0 auto;
+  position: relative;
+  z-index: 1;
 }
 
 .app-header {
@@ -149,9 +170,17 @@ main {
   min-width: 0;
 }
 
+.app-title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
 .app-kicker {
   margin: 0;
   font-size: 0.75rem;
+  font-family: var(--font-accent);
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--muted);
@@ -171,6 +200,22 @@ main {
   color: var(--muted);
 }
 
+.app-route-chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2rem;
+  padding: 0.35rem 0.7rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text);
+  font-family: var(--font-accent);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
 .app-banner-note {
   margin: 0.95rem 0 0;
   display: inline-block;
@@ -187,9 +232,12 @@ main {
 
 .app-banner-image {
   width: 100%;
+  min-height: 160px;
   max-height: 200px;
-  object-fit: cover;
-  object-position: center;
+  aspect-ratio: 35 / 8;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
   border-radius: 14px;
   border: 1px solid var(--line-soft);
 }
@@ -237,6 +285,15 @@ main {
   background: linear-gradient(180deg, var(--surface-soft), var(--surface));
   color: var(--muted);
   font-size: 0.95rem;
+}
+
+.app-footer-accent {
+  margin-bottom: 0.75rem;
+  width: 100%;
+  min-height: 54px;
+  background-position: left center;
+  background-repeat: no-repeat;
+  background-size: contain;
 }
 
 h1,
@@ -372,9 +429,11 @@ input[type="radio"] {
   border: 1px solid var(--button-border);
   background: var(--button-bg);
   color: var(--text);
+  font-family: var(--font-accent);
   font-weight: 700;
-  letter-spacing: 0.01em;
+  letter-spacing: 0.05em;
   text-decoration: none;
+  text-transform: uppercase;
   transition: transform 180ms ease, background 180ms ease, box-shadow 180ms ease;
 }
 
@@ -392,6 +451,27 @@ input[type="radio"] {
 
 .ui-link-button-secondary:hover {
   background: rgba(255, 255, 255, 0.12);
+}
+
+.ui-link-button-accent,
+.ui-link-button-accent:visited {
+  position: relative;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  border-color: transparent;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.26);
+}
+
+.ui-link-button-accent::after {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  border-radius: 11px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.18), transparent 52%);
+  pointer-events: none;
+}
+
+.ui-link-button-accent:hover {
+  background: linear-gradient(135deg, var(--primary-strong), var(--secondary));
 }
 
 .ui-button-secondary {
@@ -429,6 +509,7 @@ input[type="radio"] {
   border: 1px solid var(--line);
   background: rgba(255, 255, 255, 0.06);
   color: var(--text);
+  font-family: var(--font-accent);
   font-size: 0.78rem;
   font-weight: 700;
   letter-spacing: 0.04em;
@@ -668,6 +749,7 @@ td {
 thead th {
   background: rgba(255, 255, 255, 0.06);
   color: var(--muted);
+  font-family: var(--font-accent);
   font-size: 0.9rem;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -708,6 +790,14 @@ tr:last-child td {
   .app-title,
   h1 {
     letter-spacing: 0.03em;
+  }
+
+  .app-title-row {
+    align-items: flex-start;
+  }
+
+  .app-route-chip {
+    max-width: 100%;
   }
 
   table {
