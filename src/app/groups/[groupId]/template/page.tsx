@@ -25,7 +25,7 @@ export default async function GroupTemplatePage({ params }: GroupTemplatePagePro
     const data = await getGroupTemplateEditorData(user.id, params.groupId);
 
     return (
-      <main>
+      <main className="ui-stack">
         <h1>Template Editor: {data.groupName}</h1>
         <GroupTemplateForm
           groupId={data.groupId}
@@ -35,20 +35,20 @@ export default async function GroupTemplatePage({ params }: GroupTemplatePagePro
           hasExistingBoards={data.hasExistingBoards}
           currentVersion={data.currentVersion}
         />
-        <p>
+        <div className="ui-actions">
           <Link href={`/groups/${data.groupId}`}>Back to group</Link>
-        </p>
+        </div>
       </main>
     );
   } catch (error) {
     if (error instanceof GroupForbiddenError) {
       return (
-        <main>
+        <main className="ui-stack">
           <h1>Admin only</h1>
-          <p>Only group admins can edit the board template.</p>
-          <p>
+          <p className="ui-empty-state">Only group admins can edit the board template.</p>
+          <div className="ui-actions">
             <Link href={`/groups/${params.groupId}`}>Back to group</Link>
-          </p>
+          </div>
         </main>
       );
     }

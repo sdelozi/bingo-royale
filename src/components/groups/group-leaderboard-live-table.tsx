@@ -57,6 +57,22 @@ export function GroupLeaderboardLiveTable({
     await transport.refreshNow();
   }
 
+  function getRankClassName(rank: number) {
+    if (rank === 1) {
+      return "ui-badge is-rank-1";
+    }
+
+    if (rank === 2) {
+      return "ui-badge is-rank-2";
+    }
+
+    if (rank === 3) {
+      return "ui-badge is-rank-3";
+    }
+
+    return "ui-badge is-neutral";
+  }
+
   return (
     <section className="ui-panel">
       <p className="ui-muted">Last updated: {lastUpdated.toLocaleString()}</p>
@@ -69,10 +85,30 @@ export function GroupLeaderboardLiveTable({
         </button>
       </div>
 
+      {rows.length > 0 ? (
+        <div className="ui-stat-grid" aria-label="Leaderboard summary">
+          <div className="ui-stat-chip">
+            <span className="ui-stat-label">Players</span>
+            <span className="ui-stat-value">{rows.length}</span>
+          </div>
+          <div className="ui-stat-chip">
+            <span className="ui-stat-label">Top score</span>
+            <span className="ui-stat-value">{rows[0]?.score ?? 0}</span>
+          </div>
+          <div className="ui-stat-chip">
+            <span className="ui-stat-label">Blackouts</span>
+            <span className="ui-stat-value">{rows.filter((row) => row.blackout).length}</span>
+          </div>
+        </div>
+      ) : null}
+
+      {rows.length === 0 ? <p className="ui-empty-state">No leaderboard entries yet.</p> : null}
+
       <div className="ui-table-wrap">
         <table>
           <thead>
             <tr>
+              <th>Rank</th>
               <th>Name</th>
               <th>Role</th>
               <th>Bingos</th>
@@ -82,16 +118,33 @@ export function GroupLeaderboardLiveTable({
             </tr>
           </thead>
           <tbody>
-            {rows.map((row) => (
+            {rows.map((row, index) => {
+              const rank = index + 1;
+
+              return (
               <tr key={row.userId}>
+                <td>
+                  <span className="ui-table-rank">
+                    <span className={getRankClassName(rank)}>{rank}</span>
+                  </span>
+                </td>
                 <td>{row.displayName}</td>
-                <td>{row.role}</td>
+                <td>
+                  <span className={`ui-badge ${row.role === "ADMIN" ? "is-admin" : "is-player"}`}>{row.role}</span>
+                </td>
                 <td>{row.bingoCount}</td>
-                <td>{row.score}</td>
-                <td>{row.blackout ? "Yes" : "No"}</td>
+                <td>
+                  <span className="ui-score-value">{row.score}</span>
+                </td>
+                <td>
+                  <span className={`ui-badge ${row.blackout ? "is-success" : "is-neutral"}`}>
+                    {row.blackout ? "Yes" : "No"}
+                  </span>
+                </td>
                 <td>{row.boardHref ? <Link href={row.boardHref}>View board</Link> : "No board yet"}</td>
               </tr>
-            ))}
+              );
+            })}
           </tbody>
         </table>
       </div>

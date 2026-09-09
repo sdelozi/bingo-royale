@@ -173,9 +173,9 @@ Priority key:
 - [ ] T81 Improve readability and scannability of objectives on 5x5 grid across phone and desktop form factors (TODO)
 
 ### Story E10-S4: Leaderboard and group management polish
-- [ ] T82 Improve leaderboard visual hierarchy (rank emphasis, score emphasis, status chips, last-updated signal) while preserving current data semantics (TODO)
 - [ ] T83 Improve group list and group detail cards with clearer action affordances (join, open board, open template, invite context) (TODO)
-- [ ] T84 Add polished empty/loading/error states for dashboard, groups, board, and leaderboard views (TODO)
+- [ ] T82 Improve leaderboard visual hierarchy (rank emphasis, score emphasis, status chips, last-updated signal) while preserving current data semantics (IN-PROGRESS)
+- [ ] T84 Add polished empty/loading/error states for dashboard, groups, board, and leaderboard views (IN-PROGRESS)
 
 ### Story E10-S5: Accessibility, motion, and responsive quality bar
 - [ ] T85 Add keyboard-visible focus styles and verify full keyboard operability for core game flows (TODO)
