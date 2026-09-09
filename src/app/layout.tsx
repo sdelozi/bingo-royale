@@ -1,20 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { Bungee, Space_Grotesk } from "next/font/google";
 import { themeConfig } from "@/server/config/theme";
 import "./globals.css";
-
-const displayFont = Bungee({
-  subsets: ["latin"],
-  weight: ["400"],
-  variable: "--font-display"
-});
-
-const bodyFont = Space_Grotesk({
-  subsets: ["latin"],
-  weight: ["400", "500", "700"],
-  variable: "--font-body"
-});
 
 export const metadata: Metadata = {
   title: "Bingo Royale",
@@ -26,11 +13,9 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const shellClassName = `${displayFont.variable} ${bodyFont.variable}`;
-
   return (
     <html lang="en">
-      <body className={shellClassName} data-theme={themeConfig.key}>
+      <body data-theme={themeConfig.key}>
         <div className="app-shell">
           <header className="app-header">
             {themeConfig.bannerImageUrl ? (

@@ -3,8 +3,8 @@
 }
 
 :root {
-  --font-display: "Bungee", "Trebuchet MS", "Arial Black", sans-serif;
-  --font-body: "Space Grotesk", "Segoe UI", sans-serif;
+  --font-display: "Impact", "Haettenschweiler", "Arial Narrow Bold", "Trebuchet MS", sans-serif;
+  --font-body: "Trebuchet MS", "Segoe UI", "Avenir Next", sans-serif;
 
   --bg: #060812;
   --bg-accent: #0f1733;
