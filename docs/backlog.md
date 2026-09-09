@@ -172,7 +172,7 @@ Priority key:
 
 ### Story E10-S2: Information architecture and navigation clarity
 - [x] T76 Improve header/navigation hierarchy (primary actions, user menu, signed-in context, group context) for quicker task completion (DONE, K0)
-- [ ] T77 Add clear page headers and subheaders on dashboard/groups/leaderboard/template pages (TODO, K1)
+- [x] T77 Add clear page headers and subheaders on dashboard/groups/leaderboard/template pages (DONE, K1)
 - [x] T78 Standardize section spacing and responsive breakpoints so key controls remain reachable on mobile during gameplay (DONE, K0)
 
 ### Story E10-S3: Board gameplay experience polish
