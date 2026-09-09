@@ -15,9 +15,11 @@ export default async function DashboardPage() {
   const groups = await listGroupsForUser(user.id);
 
   return (
-    <main className="ui-stack">
-      <h1>Dashboard</h1>
-      <p className="ui-muted">Signed in as {user.name ?? user.email}.</p>
+    <main className="ui-stack ui-page">
+      <header className="ui-page-header">
+        <h1 className="ui-page-title">Dashboard</h1>
+        <p className="ui-page-subtitle">Signed in as {user.name ?? user.email}.</p>
+      </header>
 
       <section className="ui-panel">
         <h2>Your groups</h2>

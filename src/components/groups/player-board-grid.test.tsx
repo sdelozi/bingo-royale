@@ -42,7 +42,7 @@ describe("PlayerBoardGrid", () => {
 
     expect(tileButton).toHaveAttribute("aria-pressed", "true");
     expect(screen.getByText("Saving board changes...")).toBeInTheDocument();
-    expect(tileButton).toHaveTextContent("Syncing...");
+    expect(tileButton).toHaveTextContent("Syncing");
 
     await waitFor(() => {
       expect(fetchMock).toHaveBeenCalledTimes(1);
@@ -79,10 +79,11 @@ describe("PlayerBoardGrid", () => {
   it("renders the free-space tile as a normal toggleable tile", () => {
     render(<PlayerBoardGrid groupId="group-1" squares={createSquares()} />);
 
-    const freeSpaceButton = screen.getByRole("button", { name: /Free space/i });
+    const freeSpaceButton = getTileButtonByObjective("Objective 13");
 
     expect(freeSpaceButton).not.toBeDisabled();
     expect(freeSpaceButton).toHaveAttribute("aria-pressed", "false");
+    expect(freeSpaceButton).toHaveTextContent("Free space");
   });
 
   it("coalesces rapid toggles to final local state", async () => {

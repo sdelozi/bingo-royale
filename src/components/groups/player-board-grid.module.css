@@ -29,47 +29,120 @@
   width: 100%;
   min-height: 150px;
   height: 100%;
-  padding: 0.75rem;
+  padding: 0.68rem;
   text-align: left;
-  border: 0;
-  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid transparent;
+  background: rgba(255, 255, 255, 0.035);
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: 0.48rem;
   justify-content: space-between;
   cursor: pointer;
   color: var(--text);
-  transition: transform 170ms ease, box-shadow 170ms ease, background 170ms ease;
+  transition: transform 170ms ease, box-shadow 170ms ease, background 170ms ease, border-color 170ms ease;
 }
 
-.boardGridButton:hover {
-  transform: translateY(-1px);
-  background: rgba(255, 255, 255, 0.09);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+.boardGridButton[data-state="idle"] {
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.boardGridButton[data-state="marked"] {
+  background: linear-gradient(145deg, rgba(98, 255, 157, 0.2), rgba(38, 242, 255, 0.16));
+}
+
+.boardGridButton[data-state="pending"] {
+  background: linear-gradient(145deg, rgba(255, 214, 111, 0.2), rgba(38, 242, 255, 0.14));
+  border-color: rgba(255, 214, 111, 0.36);
+  box-shadow: inset 0 0 0 1px rgba(255, 214, 111, 0.2);
+}
+
+.boardGridMeta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.4rem;
+}
+
+.boardGridIndex {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 1.4rem;
+  min-width: 1.9rem;
+  padding: 0.1rem 0.4rem;
+  border-radius: 999px;
+  border: 1px solid var(--line-soft);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--muted);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.boardGridFreeSpaceLabel {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 1.4rem;
+  padding: 0.1rem 0.45rem;
+  border-radius: 999px;
+  border: 1px solid rgba(98, 255, 157, 0.5);
+  background: rgba(98, 255, 157, 0.18);
+  color: var(--text);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+
+@media (hover: hover) and (pointer: fine) {
+  .boardGridButton:hover {
+    transform: translateY(-1px);
+    background: rgba(255, 255, 255, 0.09);
+    border-color: rgba(255, 255, 255, 0.14);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+  }
+}
+
+.boardGridButton:active {
+  transform: translateY(0);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+}
+
+.boardGridButton:focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: -2px;
 }
 
 .boardGridButton[data-pending="true"] {
-  background: linear-gradient(145deg, rgba(255, 214, 111, 0.18), rgba(38, 242, 255, 0.14));
-  box-shadow: inset 0 0 0 1px rgba(255, 214, 111, 0.24);
+  cursor: progress;
 }
 
 .boardGridContent {
-  display: -webkit-box;
-  -webkit-line-clamp: 4;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+  display: block;
+  overflow-wrap: anywhere;
+  line-height: 1.2;
+  font-size: 0.96rem;
+  font-weight: 600;
   word-break: break-word;
 }
 
 .boardGridStatus {
   font-weight: 600;
-  font-size: 0.85rem;
-  letter-spacing: 0.02em;
+  font-size: 0.78rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
   color: var(--muted);
 }
 
 .boardGridButton[aria-pressed="true"] {
-  background: linear-gradient(145deg, rgba(98, 255, 157, 0.18), rgba(38, 242, 255, 0.14));
+  border-color: rgba(98, 255, 157, 0.32);
+}
+
+.boardGridButton[aria-pressed="true"] .boardGridIndex {
+  border-color: rgba(98, 255, 157, 0.52);
+  background: rgba(98, 255, 157, 0.2);
+  color: var(--text);
 }
 
 .boardGridButton[aria-pressed="true"] .boardGridStatus {
@@ -78,22 +151,51 @@
 
 .boardGridButton[data-pending="true"] .boardGridStatus {
   color: var(--warning);
+  animation: boardGridPendingPulse 1s ease-in-out infinite;
 }
 
 .boardGridButton:disabled {
-  cursor: wait;
-  opacity: 0.75;
+  cursor: not-allowed;
+  opacity: 0.62;
+  filter: grayscale(0.2);
+}
+
+@keyframes boardGridPendingPulse {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.62;
+  }
+
+  100% {
+    opacity: 1;
+  }
 }
 
 @media (max-width: 640px) {
   .boardGridButton {
-    min-height: 122px;
+    min-height: 126px;
     padding: 0.56rem;
     gap: 0.35rem;
   }
 
+  .boardGridIndex {
+    min-width: 1.7rem;
+    font-size: 0.7rem;
+  }
+
+  .boardGridFreeSpaceLabel {
+    font-size: 0.66rem;
+  }
+
   .boardGridContent {
-    -webkit-line-clamp: 5;
-    font-size: 0.92rem;
+    font-size: 0.85rem;
+    line-height: 1.16;
+  }
+
+  .boardGridStatus {
+    font-size: 0.72rem;
   }
 }

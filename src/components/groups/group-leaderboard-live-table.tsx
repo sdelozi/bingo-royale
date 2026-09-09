@@ -75,10 +75,19 @@ export function GroupLeaderboardLiveTable({
 
   return (
     <section className="ui-panel">
-      <p className="ui-muted">Last updated: {lastUpdated.toLocaleString()}</p>
-      <p className={error ? "ui-alert is-error" : "ui-alert"}>
-        {error ? `Refresh failed. Retrying in ${Math.ceil(nextRefreshMs / 1000)}s.` : `Auto-refresh every ${Math.ceil(nextRefreshMs / 1000)}s.`}
+      <div className="ui-panel-title-row">
+        <p className="ui-card-title">Live standings</p>
+        <span className={`ui-badge ${error ? "is-neutral" : "is-success"}`}>{error ? "Retrying" : "Live"}</span>
+      </div>
+      <p className="ui-status-line" aria-live="polite">
+        <span className={`ui-status-dot ${error ? "is-danger" : isRefreshing ? "is-warning" : ""}`} aria-hidden="true" />
+        {error
+          ? `Refresh failed. Retrying in ${Math.ceil(nextRefreshMs / 1000)}s.`
+          : isRefreshing
+            ? "Refreshing leaderboard now..."
+            : `Auto-refresh every ${Math.ceil(nextRefreshMs / 1000)}s.`}
       </p>
+      <p className="ui-muted">Last updated: {lastUpdated.toLocaleString()}</p>
       <div className="ui-actions">
         <button type="button" className="ui-button-secondary" onClick={handleManualRefresh} disabled={isRefreshing}>
           {isRefreshing ? "Refreshing..." : "Refresh now"}
@@ -105,7 +114,7 @@ export function GroupLeaderboardLiveTable({
       {rows.length === 0 ? <p className="ui-empty-state">No leaderboard entries yet.</p> : null}
 
       <div className="ui-table-wrap">
-        <table>
+        <table className="ui-table">
           <thead>
             <tr>
               <th>Rank</th>
@@ -120,9 +129,17 @@ export function GroupLeaderboardLiveTable({
           <tbody>
             {rows.map((row, index) => {
               const rank = index + 1;
+              const rowClassName =
+                rank === 1
+                  ? "ui-table-row-top-1"
+                  : rank === 2
+                    ? "ui-table-row-top-2"
+                    : rank === 3
+                      ? "ui-table-row-top-3"
+                      : undefined;
 
               return (
-              <tr key={row.userId}>
+              <tr key={row.userId} className={rowClassName}>
                 <td>
                   <span className="ui-table-rank">
                     <span className={getRankClassName(rank)}>{rank}</span>
@@ -134,7 +151,7 @@ export function GroupLeaderboardLiveTable({
                 </td>
                 <td>{row.bingoCount}</td>
                 <td>
-                  <span className="ui-score-value">{row.score}</span>
+                  <span className="ui-score-value">{row.score} pts</span>
                 </td>
                 <td>
                   <span className={`ui-badge ${row.blackout ? "is-success" : "is-neutral"}`}>

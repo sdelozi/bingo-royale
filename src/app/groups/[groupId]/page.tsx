@@ -27,8 +27,18 @@ export default async function GroupDetailPage({ params }: GroupDetailPageProps) 
   const shareLink = canManageTemplate && membership.shareToken ? `${env.appUrl}/join/${membership.shareToken}` : null;
 
   return (
-    <main className="ui-stack">
-      <h1>{membership.groupName}</h1>
+    <main className="ui-stack ui-page">
+      <header className="ui-page-header">
+        <h1 className="ui-page-title">{membership.groupName}</h1>
+        <p className="ui-page-subtitle">View invite details and jump quickly between group actions.</p>
+      </header>
+      <nav className="ui-tab-row" aria-label="Group navigation">
+        <Link className="ui-tab-link is-active" href={`/groups/${membership.groupId}`}>Details</Link>
+        <Link className="ui-tab-link" href={`/groups/${membership.groupId}/board`}>Board</Link>
+        <Link className="ui-tab-link" href={`/groups/${membership.groupId}/leaderboard`}>Leaderboard</Link>
+        {canManageTemplate ? <Link className="ui-tab-link" href={`/groups/${membership.groupId}/template`}>Template</Link> : null}
+      </nav>
+
       <section className="ui-panel">
         <div className="ui-panel-title-row">
           <p className="ui-card-title">Group details</p>
@@ -46,9 +56,15 @@ export default async function GroupDetailPage({ params }: GroupDetailPageProps) 
         </div>
       </section>
 
-      <div className="ui-actions">
-        <Link className="ui-link-button" href={`/groups/${membership.groupId}/board`}>Open your board</Link>
-        <Link className="ui-link-button ui-link-button-secondary" href={`/groups/${membership.groupId}/leaderboard`}>View leaderboard</Link>
+      <div className="ui-action-grid" aria-label="Player actions">
+        <Link className="ui-action-card" href={`/groups/${membership.groupId}/board`}>
+          <p className="ui-action-card-title">Open your board</p>
+          <p className="ui-action-card-copy">Mark squares and monitor live score updates.</p>
+        </Link>
+        <Link className="ui-action-card" href={`/groups/${membership.groupId}/leaderboard`}>
+          <p className="ui-action-card-title">View leaderboard</p>
+          <p className="ui-action-card-copy">See rank, score, and blackout progress across members.</p>
+        </Link>
       </div>
 
       {canManageTemplate ? (
