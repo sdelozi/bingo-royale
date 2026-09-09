@@ -159,7 +159,7 @@ Priority key:
 
 ## Kimberly Branch Cut Plan
 - Branch cut target: finish the shared mobile-first UX foundation and theme extension points below on `develop`, then cut the permanent Kimberly release branch for event-only branding/content work.
-- K0 before branch cut: T75, T76, T78, T79, T80, T81, T82, T83, T84, T93, T94, T95, T96, T97, T98, T99.
+- K0 before branch cut: T75, T76, T78, T79, T80, T81, T82, T83, T84.
 - K1 after branch cut: T77, T85, T86, T87, T88, T89, T90, T100, T101, T102, plus paused E9 deployment-process follow-ups.
 
 ## Epic E10: V1 UI/UX Polish and Delight (P0)
@@ -199,17 +199,17 @@ Priority key:
 ### Story E11-S1: Theme architecture and switch mechanism
 - [x] T91 Introduce a theme contract (tokens + assets + optional overrides) that supports default and event-specific themes without branching app logic (DONE)
 - [x] T92 Implement runtime theme selection via env/config flag (for example: DEFAULT_THEME_KEY) with safe fallback to default theme (DONE)
-- [ ] T93 Isolate theme-specific assets (banners/backgrounds/iconography) under a predictable directory structure and loading convention (TODO, K0)
+- [x] T93 Isolate theme-specific assets (banners/backgrounds/iconography) under a predictable directory structure and loading convention (DONE)
 
 ### Story E11-S2: Event customization capabilities (Kimberly branch-ready)
-- [ ] T94 Add extensibility points for themed header/footer/banner/background image slots per route group (TODO, K0)
-- [ ] T95 Add themed typography hooks (font family tokens) so event branch can swap fonts without touching component logic (TODO, K0)
-- [ ] T96 Add themed CTA/button style variants and decorative accents (stickers/badges/avatar frames) for party-specific flair (TODO, K0)
+- [x] T94 Add extensibility points for themed header/footer/banner/background image slots per route group (DONE)
+- [x] T95 Add themed typography hooks (font family tokens) so event branch can swap fonts without touching component logic (DONE)
+- [x] T96 Add themed CTA/button style variants and decorative accents (stickers/badges/avatar frames) for party-specific flair (DONE)
 
 ### Story E11-S3: Safety rails for one-off branch strategy
-- [ ] T97 Document branch strategy for one-off event release (fork from develop, no back-merge policy, post-event archival checklist) (TODO, K0)
-- [ ] T98 Keep core UX improvements merge-safe by landing structural/token work on develop before event-only content is added in branch (TODO, K0)
-- [ ] T99 Add event-content checklist (image rights, content sizing, mobile crop behavior, fallback assets, cache busting) (TODO, K0)
+- [x] T97 Document branch strategy for one-off event release (fork from develop, no back-merge policy, post-event archival checklist) (DONE)
+- [x] T98 Keep core UX improvements merge-safe by landing structural/token work on develop before event-only content is added in branch (DONE)
+- [x] T99 Add event-content checklist (image rights, content sizing, mobile crop behavior, fallback assets, cache busting) (DONE)
 
 ### Story E11-S4: Theme QA and release readiness
 - [ ] T100 Validate default theme and event theme parity for core flows (auth, group join, board play, leaderboard) (TODO, K1)
