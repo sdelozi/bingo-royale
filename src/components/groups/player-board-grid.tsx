@@ -11,50 +11,18 @@ type PlayerBoardGridProps = {
   onSquaresChange?: (squares: PlayerBoardSquareState[]) => void;
 };
 
-type FeedbackState = {
-  tone: "pending" | "success" | "error";
-  message: string;
-};
-
 export function PlayerBoardGrid({ groupId, squares, onSquaresChange }: PlayerBoardGridProps) {
   const [boardSquares, setBoardSquares] = useState(squares);
-  const [feedback, setFeedback] = useState<FeedbackState | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [pendingPositions, setPendingPositions] = useState<number[]>([]);
   const inFlightRef = useRef(false);
   const boardSquaresRef = useRef(boardSquares);
   const serverSquaresRef = useRef(squares);
   const desiredMarksRef = useRef<Map<number, boolean>>(new Map());
-  const successTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  function clearSuccessTimeout() {
-    if (successTimeoutRef.current) {
-      clearTimeout(successTimeoutRef.current);
-      successTimeoutRef.current = null;
-    }
-  }
-
-  function showPendingFeedback() {
-    clearSuccessTimeout();
-    setFeedback({ tone: "pending", message: "Saving board changes..." });
-  }
-
-  function showSuccessFeedback() {
-    clearSuccessTimeout();
-    setFeedback({ tone: "success", message: "Board updated." });
-    successTimeoutRef.current = setTimeout(() => {
-      setFeedback((current) => (current?.tone === "success" ? null : current));
-    }, 1600);
-  }
 
   useEffect(() => {
     boardSquaresRef.current = boardSquares;
   }, [boardSquares]);
-
-  useEffect(() => {
-    return () => {
-      clearSuccessTimeout();
-    };
-  }, []);
 
   useEffect(() => {
     if (!inFlightRef.current) {
@@ -128,7 +96,7 @@ export function PlayerBoardGrid({ groupId, squares, onSquaresChange }: PlayerBoa
         }
       }
 
-      setFeedback((current) => (current?.tone === "error" ? null : current));
+      setErrorMessage(null);
     } catch (requestError) {
       requestFailed = true;
       setBoardSquares(squares);
@@ -136,11 +104,7 @@ export function PlayerBoardGrid({ groupId, squares, onSquaresChange }: PlayerBoa
       serverSquaresRef.current = squares;
       desiredMarksRef.current = new Map(squares.map((square) => [square.position, square.isMarked]));
       setPendingPositions([]);
-      clearSuccessTimeout();
-      setFeedback({
-        tone: "error",
-        message: requestError instanceof Error ? requestError.message : "Unable to update board mark."
-      });
+      setErrorMessage(requestError instanceof Error ? requestError.message : "Unable to update board mark.");
     } finally {
       inFlightRef.current = false;
 
@@ -150,11 +114,9 @@ export function PlayerBoardGrid({ groupId, squares, onSquaresChange }: PlayerBoa
       });
 
       if (hasRemainingDifferences) {
-        showPendingFeedback();
         void flushPendingUpdates();
       } else if (!requestFailed) {
         setPendingPositions([]);
-        showSuccessFeedback();
       }
     }
   }
@@ -169,7 +131,7 @@ export function PlayerBoardGrid({ groupId, squares, onSquaresChange }: PlayerBoa
     const currentDesired = desiredMarksRef.current.get(position) ?? square.isMarked;
     const nextMarkedState = !currentDesired;
 
-    showPendingFeedback();
+    setErrorMessage(null);
     desiredMarksRef.current.set(position, nextMarkedState);
     setPendingPositions((currentPositions) =>
       currentPositions.includes(position) ? currentPositions : [...currentPositions, position]
@@ -190,13 +152,9 @@ export function PlayerBoardGrid({ groupId, squares, onSquaresChange }: PlayerBoa
 
   return (
     <section>
-      {feedback ? (
-        <p
-          className={`ui-alert ${feedback.tone === "error" ? "is-error" : feedback.tone === "success" ? "is-success" : "is-warning"}`}
-          role="status"
-          aria-live={feedback.tone === "error" ? "assertive" : "polite"}
-        >
-          {feedback.message}
+      {errorMessage ? (
+        <p className="ui-alert is-error" role="alert" aria-live="assertive">
+          {errorMessage}
         </p>
       ) : null}
 
