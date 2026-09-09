@@ -27,7 +27,7 @@ export default async function GroupsPage() {
         <h2>Your groups</h2>
 
         {groups.length === 0 ? (
-          <p>You have not joined or created any groups yet.</p>
+          <p className="ui-empty-state">You have not joined or created any groups yet.</p>
         ) : (
           <ul className="ui-list">
             {groups.map((group) => {

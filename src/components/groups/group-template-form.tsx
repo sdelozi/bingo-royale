@@ -86,15 +86,14 @@ export function GroupTemplateForm({
   }
 
   return (
-    <section>
+    <section className="ui-panel ui-stack">
       <h2>Board template</h2>
       <p>Current version: {currentVersion}</p>
       <p>Provide exactly 25 objectives. Free space is always rendered in the center tile.</p>
 
-      <form onSubmit={handleSubmit}>
-        <p>
+      <form onSubmit={handleSubmit} className="ui-form">
+        <div className="ui-field">
           <label htmlFor="free-space-objective">Free-space objective (center tile)</label>
-          <br />
           <input
             id="free-space-objective"
             type="text"
@@ -102,10 +101,11 @@ export function GroupTemplateForm({
             onChange={(event) => setFreeSpaceObjective(event.target.value)}
             maxLength={140}
             required
+            className="ui-input"
           />
-        </p>
+        </div>
 
-        <p>
+        <div className="ui-field">
           <label>
             <input
               type="checkbox"
@@ -114,22 +114,24 @@ export function GroupTemplateForm({
             />
             Mark free-space as completed by default for new player boards
           </label>
-        </p>
+        </div>
 
         <h3>Other objectives</h3>
-        <ol>
+        <ol className="ui-stack-tight">
           {objectives.map((objective, index) => (
             <li key={index}>
-              <label htmlFor={`objective-${index}`}>Objective {index + 1}</label>
-              <br />
-              <input
-                id={`objective-${index}`}
-                type="text"
-                value={objective}
-                onChange={(event) => updateObjective(index, event.target.value)}
-                maxLength={140}
-                required
-              />
+              <div className="ui-field">
+                <label htmlFor={`objective-${index}`}>Objective {index + 1}</label>
+                <input
+                  id={`objective-${index}`}
+                  type="text"
+                  value={objective}
+                  onChange={(event) => updateObjective(index, event.target.value)}
+                  maxLength={140}
+                  required
+                  className="ui-input"
+                />
+              </div>
             </li>
           ))}
         </ol>
@@ -137,31 +139,31 @@ export function GroupTemplateForm({
         <p>Total objectives: {objectiveCount}</p>
 
         {isConfirmingPostStartEdit ? (
-          <div role="dialog" aria-modal="true">
+          <div className="ui-modal" role="dialog" aria-modal="true">
             <p>
               Warning: saving now may affect in-progress boards. Unchanged squares stay as-is, while changed objectives may
               alter active player boards.
             </p>
-            <p>
+            <div className="ui-actions">
               <button type="submit" disabled={isSubmitting}>
                 {isSubmitting ? "Saving..." : "I understand, save template"}
-              </button>{" "}
-              <button type="button" disabled={isSubmitting} onClick={() => setIsConfirmingPostStartEdit(false)}>
+              </button>
+              <button type="button" className="ui-button-secondary" disabled={isSubmitting} onClick={() => setIsConfirmingPostStartEdit(false)}>
                 Cancel
               </button>
-            </p>
+            </div>
           </div>
         ) : (
-          <p>
+          <div className="ui-actions">
             <button type="submit" disabled={isSubmitting}>
               {isSubmitting ? "Saving..." : "Save template"}
             </button>
-          </p>
+          </div>
         )}
       </form>
 
-      {error ? <p>{error}</p> : null}
-      {isSaved ? <p>Template saved.</p> : null}
+      {error ? <p className="ui-alert is-error">{error}</p> : null}
+      {isSaved ? <p className="ui-alert is-success">Template saved.</p> : null}
     </section>
   );
 }

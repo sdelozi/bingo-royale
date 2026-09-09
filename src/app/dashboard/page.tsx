@@ -22,7 +22,7 @@ export default async function DashboardPage() {
       <section className="ui-panel">
         <h2>Your groups</h2>
         {groups.length === 0 ? (
-          <p>You are not in any groups yet. Go to groups to create or join one.</p>
+          <p className="ui-empty-state">You are not in any groups yet. Go to groups to create or join one.</p>
         ) : (
           <ul className="ui-list">
             {groups.map((group) => (

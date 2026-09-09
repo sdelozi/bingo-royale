@@ -94,6 +94,6 @@ describe("GroupLeaderboardLiveTable", () => {
 
     const headers = screen.getAllByRole("columnheader").map((header) => header.textContent?.trim() ?? "");
 
-    expect(headers).toEqual(["Name", "Role", "Bingos", "Score", "Blackout", "Board"]);
+    expect(headers).toEqual(["Rank", "Name", "Role", "Bingos", "Score", "Blackout", "Board"]);
   });
 });
