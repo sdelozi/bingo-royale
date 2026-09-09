@@ -30,21 +30,35 @@ export default async function GroupDetailPage({ params }: GroupDetailPageProps) 
     <main className="ui-stack">
       <h1>{membership.groupName}</h1>
       <section className="ui-panel">
-        <p>Role: {membership.role}</p>
-        <p>Invite code: {canManageTemplate ? membership.inviteCode : "Admin only"}</p>
-        <p>Share link: {canManageTemplate ? (shareLink ?? "Not available") : "Admin only"}</p>
+        <div className="ui-panel-title-row">
+          <p className="ui-card-title">Group details</p>
+          <span className={`ui-badge ${membership.role === "ADMIN" ? "is-admin" : "is-player"}`}>{membership.role}</span>
+        </div>
+        <div className="ui-meta-grid">
+          <p className="ui-meta-item">
+            <span className="ui-meta-key">Invite code</span>
+            <span className="ui-meta-value">{canManageTemplate ? membership.inviteCode : "Admin only"}</span>
+          </p>
+          <p className="ui-meta-item">
+            <span className="ui-meta-key">Share link</span>
+            <span className="ui-meta-value">{canManageTemplate ? (shareLink ?? "Not available") : "Admin only"}</span>
+          </p>
+        </div>
       </section>
 
       <div className="ui-actions">
-        <Link href={`/groups/${membership.groupId}/board`}>Open your board</Link>
-        <Link href={`/groups/${membership.groupId}/leaderboard`}>View leaderboard</Link>
+        <Link className="ui-link-button" href={`/groups/${membership.groupId}/board`}>Open your board</Link>
+        <Link className="ui-link-button ui-link-button-secondary" href={`/groups/${membership.groupId}/leaderboard`}>View leaderboard</Link>
       </div>
 
       {canManageTemplate ? (
         <section className="ui-panel">
-          <p>Admin actions: manage board configuration and group settings.</p>
+          <div className="ui-panel-title-row">
+            <p className="ui-card-title">Admin actions</p>
+          </div>
+          <p className="ui-card-copy ui-muted">Manage board configuration and sharing details.</p>
           <div className="ui-actions">
-            <Link href={`/groups/${membership.groupId}/template`}>Edit board template</Link>
+            <Link className="ui-link-button" href={`/groups/${membership.groupId}/template`}>Edit board template</Link>
           </div>
         </section>
       ) : (
@@ -52,7 +66,7 @@ export default async function GroupDetailPage({ params }: GroupDetailPageProps) 
       )}
 
       <div className="ui-actions">
-        <Link href="/groups">Back to groups</Link>
+        <Link className="ui-link-button ui-link-button-secondary" href="/groups">Back to groups</Link>
       </div>
     </main>
   );

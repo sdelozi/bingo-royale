@@ -27,6 +27,7 @@ export default async function GroupTemplatePage({ params }: GroupTemplatePagePro
     return (
       <main className="ui-stack">
         <h1>Template Editor: {data.groupName}</h1>
+        <p className="ui-muted">Configure the board objectives and decide whether the free-space starts marked.</p>
         <GroupTemplateForm
           groupId={data.groupId}
           initialFreeSpaceObjective={data.freeSpaceObjective}
@@ -36,7 +37,8 @@ export default async function GroupTemplatePage({ params }: GroupTemplatePagePro
           currentVersion={data.currentVersion}
         />
         <div className="ui-actions">
-          <Link href={`/groups/${data.groupId}`}>Back to group</Link>
+          <Link className="ui-link-button" href={`/groups/${data.groupId}`}>Back to group</Link>
+          <Link className="ui-link-button ui-link-button-secondary" href={`/groups/${data.groupId}/leaderboard`}>View leaderboard</Link>
         </div>
       </main>
     );
@@ -47,7 +49,7 @@ export default async function GroupTemplatePage({ params }: GroupTemplatePagePro
           <h1>Admin only</h1>
           <p className="ui-empty-state">Only group admins can edit the board template.</p>
           <div className="ui-actions">
-            <Link href={`/groups/${params.groupId}`}>Back to group</Link>
+            <Link className="ui-link-button ui-link-button-secondary" href={`/groups/${params.groupId}`}>Back to group</Link>
           </div>
         </main>
       );

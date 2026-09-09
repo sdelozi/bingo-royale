@@ -41,11 +41,14 @@ describe("PlayerBoardGrid", () => {
     fireEvent.click(tileButton);
 
     expect(tileButton).toHaveAttribute("aria-pressed", "true");
+    expect(screen.getByText("Saving board changes...")).toBeInTheDocument();
+    expect(tileButton).toHaveTextContent("Syncing...");
 
     await waitFor(() => {
       expect(fetchMock).toHaveBeenCalledTimes(1);
       expect(tileButton).toHaveAttribute("aria-pressed", "true");
       expect(tileButton).toHaveTextContent("Marked");
+      expect(screen.getByText("Board updated.")).toBeInTheDocument();
     });
 
     fetchMock.mockRestore();

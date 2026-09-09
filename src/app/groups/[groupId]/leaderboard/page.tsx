@@ -24,6 +24,7 @@ export default async function GroupLeaderboardPage({ params }: GroupLeaderboardP
     return (
       <main className="ui-stack">
         <h1>{leaderboard.groupName} leaderboard</h1>
+        <p className="ui-muted">Track standings, scores, and completed blackout boards in one place.</p>
         <GroupLeaderboardLiveTable
           groupId={leaderboard.groupId}
           initialRows={leaderboard.rows}
@@ -31,7 +32,8 @@ export default async function GroupLeaderboardPage({ params }: GroupLeaderboardP
         />
 
         <div className="ui-actions">
-          <Link href={`/groups/${leaderboard.groupId}`}>Back to group</Link>
+          <Link className="ui-link-button" href={`/groups/${leaderboard.groupId}`}>Back to group</Link>
+          <Link className="ui-link-button ui-link-button-secondary" href={`/groups/${leaderboard.groupId}/board`}>Open your board</Link>
         </div>
       </main>
     );

@@ -83,10 +83,27 @@ export function GroupBoardLivePanel({
   }, [transport]);
 
   return (
-    <section className="ui-panel">
-      <p>
-        Score: {stats.score} | Bingos: {stats.bingoCount} | Blackout: {stats.blackout ? "Yes" : "No"}
-      </p>
+    <section className="ui-panel ui-stack-tight">
+      <div className="ui-panel-title-row">
+        <p className="ui-card-title">Board status</p>
+        <span className={`ui-badge ${stats.blackout ? "is-success" : "is-neutral"}`}>
+          {stats.blackout ? "Blackout" : "In play"}
+        </span>
+      </div>
+      <div className="ui-stat-grid">
+        <div className="ui-stat-chip">
+          <span className="ui-stat-label">Score</span>
+          <span className="ui-stat-value">{stats.score}</span>
+        </div>
+        <div className="ui-stat-chip">
+          <span className="ui-stat-label">Bingos</span>
+          <span className="ui-stat-value">{stats.bingoCount}</span>
+        </div>
+        <div className="ui-stat-chip">
+          <span className="ui-stat-label">Blackout</span>
+          <span className="ui-stat-value">{stats.blackout ? "Yes" : "No"}</span>
+        </div>
+      </div>
       <p className="ui-muted">Last updated: {lastUpdated.toLocaleString()}</p>
       {error ? <p className="ui-alert is-error">Board sync issue. Retrying in {Math.ceil(nextRefreshMs / 1000)}s.</p> : null}
 
