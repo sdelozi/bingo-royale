@@ -83,12 +83,12 @@ export function GroupBoardLivePanel({
   }, [transport]);
 
   return (
-    <section>
+    <section className="ui-panel">
       <p>
         Score: {stats.score} | Bingos: {stats.bingoCount} | Blackout: {stats.blackout ? "Yes" : "No"}
       </p>
-      <p>Last updated: {lastUpdated.toLocaleString()}</p>
-      {error ? <p>Board sync issue. Retrying in {Math.ceil(nextRefreshMs / 1000)}s.</p> : null}
+      <p className="ui-muted">Last updated: {lastUpdated.toLocaleString()}</p>
+      {error ? <p className="ui-alert is-error">Board sync issue. Retrying in {Math.ceil(nextRefreshMs / 1000)}s.</p> : null}
 
       <PlayerBoardGrid groupId={groupId} squares={squares} onSquaresChange={updateStatsFromSquares} />
     </section>

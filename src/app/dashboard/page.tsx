@@ -15,18 +15,18 @@ export default async function DashboardPage() {
   const groups = await listGroupsForUser(user.id);
 
   return (
-    <main>
+    <main className="ui-stack">
       <h1>Dashboard</h1>
-      <p>Signed in as {user.name ?? user.email}.</p>
+      <p className="ui-muted">Signed in as {user.name ?? user.email}.</p>
 
-      <section>
+      <section className="ui-panel">
         <h2>Your groups</h2>
         {groups.length === 0 ? (
           <p>You are not in any groups yet. Go to groups to create or join one.</p>
         ) : (
-          <ul>
+          <ul className="ui-list">
             {groups.map((group) => (
-              <li key={group.groupId}>
+              <li key={group.groupId} className="ui-list-item">
                 <p>
                   <strong>{group.groupName}</strong> - {group.role}
                 </p>
@@ -41,12 +41,10 @@ export default async function DashboardPage() {
         )}
       </section>
 
-      <p>
+      <div className="ui-actions">
         <Link href="/groups">Go to groups</Link>
-      </p>
-      <p>
         <Link href="/">Back home</Link>
-      </p>
+      </div>
       <SignOutButton />
     </main>
   );

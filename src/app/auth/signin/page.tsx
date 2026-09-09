@@ -33,13 +33,13 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
   const callbackUrl = searchParams?.callbackUrl ?? "/dashboard";
 
   return (
-    <main>
+    <main className="ui-stack">
       <SignInForm
         googleEnabled={Boolean(env.googleClientId && env.googleClientSecret)}
         error={getErrorMessage(searchParams?.error)}
         callbackUrl={callbackUrl}
       />
-      <p>
+      <p className="ui-muted">
         Need an account? <Link href={`/auth/register?callbackUrl=${encodeURIComponent(callbackUrl)}`}>Create one</Link>
       </p>
     </main>

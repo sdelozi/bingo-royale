@@ -27,34 +27,33 @@ export default async function GroupDetailPage({ params }: GroupDetailPageProps) 
   const shareLink = canManageTemplate && membership.shareToken ? `${env.appUrl}/join/${membership.shareToken}` : null;
 
   return (
-    <main>
+    <main className="ui-stack">
       <h1>{membership.groupName}</h1>
-      <p>Role: {membership.role}</p>
-      <p>Invite code: {canManageTemplate ? membership.inviteCode : "Admin only"}</p>
-      <p>Share link: {canManageTemplate ? (shareLink ?? "Not available") : "Admin only"}</p>
+      <section className="ui-panel">
+        <p>Role: {membership.role}</p>
+        <p>Invite code: {canManageTemplate ? membership.inviteCode : "Admin only"}</p>
+        <p>Share link: {canManageTemplate ? (shareLink ?? "Not available") : "Admin only"}</p>
+      </section>
 
-      <p>
+      <div className="ui-actions">
         <Link href={`/groups/${membership.groupId}/board`}>Open your board</Link>
-      </p>
-
-      <p>
         <Link href={`/groups/${membership.groupId}/leaderboard`}>View leaderboard</Link>
-      </p>
+      </div>
 
       {canManageTemplate ? (
-        <>
+        <section className="ui-panel">
           <p>Admin actions: manage board configuration and group settings.</p>
-          <p>
+          <div className="ui-actions">
             <Link href={`/groups/${membership.groupId}/template`}>Edit board template</Link>
-          </p>
-        </>
+          </div>
+        </section>
       ) : (
-        <p>Player actions: play your board and check live standings from the leaderboard.</p>
+        <p className="ui-muted">Use your board to mark progress and check standings in the leaderboard.</p>
       )}
 
-      <p>
+      <div className="ui-actions">
         <Link href="/groups">Back to groups</Link>
-      </p>
+      </div>
     </main>
   );
 }

@@ -22,7 +22,7 @@ export default async function GroupLeaderboardPage({ params }: GroupLeaderboardP
     const leaderboard = await getGroupLeaderboardForUser(user.id, params.groupId);
 
     return (
-      <main>
+      <main className="ui-stack">
         <h1>{leaderboard.groupName} leaderboard</h1>
         <GroupLeaderboardLiveTable
           groupId={leaderboard.groupId}
@@ -30,9 +30,9 @@ export default async function GroupLeaderboardPage({ params }: GroupLeaderboardP
           initialGeneratedAt={leaderboard.generatedAt.toISOString()}
         />
 
-        <p>
+        <div className="ui-actions">
           <Link href={`/groups/${leaderboard.groupId}`}>Back to group</Link>
-        </p>
+        </div>
       </main>
     );
   } catch (error) {

@@ -55,34 +55,35 @@ export function RegisterForm({ callbackUrl = "/dashboard" }: RegisterFormProps) 
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="ui-form">
       <h1>Create account</h1>
 
-      {error ? <p>{error}</p> : null}
+      {error ? (
+        <p className="ui-alert is-error" role="alert">
+          {error}
+        </p>
+      ) : null}
 
-      <p>
+      <div className="ui-field">
         <label htmlFor="name">Name</label>
-        <br />
-        <input id="name" name="name" type="text" maxLength={80} required />
-      </p>
+        <input id="name" name="name" type="text" maxLength={80} required className="ui-input" />
+      </div>
 
-      <p>
+      <div className="ui-field">
         <label htmlFor="email">Email</label>
-        <br />
-        <input id="email" name="email" type="email" required />
-      </p>
+        <input id="email" name="email" type="email" required className="ui-input" />
+      </div>
 
-      <p>
+      <div className="ui-field">
         <label htmlFor="password">Password</label>
-        <br />
-        <input id="password" name="password" type="password" minLength={8} required />
-      </p>
+        <input id="password" name="password" type="password" minLength={8} required className="ui-input" />
+      </div>
 
-      <p>
+      <div className="ui-actions">
         <button type="submit" disabled={isSubmitting}>
           {isSubmitting ? "Creating account..." : "Create account"}
         </button>
-      </p>
+      </div>
     </form>
   );
 }
