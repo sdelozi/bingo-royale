@@ -5,6 +5,7 @@ Status key:
 - IN-PROGRESS
 - DONE
 - BLOCKED
+- PAUSED
 
 Priority key:
 - P0 = must-have for v1
@@ -139,19 +140,71 @@ Priority key:
 ## Epic E9: Deployment Execution and Environment Operations (P0)
 ### Story E9-S1: Free dev deployment environment (test + early production fallback)
 - [x] T63 Create deployment repo baseline structure and ownership docs (DONE)
-- [ ] T64 Configure dev app hosting on free tier provider with provider-specific config externalized from app repo (IN-PROGRESS)
-- [ ] T65 Configure dev managed Postgres on free tier and connect app runtime env contract (IN-PROGRESS)
-- [ ] T66 Validate migrations, auth callbacks, health endpoint, and smoke probes on deployed dev URL (TODO)
+- [ ] T64 Configure dev app hosting on free tier provider with provider-specific config externalized from app repo (PAUSED: baseline is working; resume only if deploy regression appears)
+- [ ] T65 Configure dev managed Postgres on free tier and connect app runtime env contract (PAUSED: runtime DB is connected for weekend launch)
+- [ ] T66 Validate migrations, auth callbacks, health endpoint, and smoke probes on deployed dev URL (PAUSED: complete after weekend launch window)
 
 ### Story E9-S2: Release process and promotion controls
-- [ ] T67 Define commit-to-deploy promotion flow (dev deploy first, optional prod promotion later) (TODO)
-- [ ] T68 Add deploy-repo checklists for rollout, rollback, and incident handling (TODO)
-- [ ] T69 Record first release validation run using dev deployment as temporary production environment (TODO)
+- [ ] T67 Define commit-to-deploy promotion flow (dev deploy first, optional prod promotion later) (PAUSED)
+- [ ] T68 Add deploy-repo checklists for rollout, rollback, and incident handling (PAUSED)
+- [ ] T69 Record first release validation run using dev deployment as temporary production environment (PAUSED)
 
 ### Story E9-S3: Cheap paid production environment (when needed)
-- [ ] T70 Select production provider trigger criteria (user/traffic/reliability thresholds) (TODO)
-- [ ] T71 Stand up paid production environment using same env contract and smoke gates (TODO)
-- [ ] T72 Cut over from dev-only runtime to separate prod environment with documented rollback (TODO)
+- [ ] T70 Select production provider trigger criteria (user/traffic/reliability thresholds) (PAUSED)
+- [ ] T71 Stand up paid production environment using same env contract and smoke gates (PAUSED)
+- [ ] T72 Cut over from dev-only runtime to separate prod environment with documented rollback (PAUSED)
+
+## Epic E10: V1 UI/UX Polish and Delight (P0)
+### Story E10-S1: Visual foundation and design tokens
+- [x] T73 Establish a visual direction for V1 (palette, typography pair, spacing scale, radii, shadows) with CSS variables and reusable token names (DONE)
+- [x] T74 Add app-wide shell styling baseline (page background treatment, card surfaces, elevation, border system) without changing core behaviors (DONE)
+- [ ] T75 Define reusable component variants for button, input, select, badge, alert, modal, table, tabs, and empty state (TODO)
+
+### Story E10-S2: Information architecture and navigation clarity
+- [ ] T76 Improve header/navigation hierarchy (primary actions, user menu, signed-in context, group context) for quicker task completion (TODO)
+- [ ] T77 Add clear page headers and subheaders on dashboard/groups/leaderboard/template pages (TODO)
+- [ ] T78 Standardize section spacing and responsive breakpoints so key controls remain reachable on mobile during gameplay (TODO)
+
+### Story E10-S3: Board gameplay experience polish
+- [ ] T79 Redesign interactive player board square states (idle/hover/pressed/marked/disabled) with strong visual contrast and playful feedback (IN-PROGRESS)
+- [ ] T80 Add quick feedback patterns for mark/unmark sync states (pending/success/error) with accessible non-blocking messaging (TODO)
+- [ ] T81 Improve readability and scannability of objectives on 5x5 grid across phone and desktop form factors (TODO)
+
+### Story E10-S4: Leaderboard and group management polish
+- [ ] T82 Improve leaderboard visual hierarchy (rank emphasis, score emphasis, status chips, last-updated signal) while preserving current data semantics (TODO)
+- [ ] T83 Improve group list and group detail cards with clearer action affordances (join, open board, open template, invite context) (TODO)
+- [ ] T84 Add polished empty/loading/error states for dashboard, groups, board, and leaderboard views (TODO)
+
+### Story E10-S5: Accessibility, motion, and responsive quality bar
+- [ ] T85 Add keyboard-visible focus styles and verify full keyboard operability for core game flows (TODO)
+- [ ] T86 Ensure color contrast and text sizing pass baseline accessibility checks for core screens (TODO)
+- [ ] T87 Add lightweight purposeful motion (page transitions/staggered reveals/interaction feedback) with reduced-motion support (TODO)
+
+### Story E10-S6: UX copy and conversion polish
+- [ ] T88 Refine auth/join/create-group copy for confidence and fun tone without changing backend behavior (TODO)
+- [ ] T89 Add contextual helper text and success confirmations for high-friction actions (join code, template save, registration) (TODO)
+- [ ] T90 Add an optional launch banner pattern that can be toggled per release/theme (TODO)
+
+## Epic E11: Theme System and One-Off Event Release Path (P0)
+### Story E11-S1: Theme architecture and switch mechanism
+- [x] T91 Introduce a theme contract (tokens + assets + optional overrides) that supports default and event-specific themes without branching app logic (DONE)
+- [x] T92 Implement runtime theme selection via env/config flag (for example: DEFAULT_THEME_KEY) with safe fallback to default theme (DONE)
+- [ ] T93 Isolate theme-specific assets (banners/backgrounds/iconography) under a predictable directory structure and loading convention (TODO)
+
+### Story E11-S2: Event customization capabilities (Kimberly branch-ready)
+- [ ] T94 Add extensibility points for themed header/footer/banner/background image slots per route group (TODO)
+- [ ] T95 Add themed typography hooks (font family tokens) so event branch can swap fonts without touching component logic (TODO)
+- [ ] T96 Add themed CTA/button style variants and decorative accents (stickers/badges/avatar frames) for party-specific flair (TODO)
+
+### Story E11-S3: Safety rails for one-off branch strategy
+- [ ] T97 Document branch strategy for one-off event release (fork from develop, no back-merge policy, post-event archival checklist) (TODO)
+- [ ] T98 Keep core UX improvements merge-safe by landing structural/token work on develop before event-only content is added in branch (TODO)
+- [ ] T99 Add event-content checklist (image rights, content sizing, mobile crop behavior, fallback assets, cache busting) (TODO)
+
+### Story E11-S4: Theme QA and release readiness
+- [ ] T100 Validate default theme and event theme parity for core flows (auth, group join, board play, leaderboard) (TODO)
+- [ ] T101 Validate event theme performance budget (image size, LCP impact, layout shift) on mobile network profiles (TODO)
+- [ ] T102 Add quick rollback path to default theme via config toggle and redeploy procedure (TODO)
 
 
 ## Suggested execution order
@@ -159,4 +212,5 @@ Priority key:
 2. E4 -> E5
 3. E6
 4. E7 + E8
-5. E9
+5. E10 -> E11
+6. E9 (resume after weekend launch window)

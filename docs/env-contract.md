@@ -26,6 +26,10 @@ This contract defines deployment-agnostic configuration requirements for Bingo R
 | `CREDENTIALS_PASSWORD_PEPPER` | No | Yes | random long string | Optional credentials hardening |
 | `NEXT_PUBLIC_POLL_INTERVAL_MS` | No | No | `15000` | UI polling base |
 | `NEXT_PUBLIC_POLL_MAX_INTERVAL_MS` | No | No | `120000` | UI polling max |
+| `NEXT_PUBLIC_THEME_KEY` | No | No | `arcade-neon` | Theme preset (`arcade-neon` or `lake-bachelorette`) |
+| `NEXT_PUBLIC_THEME_BANNER_TEXT` | No | No | launch message | Optional top banner text |
+| `NEXT_PUBLIC_THEME_BANNER_IMAGE_URL` | No | No | `https://...` | Optional top banner image URL |
+| `NEXT_PUBLIC_THEME_FOOTER_NOTE` | No | No | custom footer copy | Optional footer text override |
 
 ## Secrets Model
 - `DATABASE_URL`, `AUTH_SECRET`, and OAuth credentials are managed via host secret managers.
