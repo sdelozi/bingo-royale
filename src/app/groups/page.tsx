@@ -16,9 +16,11 @@ export default async function GroupsPage() {
   const groups = await listGroupsForUser(user.id);
 
   return (
-    <main className="ui-stack">
-      <h1>Groups</h1>
-      <p className="ui-muted">Create or join groups, then open your board and leaderboard.</p>
+    <main className="ui-stack ui-page">
+      <header className="ui-page-header">
+        <h1 className="ui-page-title">Groups</h1>
+        <p className="ui-page-subtitle">Create or join groups, then open your board and leaderboard.</p>
+      </header>
 
       <CreateGroupForm />
       <JoinGroupForm />
@@ -51,19 +53,23 @@ export default async function GroupsPage() {
                         <span className="ui-meta-value">{canViewInviteCredentials ? (shareLink ?? "Not available") : "Admin only"}</span>
                       </p>
                     </div>
-                    <div className="ui-actions">
-                      <Link className="ui-link-button" href={`/groups/${group.groupId}`}>
-                        {group.isCreator ? "Manage group" : "Open group"}
+                    <div className="ui-action-grid" aria-label="Group actions">
+                      <Link className="ui-action-card" href={`/groups/${group.groupId}`}>
+                        <p className="ui-action-card-title">{group.isCreator ? "Manage group" : "Open group"}</p>
+                        <p className="ui-action-card-copy">Open details, invite context, and role controls.</p>
                       </Link>
-                      <Link className="ui-link-button ui-link-button-secondary" href={`/groups/${group.groupId}/board`}>
-                        Open board
+                      <Link className="ui-action-card" href={`/groups/${group.groupId}/board`}>
+                        <p className="ui-action-card-title">Open board</p>
+                        <p className="ui-action-card-copy">Mark objectives and keep your progress current.</p>
                       </Link>
-                      <Link className="ui-link-button ui-link-button-secondary" href={`/groups/${group.groupId}/leaderboard`}>
-                        View leaderboard
+                      <Link className="ui-action-card" href={`/groups/${group.groupId}/leaderboard`}>
+                        <p className="ui-action-card-title">View leaderboard</p>
+                        <p className="ui-action-card-copy">Track rank movement, scores, and blackout status.</p>
                       </Link>
                       {group.role === "ADMIN" ? (
-                        <Link className="ui-link-button ui-link-button-secondary" href={`/groups/${group.groupId}/template`}>
-                          Edit template
+                        <Link className="ui-action-card" href={`/groups/${group.groupId}/template`}>
+                          <p className="ui-action-card-title">Edit template</p>
+                          <p className="ui-action-card-copy">Adjust objectives and free-space behavior safely.</p>
                         </Link>
                       ) : null}
                     </div>

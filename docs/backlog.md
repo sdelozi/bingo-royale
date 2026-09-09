@@ -168,22 +168,22 @@ Priority key:
 ### Story E10-S1: Visual foundation and design tokens
 - [x] T73 Establish a visual direction for V1 (palette, typography pair, spacing scale, radii, shadows) with CSS variables and reusable token names (DONE)
 - [x] T74 Add app-wide shell styling baseline (page background treatment, card surfaces, elevation, border system) without changing core behaviors (DONE)
-- [ ] T75 Define reusable component variants for button, input, select, badge, alert, modal, table, tabs, and empty state (IN-PROGRESS, K0)
+- [x] T75 Define reusable component variants for button, input, select, badge, alert, modal, table, tabs, and empty state (DONE, K0)
 
 ### Story E10-S2: Information architecture and navigation clarity
-- [ ] T76 Improve header/navigation hierarchy (primary actions, user menu, signed-in context, group context) for quicker task completion (IN-PROGRESS, K0)
+- [x] T76 Improve header/navigation hierarchy (primary actions, user menu, signed-in context, group context) for quicker task completion (DONE, K0)
 - [ ] T77 Add clear page headers and subheaders on dashboard/groups/leaderboard/template pages (TODO, K1)
-- [ ] T78 Standardize section spacing and responsive breakpoints so key controls remain reachable on mobile during gameplay (IN-PROGRESS, K0)
+- [x] T78 Standardize section spacing and responsive breakpoints so key controls remain reachable on mobile during gameplay (DONE, K0)
 
 ### Story E10-S3: Board gameplay experience polish
-- [ ] T79 Redesign interactive player board square states (idle/hover/pressed/marked/disabled) with strong visual contrast and playful feedback (IN-PROGRESS, K0)
-- [ ] T80 Add quick feedback patterns for mark/unmark sync states (pending/success/error) with accessible non-blocking messaging (IN-PROGRESS, K0)
-- [ ] T81 Improve readability and scannability of objectives on 5x5 grid across phone and desktop form factors (TODO, K0)
+- [x] T79 Redesign interactive player board square states (idle/hover/pressed/marked/disabled) with strong visual contrast and playful feedback (DONE, K0)
+- [x] T80 Add quick feedback patterns for mark/unmark sync states (pending/success/error) with accessible non-blocking messaging (DONE, K0)
+- [x] T81 Improve readability and scannability of objectives on 5x5 grid across phone and desktop form factors (DONE, K0)
 
 ### Story E10-S4: Leaderboard and group management polish
-- [ ] T83 Improve group list and group detail cards with clearer action affordances (join, open board, open template, invite context) (IN-PROGRESS, K0)
-- [ ] T82 Improve leaderboard visual hierarchy (rank emphasis, score emphasis, status chips, last-updated signal) while preserving current data semantics (IN-PROGRESS, K0)
-- [ ] T84 Add polished empty/loading/error states for dashboard, groups, board, and leaderboard views (IN-PROGRESS, K0)
+- [x] T83 Improve group list and group detail cards with clearer action affordances (join, open board, open template, invite context) (DONE, K0)
+- [x] T82 Improve leaderboard visual hierarchy (rank emphasis, score emphasis, status chips, last-updated signal) while preserving current data semantics (DONE, K0)
+- [x] T84 Add polished empty/loading/error states for dashboard, groups, board, and leaderboard views (DONE, K0)
 
 ### Story E10-S5: Accessibility, motion, and responsive quality bar
 - [ ] T85 Add keyboard-visible focus styles and verify full keyboard operability for core game flows (TODO, K1)

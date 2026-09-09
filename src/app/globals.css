@@ -351,6 +351,67 @@ section {
   gap: 0.45rem;
 }
 
+.ui-page {
+  gap: 1rem;
+}
+
+.ui-page-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding: 0.2rem 0 0.25rem;
+}
+
+.ui-page-title {
+  margin: 0;
+}
+
+.ui-page-subtitle {
+  margin: 0;
+  color: var(--muted);
+}
+
+.ui-tab-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.ui-tab-link,
+.ui-tab-link:visited {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 0.5rem 0.7rem;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--muted);
+  font-family: var(--font-accent);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: transform 180ms ease, background 180ms ease, border-color 180ms ease, color 180ms ease;
+}
+
+.ui-tab-link:hover {
+  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--button-border);
+  color: var(--text);
+  text-decoration: none;
+}
+
+.ui-tab-link.is-active,
+.ui-tab-link.is-active:visited {
+  color: var(--text);
+  border-color: var(--primary);
+  background: linear-gradient(130deg, rgba(38, 242, 255, 0.2), rgba(255, 79, 216, 0.16));
+}
+
 .ui-muted {
   color: var(--muted);
 }
@@ -403,6 +464,10 @@ section {
   margin-top: 0;
 }
 
+.ui-select {
+  width: min(100%, 34rem);
+}
+
 .ui-field input[type="checkbox"],
 .ui-field input[type="radio"],
 input[type="checkbox"],
@@ -416,6 +481,49 @@ input[type="radio"] {
   display: flex;
   flex-wrap: wrap;
   gap: 0.6rem;
+}
+
+.ui-action-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.55rem;
+}
+
+.ui-action-card,
+.ui-action-card:visited {
+  display: flex;
+  flex-direction: column;
+  gap: 0.32rem;
+  min-height: 88px;
+  padding: 0.7rem;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text);
+  text-decoration: none;
+  transition: transform 180ms ease, background 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+}
+
+.ui-action-card:hover {
+  transform: translateY(-1px);
+  border-color: var(--button-border);
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  text-decoration: none;
+}
+
+.ui-action-card-title {
+  margin: 0;
+  font-family: var(--font-accent);
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.ui-action-card-copy {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.86rem;
 }
 
 .ui-link-button,
@@ -497,6 +605,11 @@ input[type="radio"] {
 .ui-alert.is-success {
   border-color: rgba(98, 255, 157, 0.6);
   background: rgba(98, 255, 157, 0.15);
+}
+
+.ui-alert.is-warning {
+  border-color: rgba(255, 214, 111, 0.58);
+  background: rgba(255, 214, 111, 0.14);
 }
 
 .ui-badge {
@@ -655,10 +768,53 @@ input[type="radio"] {
   overflow-x: auto;
 }
 
+.ui-table {
+  border-radius: 14px;
+  overflow: hidden;
+}
+
 .ui-table-rank {
   display: inline-flex;
   align-items: center;
   gap: 0.45rem;
+}
+
+.ui-table-row-top-1 td {
+  background: rgba(255, 214, 111, 0.09);
+}
+
+.ui-table-row-top-2 td {
+  background: rgba(206, 224, 255, 0.08);
+}
+
+.ui-table-row-top-3 td {
+  background: rgba(214, 158, 111, 0.08);
+}
+
+.ui-status-line {
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.9rem;
+}
+
+.ui-status-dot {
+  width: 0.58rem;
+  height: 0.58rem;
+  border-radius: 50%;
+  background: var(--success);
+  box-shadow: 0 0 0 6px rgba(98, 255, 157, 0.12);
+}
+
+.ui-status-dot.is-warning {
+  background: var(--warning);
+  box-shadow: 0 0 0 6px rgba(255, 214, 111, 0.12);
+}
+
+.ui-status-dot.is-danger {
+  background: var(--danger);
+  box-shadow: 0 0 0 6px rgba(255, 111, 158, 0.1);
 }
 
 .ui-score-value {
@@ -808,6 +964,36 @@ tr:last-child td {
   .ui-actions {
     flex-direction: column;
     align-items: stretch;
+  }
+
+  .ui-action-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ui-action-card,
+  .ui-action-card:visited {
+    min-height: 76px;
+  }
+
+  .ui-page {
+    gap: 0.85rem;
+  }
+
+  .ui-page-header {
+    gap: 0.4rem;
+    padding-top: 0;
+  }
+
+  .ui-tab-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.5rem;
+  }
+
+  .ui-tab-link,
+  .ui-tab-link:visited {
+    min-height: 44px;
+    width: 100%;
   }
 
   .ui-actions button,

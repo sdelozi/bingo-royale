@@ -25,9 +25,18 @@ export default async function GroupTemplatePage({ params }: GroupTemplatePagePro
     const data = await getGroupTemplateEditorData(user.id, params.groupId);
 
     return (
-      <main className="ui-stack">
-        <h1>Template Editor: {data.groupName}</h1>
-        <p className="ui-muted">Configure the board objectives and decide whether the free-space starts marked.</p>
+      <main className="ui-stack ui-page">
+        <header className="ui-page-header">
+          <h1 className="ui-page-title">Template Editor: {data.groupName}</h1>
+          <p className="ui-page-subtitle">Configure the board objectives and decide whether the free-space starts marked.</p>
+        </header>
+        <nav className="ui-tab-row" aria-label="Group navigation">
+          <Link className="ui-tab-link" href={`/groups/${data.groupId}`}>Details</Link>
+          <Link className="ui-tab-link" href={`/groups/${data.groupId}/board`}>Board</Link>
+          <Link className="ui-tab-link" href={`/groups/${data.groupId}/leaderboard`}>Leaderboard</Link>
+          <Link className="ui-tab-link is-active" href={`/groups/${data.groupId}/template`}>Template</Link>
+        </nav>
+
         <GroupTemplateForm
           groupId={data.groupId}
           initialFreeSpaceObjective={data.freeSpaceObjective}
@@ -45,8 +54,11 @@ export default async function GroupTemplatePage({ params }: GroupTemplatePagePro
   } catch (error) {
     if (error instanceof GroupForbiddenError) {
       return (
-        <main className="ui-stack">
-          <h1>Admin only</h1>
+        <main className="ui-stack ui-page">
+          <header className="ui-page-header">
+            <h1 className="ui-page-title">Admin only</h1>
+            <p className="ui-page-subtitle">Only admins can edit objectives and free-space defaults.</p>
+          </header>
           <p className="ui-empty-state">Only group admins can edit the board template.</p>
           <div className="ui-actions">
             <Link className="ui-link-button ui-link-button-secondary" href={`/groups/${params.groupId}`}>Back to group</Link>

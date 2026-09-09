@@ -22,9 +22,17 @@ export default async function GroupLeaderboardPage({ params }: GroupLeaderboardP
     const leaderboard = await getGroupLeaderboardForUser(user.id, params.groupId);
 
     return (
-      <main className="ui-stack">
-        <h1>{leaderboard.groupName} leaderboard</h1>
-        <p className="ui-muted">Track standings, scores, and completed blackout boards in one place.</p>
+      <main className="ui-stack ui-page">
+        <header className="ui-page-header">
+          <h1 className="ui-page-title">{leaderboard.groupName} leaderboard</h1>
+          <p className="ui-page-subtitle">Track standings, scores, and completed blackout boards in one place.</p>
+        </header>
+        <nav className="ui-tab-row" aria-label="Group navigation">
+          <Link className="ui-tab-link" href={`/groups/${leaderboard.groupId}`}>Details</Link>
+          <Link className="ui-tab-link" href={`/groups/${leaderboard.groupId}/board`}>Board</Link>
+          <Link className="ui-tab-link is-active" href={`/groups/${leaderboard.groupId}/leaderboard`}>Leaderboard</Link>
+        </nav>
+
         <GroupLeaderboardLiveTable
           groupId={leaderboard.groupId}
           initialRows={leaderboard.rows}

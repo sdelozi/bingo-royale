@@ -25,9 +25,17 @@ export default async function GroupBoardPage({ params }: GroupBoardPageProps) {
     const board = await getOrCreatePlayerBoardForGroup(user.id, params.groupId);
 
     return (
-      <main className="ui-stack">
-        <h1>Your board: {board.groupName}</h1>
-        <p className="ui-muted">This layout is generated once per player and stays stable over time.</p>
+      <main className="ui-stack ui-page">
+        <header className="ui-page-header">
+          <h1 className="ui-page-title">Your board: {board.groupName}</h1>
+          <p className="ui-page-subtitle">This layout is generated once per player and stays stable over time.</p>
+        </header>
+        <nav className="ui-tab-row" aria-label="Group navigation">
+          <Link className="ui-tab-link" href={`/groups/${board.groupId}`}>Details</Link>
+          <Link className="ui-tab-link is-active" href={`/groups/${board.groupId}/board`}>Board</Link>
+          <Link className="ui-tab-link" href={`/groups/${board.groupId}/leaderboard`}>Leaderboard</Link>
+        </nav>
+
         <GroupBoardLivePanel
           groupId={board.groupId}
           initialSquares={board.squares}
@@ -45,8 +53,11 @@ export default async function GroupBoardPage({ params }: GroupBoardPageProps) {
   } catch (error) {
     if (error instanceof GroupBoardTemplateMissingError) {
       return (
-        <main className="ui-stack">
-          <h1>Board unavailable</h1>
+        <main className="ui-stack ui-page">
+          <header className="ui-page-header">
+            <h1 className="ui-page-title">Board unavailable</h1>
+            <p className="ui-page-subtitle">A template must exist before player boards can be generated.</p>
+          </header>
           <p className="ui-empty-state">An admin needs to save the group board template before player boards can be generated.</p>
           <div className="ui-actions">
             <Link className="ui-link-button ui-link-button-secondary" href={`/groups/${params.groupId}`}>Back to group</Link>
