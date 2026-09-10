@@ -137,8 +137,8 @@ const themeDefinitions: Record<ThemeKey, ThemeDefinition> = {
       public: {
         routeLabel: "Lake Weekend",
         headline: "Kimberly's Bachelorette Bingo",
-        tagline: "A weekend on the water, with a little friendly competition.",
-        bannerText: "Play along all weekend and keep the stories rolling.",
+        tagline: "A weekend on the water with some friendly competition!",
+        bannerText: "Play along all weekend and become the Kimberly Bachelorette Bingo Champion.",
         bannerImageUrl: "/themes/kimberly/love-on-the-lake.jpg",
         backgroundImageUrl: "/themes/kimberly/love-on-the-lake.jpg",
         footerNote: "Lake of the Ozarks, 2026.",
@@ -147,8 +147,8 @@ const themeDefinitions: Record<ThemeKey, ThemeDefinition> = {
       auth: {
         routeLabel: "Weekend Check-In",
         headline: "Join Kimberly's Weekend",
-        tagline: "Sign in, grab your card, and join the fun.",
-        bannerText: "Your board and the group standings are waiting.",
+        tagline: "Sign in, grab your card, and get some bingos!",
+        bannerText: "Your board is waiting :D",
         bannerImageUrl: "/themes/kimberly/love-on-the-lake.jpg",
         backgroundImageUrl: "/themes/kimberly/love-on-the-lake.jpg",
         footerNote: "Lake of the Ozarks, 2026.",
@@ -157,8 +157,8 @@ const themeDefinitions: Record<ThemeKey, ThemeDefinition> = {
       app: {
         routeLabel: "Bachelorette Bingo",
         headline: "Kimberly's Lake Weekend",
-        tagline: "Keep your card moving and follow the weekend standings.",
-        bannerText: "Every marked square makes the weekend story better.",
+        tagline: "Get any bingos lately? Keep it moving!",
+        bannerText: "Don't forget to check the leaderboard :O",
         bannerImageUrl: "/themes/kimberly/love-on-the-lake.jpg",
         backgroundImageUrl: "/themes/kimberly/love-on-the-lake.jpg",
         footerNote: "Lake of the Ozarks, 2026.",
