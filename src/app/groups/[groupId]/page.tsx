@@ -6,19 +6,20 @@ import { getShareOrigin } from "@/server/http/share-origin";
 import { getUserGroup } from "@/server/services/groups/get-user-group";
 
 type GroupDetailPageProps = {
-  params: {
+  params: Promise<{
     groupId: string;
-  };
+  }>;
 };
 
 export default async function GroupDetailPage({ params }: GroupDetailPageProps) {
+  const { groupId } = await params;
   const user = await getCurrentUser();
 
   if (!user?.id) {
     redirect("/auth/signin");
   }
 
-  const membership = await getUserGroup(user.id, params.groupId);
+  const membership = await getUserGroup(user.id, groupId);
 
   if (!membership) {
     notFound();
