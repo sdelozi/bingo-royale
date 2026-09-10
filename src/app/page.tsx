@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { getCurrentUser } from "@/server/auth/session";
 import { SignOutButton } from "@/components/auth/sign-out-button";
@@ -18,7 +19,13 @@ export default async function HomePage() {
 
       {isKimberlyTheme ? (
         <section className="ui-panel kimberly-itinerary">
-          <div className="kimberly-itinerary-image" role="img" aria-label="Kimberly's Lake of the Ozarks bachelorette weekend itinerary" />
+          <Image
+            className="kimberly-itinerary-image"
+            src="/themes/kimberly/kimberly-itinerary-cropped.jpg"
+            alt="Kimberly's Lake of the Ozarks bachelorette weekend itinerary"
+            width={900}
+            height={1329}
+          />
         </section>
       ) : null}
 

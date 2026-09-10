@@ -929,9 +929,9 @@ input[type="radio"] {
 
 .kimberly-itinerary-image {
   width: 100%;
-  aspect-ratio: 5 / 7;
+  height: auto;
+  display: block;
   border-radius: 12px;
-  background: url("/themes/kimberly/kimberly-itinerary.jpg") center top / cover no-repeat;
 }
 
 .ui-bingo-burst {

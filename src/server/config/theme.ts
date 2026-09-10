@@ -141,7 +141,6 @@ const themeDefinitions: Record<ThemeKey, ThemeDefinition> = {
         bannerText: "Play along all weekend and keep the stories rolling.",
         bannerImageUrl: "/themes/kimberly/love-on-the-lake.jpg",
         backgroundImageUrl: "/themes/kimberly/love-on-the-lake.jpg",
-        footerImageUrl: "/themes/kimberly/love-on-the-lake.jpg",
         footerNote: "Lake of the Ozarks, 2026.",
         primaryCtaVariant: "accent"
       },
@@ -152,7 +151,6 @@ const themeDefinitions: Record<ThemeKey, ThemeDefinition> = {
         bannerText: "Your board and the group standings are waiting.",
         bannerImageUrl: "/themes/kimberly/love-on-the-lake.jpg",
         backgroundImageUrl: "/themes/kimberly/love-on-the-lake.jpg",
-        footerImageUrl: "/themes/kimberly/love-on-the-lake.jpg",
         footerNote: "Lake of the Ozarks, 2026.",
         primaryCtaVariant: "accent"
       },
@@ -163,7 +161,6 @@ const themeDefinitions: Record<ThemeKey, ThemeDefinition> = {
         bannerText: "Every marked square makes the weekend story better.",
         bannerImageUrl: "/themes/kimberly/love-on-the-lake.jpg",
         backgroundImageUrl: "/themes/kimberly/love-on-the-lake.jpg",
-        footerImageUrl: "/themes/kimberly/love-on-the-lake.jpg",
         footerNote: "Lake of the Ozarks, 2026.",
         primaryCtaVariant: "accent"
       }
