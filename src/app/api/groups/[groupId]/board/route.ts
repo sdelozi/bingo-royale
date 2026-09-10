@@ -11,12 +11,13 @@ import {
 import { GroupBoardTemplateMissingError, getOrCreatePlayerBoardForGroup } from "@/server/services/groups/player-board";
 
 type Params = {
-  params: {
+  params: Promise<{
     groupId: string;
-  };
+  }>;
 };
 
 export async function GET(_request: Request, { params }: Params) {
+  const { groupId } = await params;
   const session = await getAuthSession();
   const userId = session?.user?.id;
 
@@ -25,7 +26,7 @@ export async function GET(_request: Request, { params }: Params) {
   }
 
   try {
-    const board = await getOrCreatePlayerBoardForGroup(userId, params.groupId);
+    const board = await getOrCreatePlayerBoardForGroup(userId, groupId);
 
     return NextResponse.json(
       {
@@ -46,7 +47,7 @@ export async function GET(_request: Request, { params }: Params) {
     logError("api.groups.board.read.unexpected_error", error, {
       route: "/api/groups/[groupId]/board",
       method: "GET",
-      groupId: params.groupId
+      groupId
     });
 
     return NextResponse.json({ error: "Unable to load board right now." }, { status: 500 });
@@ -54,6 +55,7 @@ export async function GET(_request: Request, { params }: Params) {
 }
 
 export async function PATCH(request: Request, { params }: Params) {
+  const { groupId } = await params;
   const session = await getAuthSession();
   const userId = session?.user?.id;
 
@@ -70,7 +72,7 @@ export async function PATCH(request: Request, { params }: Params) {
     });
 
     const body = await request.json();
-    const result = await updatePlayerBoardMark(userId, params.groupId, body);
+    const result = await updatePlayerBoardMark(userId, groupId, body);
     return NextResponse.json(result, { status: 200 });
   } catch (error) {
     if (error instanceof RateLimitExceededError) {
@@ -100,7 +102,7 @@ export async function PATCH(request: Request, { params }: Params) {
     logError("api.groups.board.mark.unexpected_error", error, {
       route: "/api/groups/[groupId]/board",
       method: "PATCH",
-      groupId: params.groupId
+      groupId
     });
 
     return NextResponse.json({ error: "Unable to update board mark right now." }, { status: 500 });

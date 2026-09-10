@@ -10,12 +10,13 @@ import {
 } from "@/server/services/groups/template-management";
 
 type Params = {
-  params: {
+  params: Promise<{
     groupId: string;
-  };
+  }>;
 };
 
 export async function POST(request: Request, { params }: Params) {
+  const { groupId } = await params;
   const session = await getAuthSession();
   const userId = session?.user?.id;
 
@@ -25,7 +26,7 @@ export async function POST(request: Request, { params }: Params) {
 
   try {
     const body = await request.json();
-    const result = await saveGroupTemplateForGroup(userId, params.groupId, body);
+    const result = await saveGroupTemplateForGroup(userId, groupId, body);
     return NextResponse.json(result, { status: 200 });
   } catch (error) {
     if (error instanceof ZodError) {
@@ -54,7 +55,7 @@ export async function POST(request: Request, { params }: Params) {
     logError("api.groups.template.save.unexpected_error", error, {
       route: "/api/groups/[groupId]/template",
       method: "POST",
-      groupId: params.groupId
+      groupId
     });
 
     return NextResponse.json({ error: "Unable to save board template right now." }, { status: 500 });
