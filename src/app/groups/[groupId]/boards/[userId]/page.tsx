@@ -5,13 +5,14 @@ import { getCurrentUser } from "@/server/auth/session";
 import { db } from "@/server/db/client";
 
 type GroupMemberBoardPageProps = {
-  params: {
+  params: Promise<{
     groupId: string;
     userId: string;
-  };
+  }>;
 };
 
 export default async function GroupMemberBoardPage({ params }: GroupMemberBoardPageProps) {
+  const { groupId, userId: targetUserId } = await params;
   const user = await getCurrentUser();
 
   if (!user?.id) {
@@ -21,7 +22,7 @@ export default async function GroupMemberBoardPage({ params }: GroupMemberBoardP
   const viewerMembership = await db.membership.findUnique({
     where: {
       groupId_userId: {
-        groupId: params.groupId,
+        groupId,
         userId: user.id
       }
     }
@@ -34,8 +35,8 @@ export default async function GroupMemberBoardPage({ params }: GroupMemberBoardP
   const targetMembership = await db.membership.findUnique({
     where: {
       groupId_userId: {
-        groupId: params.groupId,
-        userId: params.userId
+        groupId,
+        userId: targetUserId
       }
     },
     include: {
@@ -61,8 +62,8 @@ export default async function GroupMemberBoardPage({ params }: GroupMemberBoardP
   const board = await db.playerBoard.findUnique({
     where: {
       groupId_userId: {
-        groupId: params.groupId,
-        userId: params.userId
+        groupId,
+        userId: targetUserId
       }
     },
     include: {

@@ -5,12 +5,13 @@ import { getGroupLeaderboardForUser } from "@/server/services/groups/get-group-l
 import { GroupAccessError } from "@/server/services/groups/template-management";
 
 type Params = {
-  params: {
+  params: Promise<{
     groupId: string;
-  };
+  }>;
 };
 
 export async function GET(_request: Request, { params }: Params) {
+  const { groupId } = await params;
   const session = await getAuthSession();
   const userId = session?.user?.id;
 
@@ -19,7 +20,7 @@ export async function GET(_request: Request, { params }: Params) {
   }
 
   try {
-    const leaderboard = await getGroupLeaderboardForUser(userId, params.groupId);
+    const leaderboard = await getGroupLeaderboardForUser(userId, groupId);
     return NextResponse.json(leaderboard, { status: 200 });
   } catch (error) {
     if (error instanceof GroupAccessError) {
@@ -29,7 +30,7 @@ export async function GET(_request: Request, { params }: Params) {
     logError("api.groups.leaderboard.unexpected_error", error, {
       route: "/api/groups/[groupId]/leaderboard",
       method: "GET",
-      groupId: params.groupId
+      groupId
     });
 
     return NextResponse.json({ error: "Unable to load leaderboard right now." }, { status: 500 });

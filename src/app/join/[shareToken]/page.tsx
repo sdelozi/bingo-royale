@@ -4,20 +4,21 @@ import { getCurrentUser } from "@/server/auth/session";
 import { GroupNotFoundError, joinGroupForUser } from "@/server/services/groups/join-group";
 
 type JoinBySharePageProps = {
-  params: {
+  params: Promise<{
     shareToken: string;
-  };
+  }>;
 };
 
 export default async function JoinBySharePage({ params }: JoinBySharePageProps) {
+  const { shareToken } = await params;
   const user = await getCurrentUser();
 
   if (!user?.id) {
-    redirect(`/auth/signin?callbackUrl=${encodeURIComponent(`/join/${params.shareToken}`)}&error=auth_required`);
+    redirect(`/auth/signin?callbackUrl=${encodeURIComponent(`/join/${shareToken}`)}&error=auth_required`);
   }
 
   try {
-    const result = await joinGroupForUser(user.id, { shareToken: params.shareToken });
+    const result = await joinGroupForUser(user.id, { shareToken });
 
     return (
       <main>

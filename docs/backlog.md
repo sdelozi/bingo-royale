@@ -156,7 +156,6 @@ Priority key:
 - [ ] T71 Stand up paid production environment using same env contract and smoke gates (PAUSED)
 - [ ] T72 Cut over from dev-only runtime to separate prod environment with documented rollback (PAUSED)
 
-
 ## Kimberly Branch Cut Plan
 - Branch cut target: finish the shared mobile-first UX foundation and theme extension points below on `develop`, then cut the permanent Kimberly release branch for event-only branding/content work.
 - K0 before branch cut: T75, T76, T78, T79, T80, T81, T82, T83, T84.

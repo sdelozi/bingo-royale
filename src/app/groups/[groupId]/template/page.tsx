@@ -9,12 +9,13 @@ import {
 } from "@/server/services/groups/template-management";
 
 type GroupTemplatePageProps = {
-  params: {
+  params: Promise<{
     groupId: string;
-  };
+  }>;
 };
 
 export default async function GroupTemplatePage({ params }: GroupTemplatePageProps) {
+  const { groupId } = await params;
   const user = await getCurrentUser();
 
   if (!user?.id) {
@@ -22,7 +23,7 @@ export default async function GroupTemplatePage({ params }: GroupTemplatePagePro
   }
 
   try {
-    const data = await getGroupTemplateEditorData(user.id, params.groupId);
+    const data = await getGroupTemplateEditorData(user.id, groupId);
 
     return (
       <main className="ui-stack ui-page">
@@ -61,7 +62,7 @@ export default async function GroupTemplatePage({ params }: GroupTemplatePagePro
           </header>
           <p className="ui-empty-state">Only group admins can edit the board template.</p>
           <div className="ui-actions">
-            <Link className="ui-link-button ui-link-button-secondary" href={`/groups/${params.groupId}`}>Back to group</Link>
+            <Link className="ui-link-button ui-link-button-secondary" href={`/groups/${groupId}`}>Back to group</Link>
           </div>
         </main>
       );

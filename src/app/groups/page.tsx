@@ -15,7 +15,7 @@ export default async function GroupsPage() {
   }
 
   const groups = await listGroupsForUser(user.id);
-  const shareOrigin = getShareOrigin(getRequestOrigin());
+  const shareOrigin = getShareOrigin(await getRequestOrigin());
 
   return (
     <main className="ui-stack ui-page">

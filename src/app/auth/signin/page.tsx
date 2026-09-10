@@ -5,10 +5,10 @@ import { env } from "@/server/config/env";
 import { getCurrentUser } from "@/server/auth/session";
 
 type SignInPageProps = {
-  searchParams?: {
+  searchParams?: Promise<{
     error?: string;
     callbackUrl?: string;
-  };
+  }>;
 };
 
 function getErrorMessage(error?: string): string | undefined {
@@ -38,13 +38,14 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
     redirect("/dashboard");
   }
 
-  const callbackUrl = searchParams?.callbackUrl ?? "/dashboard";
+  const resolvedSearchParams = searchParams ? await searchParams : undefined;
+  const callbackUrl = resolvedSearchParams?.callbackUrl ?? "/dashboard";
 
   return (
     <main className="ui-stack">
       <SignInForm
         googleEnabled={Boolean(env.googleClientId && env.googleClientSecret)}
-        error={getErrorMessage(searchParams?.error)}
+        error={getErrorMessage(resolvedSearchParams?.error)}
         callbackUrl={callbackUrl}
       />
       <p className="ui-muted">

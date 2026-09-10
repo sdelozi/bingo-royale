@@ -5,9 +5,9 @@ import { env } from "@/server/config/env";
 import { getCurrentUser } from "@/server/auth/session";
 
 type RegisterPageProps = {
-  searchParams?: {
+  searchParams?: Promise<{
     callbackUrl?: string;
-  };
+  }>;
 };
 
 export default async function RegisterPage({ searchParams }: RegisterPageProps) {
@@ -17,7 +17,8 @@ export default async function RegisterPage({ searchParams }: RegisterPageProps) 
     redirect("/dashboard");
   }
 
-  const callbackUrl = searchParams?.callbackUrl ?? "/dashboard";
+  const resolvedSearchParams = searchParams ? await searchParams : undefined;
+  const callbackUrl = resolvedSearchParams?.callbackUrl ?? "/dashboard";
   const googleEnabled = Boolean(env.googleClientId && env.googleClientSecret);
 
   return (

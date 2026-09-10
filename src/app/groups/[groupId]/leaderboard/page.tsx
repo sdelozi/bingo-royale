@@ -6,12 +6,13 @@ import { getGroupLeaderboardForUser } from "@/server/services/groups/get-group-l
 import { GroupAccessError } from "@/server/services/groups/template-management";
 
 type GroupLeaderboardPageProps = {
-  params: {
+  params: Promise<{
     groupId: string;
-  };
+  }>;
 };
 
 export default async function GroupLeaderboardPage({ params }: GroupLeaderboardPageProps) {
+  const { groupId } = await params;
   const user = await getCurrentUser();
 
   if (!user?.id) {
@@ -19,7 +20,7 @@ export default async function GroupLeaderboardPage({ params }: GroupLeaderboardP
   }
 
   try {
-    const leaderboard = await getGroupLeaderboardForUser(user.id, params.groupId);
+    const leaderboard = await getGroupLeaderboardForUser(user.id, groupId);
 
     return (
       <main className="ui-stack ui-page">

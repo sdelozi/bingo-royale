@@ -10,12 +10,13 @@ import {
 } from "@/server/services/groups/player-board";
 
 type GroupBoardPageProps = {
-  params: {
+  params: Promise<{
     groupId: string;
-  };
+  }>;
 };
 
 export default async function GroupBoardPage({ params }: GroupBoardPageProps) {
+  const { groupId } = await params;
   const user = await getCurrentUser();
 
   if (!user?.id) {
@@ -23,7 +24,7 @@ export default async function GroupBoardPage({ params }: GroupBoardPageProps) {
   }
 
   try {
-    const board = await getOrCreatePlayerBoardForGroup(user.id, params.groupId);
+    const board = await getOrCreatePlayerBoardForGroup(user.id, groupId);
 
     return (
       <main className="ui-stack ui-page">
@@ -62,7 +63,7 @@ export default async function GroupBoardPage({ params }: GroupBoardPageProps) {
           </header>
           <p className="ui-empty-state">An admin needs to save the group board template before player boards can be generated.</p>
           <div className="ui-actions">
-            <Link className="ui-link-button ui-link-button-secondary" href={`/groups/${params.groupId}`}>Back to group</Link>
+            <Link className="ui-link-button ui-link-button-secondary" href={`/groups/${groupId}`}>Back to group</Link>
           </div>
         </main>
       );
