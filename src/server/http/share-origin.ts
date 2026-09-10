@@ -1,4 +1,4 @@
-import { env } from "@/server/config/env";
+import { getOptionalEnv } from "@/server/config/env-helpers";
 
 function normalizeOrigin(rawOrigin: string): string {
   const trimmed = rawOrigin.trim();
@@ -15,7 +15,8 @@ function normalizeOrigin(rawOrigin: string): string {
 }
 
 export function getShareOrigin(fallbackOrigin?: string): string {
-  const configuredOrigin = env.shareBaseUrl?.trim() || env.appUrl;
+  const configuredOrigin =
+    getOptionalEnv("NEXT_PUBLIC_SHARE_BASE_URL") || getOptionalEnv("NEXT_PUBLIC_APP_URL") || fallbackOrigin || "";
 
-  return normalizeOrigin(configuredOrigin || fallbackOrigin || "");
+  return normalizeOrigin(configuredOrigin);
 }
