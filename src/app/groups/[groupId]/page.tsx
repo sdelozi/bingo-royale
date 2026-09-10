@@ -26,7 +26,7 @@ export default async function GroupDetailPage({ params }: GroupDetailPageProps) 
   }
 
   const canManageTemplate = membership.role === "ADMIN";
-  const shareOrigin = getShareOrigin(getRequestOrigin());
+  const shareOrigin = getShareOrigin(await getRequestOrigin());
   const shareLink =
     canManageTemplate && membership.shareToken ? `${shareOrigin}/join/${membership.shareToken}` : null;
 

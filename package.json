@@ -2,6 +2,9 @@
   "name": "bingo-royale",
   "version": "0.5.1",
   "private": true,
+  "engines": {
+    "node": ">=20.19.0"
+  },
   "scripts": {
     "dev": "next dev",
     "start:local": "powershell -ExecutionPolicy Bypass -File ./scripts/start-local.ps1",
