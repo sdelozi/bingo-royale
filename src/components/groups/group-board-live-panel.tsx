@@ -83,9 +83,9 @@ export function GroupBoardLivePanel({
     const previousBlackout = previousBlackoutRef.current;
 
     if (stats.blackout && !previousBlackout) {
-      showCelebration("Blackout complete! Massive bonus secured.");
+      showCelebration("BLACKOUT!");
     } else if (stats.bingoCount > previousBingoCount) {
-      showCelebration("Bingo! Bonus points awarded.");
+      showCelebration("BINGO!");
     }
 
     previousBingoCountRef.current = stats.bingoCount;
@@ -145,9 +145,14 @@ export function GroupBoardLivePanel({
       </div>
       <p className="ui-muted">Last updated: {lastUpdated.toLocaleString()}</p>
       {celebrationMessage ? (
-        <p className="ui-celebration-toast" role="status" aria-live="polite">
-          {celebrationMessage}
-        </p>
+        <div className="ui-bingo-burst" role="status" aria-live="polite">
+          <div className="ui-bingo-burst-confetti" aria-hidden="true">
+            {Array.from({ length: 18 }, (_, index) => (
+              <span key={index} className="ui-bingo-burst-piece" style={{ "--piece-index": `${index}` } as React.CSSProperties} />
+            ))}
+          </div>
+          <p className="ui-bingo-burst-label">{celebrationMessage}</p>
+        </div>
       ) : null}
       {error ? <p className="ui-alert is-error">Board sync issue. Retrying in {Math.ceil(nextRefreshMs / 1000)}s.</p> : null}
 

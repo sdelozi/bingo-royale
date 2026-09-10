@@ -4,6 +4,7 @@ import { CreateGroupForm } from "@/components/groups/create-group-form";
 import { JoinGroupForm } from "@/components/groups/join-group-form";
 import { getCurrentUser } from "@/server/auth/session";
 import { getRequestOrigin } from "@/server/http/request-origin";
+import { getShareOrigin } from "@/server/http/share-origin";
 import { listGroupsForUser } from "@/server/services/groups/list-user-groups";
 
 export default async function GroupsPage() {
@@ -14,7 +15,7 @@ export default async function GroupsPage() {
   }
 
   const groups = await listGroupsForUser(user.id);
-  const requestOrigin = getRequestOrigin();
+  const shareOrigin = getShareOrigin(getRequestOrigin());
 
   return (
     <main className="ui-stack ui-page">
@@ -36,7 +37,7 @@ export default async function GroupsPage() {
             {groups.map((group) => {
               const canViewInviteCredentials = group.role === "ADMIN";
               const shareLink =
-                canViewInviteCredentials && group.shareToken ? `${requestOrigin}/join/${group.shareToken}` : null;
+                canViewInviteCredentials && group.shareToken ? `${shareOrigin}/join/${group.shareToken}` : null;
 
               return (
                 <li key={group.groupId} className="ui-list-item">

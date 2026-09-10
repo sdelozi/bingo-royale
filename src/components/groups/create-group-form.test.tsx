@@ -22,7 +22,8 @@ describe("CreateGroupForm", () => {
       json: async () => ({
         name: "Trip Bingo",
         inviteCode: "ABCD2345",
-        shareToken: "share-token-123"
+        shareToken: "share-token-123",
+        shareLink: "https://bingo-royale.app/join/share-token-123"
       })
     } as Response);
 
@@ -42,12 +43,50 @@ describe("CreateGroupForm", () => {
       expect(refresh).toHaveBeenCalledTimes(1);
       expect(screen.getByText("Created: Trip Bingo")).toBeInTheDocument();
       expect(screen.getByText("Invite code: ABCD2345")).toBeInTheDocument();
-      expect(
-        screen.getByText(`Share link: ${window.location.origin}/join/share-token-123`)
-      ).toBeInTheDocument();
+      expect(screen.getByText("https://bingo-royale.app/join/share-token-123")).toBeInTheDocument();
     });
 
     fetchMock.mockRestore();
     resetSpy.mockRestore();
+  });
+
+  it("copies share link to clipboard when requested", async () => {
+    const fetchMock = vi.spyOn(globalThis, "fetch").mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({
+        name: "Trip Bingo",
+        inviteCode: "ABCD2345",
+        shareToken: "share-token-123",
+        shareLink: "https://bingo-royale.app/join/share-token-123"
+      })
+    } as Response);
+
+    const writeText = vi.fn().mockResolvedValue(undefined);
+    Object.assign(navigator, {
+      clipboard: {
+        writeText
+      }
+    });
+
+    render(<CreateGroupForm />);
+
+    fireEvent.change(screen.getByLabelText("Group name"), {
+      target: { value: "Trip Bingo" }
+    });
+
+    fireEvent.submit(screen.getByRole("button", { name: "Create group" }).closest("form") as HTMLFormElement);
+
+    await waitFor(() => {
+      expect(screen.getByRole("button", { name: "Copy share link" })).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByRole("button", { name: "Copy share link" }));
+
+    await waitFor(() => {
+      expect(writeText).toHaveBeenCalledWith("https://bingo-royale.app/join/share-token-123");
+      expect(screen.getByText("Share link copied.")).toBeInTheDocument();
+    });
+
+    fetchMock.mockRestore();
   });
 });

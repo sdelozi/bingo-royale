@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { getCurrentUser } from "@/server/auth/session";
 import { getRequestOrigin } from "@/server/http/request-origin";
+import { getShareOrigin } from "@/server/http/share-origin";
 import { getUserGroup } from "@/server/services/groups/get-user-group";
 
 type GroupDetailPageProps = {
@@ -24,9 +25,9 @@ export default async function GroupDetailPage({ params }: GroupDetailPageProps) 
   }
 
   const canManageTemplate = membership.role === "ADMIN";
-  const requestOrigin = getRequestOrigin();
+  const shareOrigin = getShareOrigin(getRequestOrigin());
   const shareLink =
-    canManageTemplate && membership.shareToken ? `${requestOrigin}/join/${membership.shareToken}` : null;
+    canManageTemplate && membership.shareToken ? `${shareOrigin}/join/${membership.shareToken}` : null;
 
   return (
     <main className="ui-stack ui-page">

@@ -2,6 +2,7 @@ import { randomBytes, randomInt } from "crypto";
 import { MembershipRole, Prisma } from "@prisma/client";
 import { z } from "zod";
 import { db } from "@/server/db/client";
+import { getShareOrigin } from "@/server/http/share-origin";
 
 const createGroupSchema = z.object({
   name: z.string().trim().min(1).max(80)
@@ -45,6 +46,7 @@ export async function createGroupForUser(userId: string, rawInput: unknown) {
 
       return {
         ...group,
+        shareLink: `${getShareOrigin()}/join/${group.shareToken}`,
         role: MembershipRole.ADMIN
       };
     } catch (error) {

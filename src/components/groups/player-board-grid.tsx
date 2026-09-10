@@ -151,7 +151,7 @@ export function PlayerBoardGrid({ groupId, squares, onSquaresChange }: PlayerBoa
   const rows = Array.from({ length: 5 }, (_, rowIndex) => boardSquares.slice(rowIndex * 5, rowIndex * 5 + 5));
 
   return (
-    <section>
+    <>
       {errorMessage ? (
         <p className="ui-alert is-error" role="alert" aria-live="assertive">
           {errorMessage}
@@ -197,6 +197,6 @@ export function PlayerBoardGrid({ groupId, squares, onSquaresChange }: PlayerBoa
           </tbody>
         </table>
       </div>
-    </section>
+    </>
   );
 }
