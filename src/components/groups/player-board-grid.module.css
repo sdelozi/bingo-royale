@@ -152,6 +152,26 @@
   color: var(--success);
 }
 
+:global(body[data-theme="kimberly"]) .boardGridButton[data-state="idle"] {
+  background: rgba(255, 255, 255, 0.76);
+  border-color: rgba(49, 91, 146, 0.24);
+}
+
+:global(body[data-theme="kimberly"]) .boardGridButton[data-state="marked"] {
+  background: linear-gradient(145deg, rgba(56, 130, 108, 0.35), rgba(185, 222, 202, 0.86));
+  border-color: rgba(32, 103, 82, 0.86);
+  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.6);
+}
+
+:global(body[data-theme="kimberly"]) .boardGridButton[data-state="marked"] .boardGridContent {
+  color: #174d3e;
+}
+
+:global(body[data-theme="kimberly"]) .boardGridButton[data-state="marked"] .boardGridStatus {
+  color: #174d3e;
+  font-weight: 800;
+}
+
 .boardGridButton[data-pending="true"] .boardGridStatus {
   color: var(--warning);
   animation: boardGridPendingPulse 1s ease-in-out infinite;

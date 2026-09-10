@@ -14,15 +14,19 @@ export function ReadOnlyBoardGrid({ squares }: ReadOnlyBoardGridProps) {
         <tbody>
           {rows.map((row, rowIndex) => (
             <tr key={rowIndex}>
-              {row.map((square) => (
-                <td key={square.position} className={styles.boardGridCell}>
-                  <div className={styles.boardGridButton} aria-pressed={square.isMarked}>
-                    {square.isFreeSpace ? <strong>Free space</strong> : null}
-                    <span className={styles.boardGridContent}>{square.content}</span>
-                    <span className={styles.boardGridStatus}>{square.isMarked ? "Marked" : "Open"}</span>
-                  </div>
-                </td>
-              ))}
+              {row.map((square) => {
+                const visualState = square.isMarked ? "marked" : "idle";
+
+                return (
+                  <td key={square.position} className={styles.boardGridCell}>
+                    <div className={styles.boardGridButton} aria-pressed={square.isMarked} data-state={visualState}>
+                      {square.isFreeSpace ? <strong>Free space</strong> : null}
+                      <span className={styles.boardGridContent}>{square.content}</span>
+                      <span className={styles.boardGridStatus}>{square.isMarked ? "Marked" : "Open"}</span>
+                    </div>
+                  </td>
+                );
+              })}
             </tr>
           ))}
         </tbody>
