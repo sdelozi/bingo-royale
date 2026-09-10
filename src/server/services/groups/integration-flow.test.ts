@@ -46,6 +46,8 @@ type PlayerBoardRecord = {
   userId: string;
   createdAt: Date;
   updatedAt: Date;
+  firstBingoAt: Date | null;
+  firstBlackoutAt: Date | null;
 };
 
 type PlayerBoardSquareRecord = {
@@ -146,6 +148,8 @@ function getBoardWithSquares(groupId: string, userId: string) {
     id: board.id,
     createdAt: board.createdAt,
     updatedAt: board.updatedAt,
+    firstBingoAt: board.firstBingoAt,
+    firstBlackoutAt: board.firstBlackoutAt,
     group: {
       id: group.id,
       name: group.name
@@ -293,6 +297,8 @@ function buildDbMock() {
             id: board.id,
             createdAt: board.createdAt,
             updatedAt: board.updatedAt,
+            firstBingoAt: board.firstBingoAt,
+            firstBlackoutAt: board.firstBlackoutAt,
             squares: state.squares
               .filter((square) => square.playerBoardId === board.id)
               .sort((left, right) => left.position - right.position)
@@ -343,6 +349,25 @@ function buildDbMock() {
     findUnique: vi.fn(async ({ where }: any) =>
       getBoardWithSquares(where.groupId_userId.groupId, where.groupId_userId.userId)
     ),
+    update: vi.fn(async ({ where, data }: any) => {
+      const record = state.boards.find(
+        (candidate) => candidate.groupId === where.groupId_userId.groupId && candidate.userId === where.groupId_userId.userId
+      );
+
+      if (!record) {
+        throw new Error("Player board not found.");
+      }
+
+      if ("firstBingoAt" in data) {
+        record.firstBingoAt = data.firstBingoAt;
+      }
+
+      if ("firstBlackoutAt" in data) {
+        record.firstBlackoutAt = data.firstBlackoutAt;
+      }
+
+      return getBoardWithSquares(record.groupId, record.userId);
+    }),
     create: vi.fn(async ({ data }: any) => {
       const now = new Date();
       const board: PlayerBoardRecord = {
@@ -350,7 +375,9 @@ function buildDbMock() {
         groupId: data.groupId,
         userId: data.userId,
         createdAt: now,
-        updatedAt: now
+        updatedAt: now,
+        firstBingoAt: null,
+        firstBlackoutAt: null
       };
 
       state.boards.push(board);

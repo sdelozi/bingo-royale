@@ -129,11 +129,13 @@ model Objective {
 }
 
 model PlayerBoard {
-  id             String             @id @default(cuid())
-  groupId        String
-  userId         String
-  createdAt      DateTime           @default(now())
-  updatedAt      DateTime           @updatedAt
+  id               String             @id @default(cuid())
+  groupId          String
+  userId           String
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  firstBingoAt     DateTime?
+  firstBlackoutAt  DateTime?
 
   group          Group              @relation(fields: [groupId], references: [id], onDelete: Cascade)
   user           User               @relation(fields: [userId], references: [id], onDelete: Cascade)

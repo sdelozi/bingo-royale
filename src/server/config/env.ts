@@ -3,6 +3,8 @@ import { getOptionalBooleanEnv, getOptionalEnv, getRequiredEnv } from "@/server/
 export const env = {
   nodeEnv: process.env.NODE_ENV ?? "development",
   appUrl: getRequiredEnv("NEXT_PUBLIC_APP_URL"),
+  // Enforced (not just documented) so NextAuth never silently falls back to Vercel's per-deployment VERCEL_URL.
+  nextAuthUrl: getRequiredEnv("NEXTAUTH_URL"),
   databaseUrl: getRequiredEnv("DATABASE_URL"),
   authSecret: getRequiredEnv("AUTH_SECRET"),
   googleClientId: getOptionalEnv("GOOGLE_CLIENT_ID"),
