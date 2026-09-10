@@ -157,7 +157,7 @@ Priority key:
 - [ ] T72 Cut over from dev-only runtime to separate prod environment with documented rollback (PAUSED)
 
 ## Kimberly Branch Cut Plan
-- Branch cut target: finish the shared mobile-first UX foundation and theme extension points below on `develop`, then cut the permanent Kimberly release branch for event-only branding/content work.
+- Branch cut complete: `release/kimberly` was created from validated `develop` for permanent event-only branding/content work.
 - K0 before branch cut: T75, T76, T78, T79, T80, T81, T82, T83, T84.
 - K1 after branch cut: T77, T85, T86, T87, T88, T89, T90, T100, T101, T102, plus paused E9 deployment-process follow-ups.
 

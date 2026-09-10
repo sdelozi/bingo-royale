@@ -1,6 +1,9 @@
 # Changelog
 
-## 0.5.1 (in progress)
+## 0.5.2 (in progress)
+- Kimberly event-release branch cut from the validated shared-platform baseline.
+
+## 0.5.1
 - User-testing polish: removed confusing dashboard board entry-point and redirected the legacy global board route to groups.
 - Board UX polish: increased tile readability, removed tile numbering labels, and aligned read-only board visuals with playable tiles.
 - Scoring and leaderboard update: switched to weighted score calculation and ranked by blackout, bingo count, score, then earliest achievement timestamp.
@@ -19,6 +22,13 @@
 - Added portability guardrails (`npm run check:portability`) and CI enforcement for env access and raw SQL restrictions.
 - Added deployment-agnostic environment and secrets contract documentation.
 - Added cross-target hosting smoke workflow requiring two deployment URLs before provider lock-in.
+- Added Google OAuth on both sign-in and registration when configured, with an opt-in same-email account-linking control.
+- Added configurable four-corners bonus scoring and celebratory board feedback for bingo and blackout completions.
+- Improved mobile board and leaderboard overflow behavior, read-only board access, share-link wrapping, and share-link copy feedback.
+- Added canonical public share-link origin configuration to keep generated invitations off protected preview hosts.
+- Updated runtime and CI compatibility for Next.js 15, including async App Router request APIs and route/page prop contracts.
+- Upgraded Next.js, Auth.js, Vitest, Vite transitive dependencies, PostCSS, and Undici to resolve high and critical dependency advisories.
+- Restricted CI workflow token permissions to read-only repository contents.
 
 ## 0.5.0
 - E5-S1 derived stats: player board state now includes score, bingo count, and blackout.

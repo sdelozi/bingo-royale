@@ -1,8 +1,8 @@
 # Versioning
 
 ## Current baseline
-- Current development version: 0.5.1
-- Rationale: User-testing polish and bug-fix updates landed across board UX, sync behavior, and leaderboard scoring/ranking.
+- Current development version: 0.5.2
+- Rationale: The validated shared-platform baseline now includes user-testing polish, configurable scoring/share-link improvements, and security maintenance. Kimberly-specific work proceeds on `release/kimberly`.
 
 ## Rules until first release
 - Stay on major version 0 until first release.
