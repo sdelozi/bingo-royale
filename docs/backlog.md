@@ -213,7 +213,7 @@ Priority key:
 ### Story E11-S4: Theme QA and release readiness
 - [ ] T100 Validate default theme and event theme parity for core flows (auth, group join, board play, leaderboard) (TODO, K1)
 - [ ] T101 Validate event theme performance budget (image size, LCP impact, layout shift) on mobile network profiles (TODO, K1)
-- [ ] T102 Add quick rollback path to default theme via config toggle and redeploy procedure (TODO, K1)
+- [x] T102 Add quick rollback path to default theme via config toggle and redeploy procedure (DONE, K1)
 
 
 ## Suggested execution order

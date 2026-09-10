@@ -62,6 +62,33 @@ body[data-theme="lake-blue"] {
   --button-hover: linear-gradient(125deg, rgba(63, 119, 211, 0.28), rgba(146, 184, 239, 0.3));
 }
 
+body[data-theme="kimberly"] {
+  --bg: #c4a37b;
+  --bg-accent: #ad875d;
+  --surface: rgba(255, 251, 244, 0.91);
+  --surface-strong: rgba(255, 253, 249, 0.97);
+  --surface-soft: rgba(238, 228, 214, 0.88);
+
+  --text: #315b92;
+  --muted: #607b9f;
+  --link: #315b92;
+
+  --primary: #315b92;
+  --primary-strong: #244a79;
+  --secondary: #d589a5;
+  --success: #38826c;
+  --warning: #b77b35;
+  --danger: #b8516e;
+
+  --line: rgba(49, 91, 146, 0.34);
+  --line-soft: rgba(49, 91, 146, 0.2);
+  --shadow: 0 16px 42px rgba(85, 59, 29, 0.22);
+
+  --button-bg: linear-gradient(125deg, rgba(49, 91, 146, 0.14), rgba(213, 137, 165, 0.2));
+  --button-border: rgba(49, 91, 146, 0.52);
+  --button-hover: linear-gradient(125deg, rgba(49, 91, 146, 0.24), rgba(213, 137, 165, 0.3));
+}
+
 html,
 body {
   padding: 0;
@@ -88,6 +115,13 @@ body[data-theme="lake-blue"] {
     linear-gradient(180deg, var(--bg), var(--bg-accent));
 }
 
+body[data-theme="kimberly"] {
+  background:
+    linear-gradient(rgba(255, 250, 241, 0.2), rgba(255, 250, 241, 0.2)),
+    url("/themes/kimberly/love-on-the-lake.jpg") center / cover fixed,
+    linear-gradient(180deg, var(--bg), var(--bg-accent));
+}
+
 body::before {
   content: "";
   position: fixed;
@@ -100,6 +134,11 @@ body::before {
 }
 
 body[data-theme="lake-blue"]::before {
+  background-image: none;
+  opacity: 0;
+}
+
+body[data-theme="kimberly"]::before {
   background-image: none;
   opacity: 0;
 }
@@ -139,6 +178,10 @@ a:hover {
 body[data-theme="lake-blue"] .app-shell-backdrop {
   opacity: 0.3;
   mix-blend-mode: multiply;
+}
+
+body[data-theme="kimberly"] .app-shell-backdrop {
+  opacity: 0;
 }
 
 .app-header,
@@ -879,6 +922,18 @@ input[type="radio"] {
   font-size: 1.05rem;
 }
 
+.kimberly-itinerary {
+  padding: 0.55rem;
+  overflow: hidden;
+}
+
+.kimberly-itinerary-image {
+  width: 100%;
+  aspect-ratio: 5 / 7;
+  border-radius: 12px;
+  background: url("/themes/kimberly/kimberly-itinerary.jpg") center top / cover no-repeat;
+}
+
 .ui-bingo-burst {
   position: fixed;
   inset: 0;
@@ -1016,7 +1071,10 @@ select {
 
 body[data-theme="lake-blue"] input,
 body[data-theme="lake-blue"] textarea,
-body[data-theme="lake-blue"] select {
+body[data-theme="lake-blue"] select,
+body[data-theme="kimberly"] input,
+body[data-theme="kimberly"] textarea,
+body[data-theme="kimberly"] select {
   background: rgba(255, 255, 255, 0.86);
 }
 
@@ -1189,6 +1247,10 @@ tr:last-child td {
 
   .ui-table.is-leaderboard {
     min-width: 680px;
+  }
+
+  .kimberly-itinerary {
+    padding: 0.4rem;
   }
 
   input,

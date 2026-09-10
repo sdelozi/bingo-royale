@@ -1,7 +1,7 @@
 import { env } from "@/server/config/env";
 import type { ResolvedThemeConfig, ThemeRouteMap } from "@/lib/theme-shell";
 
-const THEME_KEYS = ["arcade-neon", "lake-blue"] as const;
+const THEME_KEYS = ["arcade-neon", "lake-blue", "kimberly"] as const;
 
 type ThemeKey = (typeof THEME_KEYS)[number];
 
@@ -124,6 +124,48 @@ const themeDefinitions: Record<ThemeKey, ThemeDefinition> = {
         footerImageUrl: "/themes/lake-blue/footer.svg",
         footerNote: "Stable shared UX underneath event-only branding.",
         primaryCtaVariant: "primary"
+      }
+    }
+  },
+  kimberly: {
+    fonts: {
+      display: '"Georgia", "Palatino Linotype", "Book Antiqua", serif',
+      body: '"Avenir Next", "Segoe UI", "Trebuchet MS", sans-serif',
+      accent: '"Verdana", "Trebuchet MS", sans-serif'
+    },
+    routes: {
+      public: {
+        routeLabel: "Lake Weekend",
+        headline: "Kimberly's Bachelorette Bingo",
+        tagline: "A weekend on the water, with a little friendly competition.",
+        bannerText: "Play along all weekend and keep the stories rolling.",
+        bannerImageUrl: "/themes/kimberly/love-on-the-lake.jpg",
+        backgroundImageUrl: "/themes/kimberly/love-on-the-lake.jpg",
+        footerImageUrl: "/themes/kimberly/love-on-the-lake.jpg",
+        footerNote: "Lake of the Ozarks, 2026.",
+        primaryCtaVariant: "accent"
+      },
+      auth: {
+        routeLabel: "Weekend Check-In",
+        headline: "Join Kimberly's Weekend",
+        tagline: "Sign in, grab your card, and join the fun.",
+        bannerText: "Your board and the group standings are waiting.",
+        bannerImageUrl: "/themes/kimberly/love-on-the-lake.jpg",
+        backgroundImageUrl: "/themes/kimberly/love-on-the-lake.jpg",
+        footerImageUrl: "/themes/kimberly/love-on-the-lake.jpg",
+        footerNote: "Lake of the Ozarks, 2026.",
+        primaryCtaVariant: "accent"
+      },
+      app: {
+        routeLabel: "Bachelorette Bingo",
+        headline: "Kimberly's Lake Weekend",
+        tagline: "Keep your card moving and follow the weekend standings.",
+        bannerText: "Every marked square makes the weekend story better.",
+        bannerImageUrl: "/themes/kimberly/love-on-the-lake.jpg",
+        backgroundImageUrl: "/themes/kimberly/love-on-the-lake.jpg",
+        footerImageUrl: "/themes/kimberly/love-on-the-lake.jpg",
+        footerNote: "Lake of the Ozarks, 2026.",
+        primaryCtaVariant: "accent"
       }
     }
   }

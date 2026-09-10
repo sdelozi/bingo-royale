@@ -2,6 +2,9 @@
 
 ## 0.5.2 (in progress)
 - Kimberly event-release branch cut from the validated shared-platform baseline.
+- Added the Kimberly theme with Lake of the Ozarks event copy, supplied artwork, and a mobile-ready itinerary entry point.
+- Added Kimberly-specific browser title and description metadata for event links and tabs.
+- Documented a no-code Kimberly theme rollback using the deployment theme toggle.
 
 ## 0.5.1
 - User-testing polish: removed confusing dashboard board entry-point and redirected the legacy global board route to groups.

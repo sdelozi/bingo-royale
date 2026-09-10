@@ -5,10 +5,19 @@ import { themeConfig } from "@/server/config/theme";
 import { getCurrentUser } from "@/server/auth/session";
 import "./globals.css";
 
-export const metadata: Metadata = {
-  title: "Bingo Royale",
-  description: "Browser-first multiplayer bingo."
-};
+export function generateMetadata(): Metadata {
+  if (themeConfig.key === "kimberly") {
+    return {
+      title: "Kimberly's Bachelorette Bingo",
+      description: "Lake of the Ozarks bachelorette weekend bingo."
+    };
+  }
+
+  return {
+    title: "Bingo Royale",
+    description: "Browser-first multiplayer bingo."
+  };
+}
 
 export default async function RootLayout({
   children

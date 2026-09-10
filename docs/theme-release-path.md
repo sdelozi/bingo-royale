@@ -30,6 +30,17 @@ Each route group can provide its own:
 - Treat the Kimberly branch as permanent and event-specific.
 - Do not back-merge Kimberly-only copy, assets, or styling into `develop`.
 - Merge only bug fixes by re-applying the minimal shared fix onto both branches when needed.
+- Activate the event theme in its deployment with `NEXT_PUBLIC_THEME_KEY=kimberly`.
+
+## Kimberly Theme Rollback
+The event presentation is isolated behind `NEXT_PUBLIC_THEME_KEY`; rollback does not require a code or database change.
+
+1. In the Kimberly Vercel project's production environment variables, set `NEXT_PUBLIC_THEME_KEY=arcade-neon`.
+2. Redeploy the same approved `release/kimberly` commit so the public client bundle receives the new value.
+3. Verify `/`, `/auth/signin`, `/groups`, and one board route display and function normally.
+4. Restore `NEXT_PUBLIC_THEME_KEY=kimberly` and redeploy only after the event-theme issue is corrected and reviewed.
+
+`lake-blue` is also a valid fallback preset, but `arcade-neon` is the default shared-platform presentation and the primary rollback target.
 
 ## Event Content Checklist
 - Confirm image rights and source ownership before adding event assets.
