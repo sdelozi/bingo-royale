@@ -73,7 +73,7 @@ const themeDefinitions: Record<ThemeKey, ThemeDefinition> = {
         primaryCtaVariant: "primary"
       },
       app: {
-        routeLabel: "Game In Progress",
+        routeLabel: "Player Hub",
         headline: "Live Multiplayer Bingo",
         tagline: "Real-time board updates and shared score tracking.",
         bannerText: "Keep the round moving with fast board updates and clear mobile controls.",

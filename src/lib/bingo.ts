@@ -1,5 +1,11 @@
 export type BoardMarks = boolean[];
 
+const FOUR_CORNERS = [0, 4, 20, 24] as const;
+
+type ScoreOptions = {
+  enableFourCornersScoring?: boolean;
+};
+
 const WINNING_LINES: number[][] = [
   [0, 1, 2, 3, 4],
   [5, 6, 7, 8, 9],
@@ -15,13 +21,14 @@ const WINNING_LINES: number[][] = [
   [4, 8, 12, 16, 20]
 ];
 
-export function calculateScore(marks: BoardMarks): number {
+export function calculateScore(marks: BoardMarks, options: ScoreOptions = {}): number {
   validateBoardLength(marks);
   const markedSquares = marks.filter(Boolean).length;
   const bingoCount = countBingos(marks);
   const blackout = isBlackout(marks);
+  const fourCornersBonus = options.enableFourCornersScoring && hasFourCorners(marks) ? 4 : 0;
 
-  return markedSquares + bingoCount * 5 + (blackout ? 15 : 0);
+  return markedSquares + bingoCount * 5 + (blackout ? 15 : 0) + fourCornersBonus;
 }
 
 export function countBingos(marks: BoardMarks): number {
@@ -32,6 +39,11 @@ export function countBingos(marks: BoardMarks): number {
 export function isBlackout(marks: BoardMarks): boolean {
   validateBoardLength(marks);
   return marks.every(Boolean);
+}
+
+export function hasFourCorners(marks: BoardMarks): boolean {
+  validateBoardLength(marks);
+  return FOUR_CORNERS.every((index) => marks[index]);
 }
 
 function validateBoardLength(marks: BoardMarks): void {

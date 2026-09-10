@@ -1,7 +1,10 @@
 import { MembershipRole } from "@prisma/client";
 import { calculateScore, countBingos, isBlackout } from "@/lib/bingo";
+import { getOptionalBooleanEnv } from "@/server/config/env-helpers";
 import { db } from "@/server/db/client";
 import { GROUP_OBJECTIVE_COUNT, GroupAccessError } from "./template-management";
+
+const enableFourCornersScoring = getOptionalBooleanEnv("NEXT_PUBLIC_ENABLE_FOUR_CORNERS_SCORING");
 
 type LeaderboardBoard = {
   id: string;
@@ -49,7 +52,7 @@ function mapBoardStats(board: LeaderboardBoard | undefined) {
   }
 
   return {
-    score: calculateScore(marks),
+    score: calculateScore(marks, { enableFourCornersScoring }),
     bingoCount: countBingos(marks),
     blackout: isBlackout(marks)
   };

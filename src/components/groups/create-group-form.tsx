@@ -16,6 +16,24 @@ export function CreateGroupForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [createdGroup, setCreatedGroup] = useState<CreatedGroup | null>(null);
+  const [copyFeedback, setCopyFeedback] = useState<string | null>(null);
+
+  async function copyToClipboard(value: string) {
+    if (navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(value);
+      return;
+    }
+
+    const textArea = document.createElement("textarea");
+    textArea.value = value;
+    textArea.setAttribute("readonly", "");
+    textArea.style.position = "absolute";
+    textArea.style.left = "-9999px";
+    document.body.appendChild(textArea);
+    textArea.select();
+    document.execCommand("copy");
+    document.body.removeChild(textArea);
+  }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -42,7 +60,7 @@ export function CreateGroupForm() {
       return;
     }
 
-    const shareLink = data.shareToken ? `${window.location.origin}/join/${data.shareToken}` : null;
+    const shareLink = data.shareLink ?? (data.shareToken ? `${window.location.origin}/join/${data.shareToken}` : null);
 
     setCreatedGroup({
       name: data.name,
@@ -52,8 +70,22 @@ export function CreateGroupForm() {
     });
 
     setIsSubmitting(false);
+    setCopyFeedback(null);
     form.reset();
     router.refresh();
+  }
+
+  async function handleCopyShareLink() {
+    if (!createdGroup?.shareLink) {
+      return;
+    }
+
+    try {
+      await copyToClipboard(createdGroup.shareLink);
+      setCopyFeedback("Share link copied.");
+    } catch {
+      setCopyFeedback("Unable to copy automatically. Please copy the link manually.");
+    }
   }
 
   return (
@@ -81,7 +113,20 @@ export function CreateGroupForm() {
         <div className="ui-alert is-success">
           <p>Created: {createdGroup.name}</p>
           <p>Invite code: {createdGroup.inviteCode}</p>
-          <p>Share link: {createdGroup.shareLink ?? "Not available"}</p>
+          <p className="ui-share-link-line">
+            <span>Share link:</span>
+            <span className="ui-share-link-value">{createdGroup.shareLink ?? "Not available"}</span>
+          </p>
+          {createdGroup.shareLink ? (
+            <div className="ui-actions ui-actions-compact">
+              <button type="button" className="ui-button-secondary" onClick={handleCopyShareLink}>Copy share link</button>
+            </div>
+          ) : null}
+          {copyFeedback ? (
+            <p className="ui-copy-feedback" role="status" aria-live="polite">
+              {copyFeedback}
+            </p>
+          ) : null}
         </div>
       ) : null}
     </section>

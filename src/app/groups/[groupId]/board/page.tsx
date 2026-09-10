@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { GroupBoardLivePanel } from "@/components/groups/group-board-live-panel";
 import { getCurrentUser } from "@/server/auth/session";
+import { env } from "@/server/config/env";
 import { GroupAccessError } from "@/server/services/groups/template-management";
 import {
   GroupBoardTemplateMissingError,
@@ -41,6 +42,7 @@ export default async function GroupBoardPage({ params }: GroupBoardPageProps) {
           initialSquares={board.squares}
           initialStats={board.stats}
           initialGeneratedAt={new Date().toISOString()}
+          enableFourCornersScoring={env.enableFourCornersScoring}
         />
 
         <p className="ui-muted">Mark your own board here.</p>
