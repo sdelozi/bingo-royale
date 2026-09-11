@@ -1,8 +1,6 @@
 # Changelog
 
 ## 0.5.2 (in progress)
-- Fixed post-sign-in and share-link redirects landing on Vercel's ephemeral per-deployment URL (and the related Google OAuth `redirect_uri_mismatch`) by enforcing `NEXTAUTH_URL` as a required, validated environment variable.
-- Added "first bingo" and "first blackout" leaderboard badges, awarded to the earliest currently-qualifying player and automatically transferred if that player unmarks tiles and loses the achievement.
 - Kimberly event-release branch cut from the validated shared-platform baseline.
 - Added the Kimberly theme with Lake of the Ozarks event copy, supplied artwork, and a mobile-ready itinerary entry point.
 - Cropped embedded black padding from the Kimberly itinerary and removed the mismatched footer banner treatment.

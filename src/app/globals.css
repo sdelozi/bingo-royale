@@ -757,23 +757,6 @@ input[type="radio"] {
   background: rgba(214, 158, 111, 0.18);
 }
 
-.ui-badge.is-first-bingo {
-  border-color: rgba(38, 242, 255, 0.7);
-  background: rgba(38, 242, 255, 0.18);
-}
-
-.ui-badge.is-first-blackout {
-  border-color: rgba(255, 214, 111, 0.84);
-  background: rgba(255, 214, 111, 0.2);
-}
-
-.ui-badge-stack {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  flex-wrap: wrap;
-}
-
 .ui-empty-state {
   margin: 0;
   padding: 0.85rem 0.95rem;

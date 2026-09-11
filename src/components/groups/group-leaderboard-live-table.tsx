@@ -149,29 +149,13 @@ export function GroupLeaderboardLiveTable({
                 <td>
                   <span className={`ui-badge ${row.role === "ADMIN" ? "is-admin" : "is-player"}`}>{row.role}</span>
                 </td>
-                <td>
-                  <span className="ui-badge-stack">
-                    <span>{row.bingoCount}</span>
-                    {row.hasFirstBingoBadge ? (
-                      <span className="ui-badge is-first-bingo" title="First to get a bingo">
-                        First bingo
-                      </span>
-                    ) : null}
-                  </span>
-                </td>
+                <td>{row.bingoCount}</td>
                 <td>
                   <span className="ui-score-value">{row.score} pts</span>
                 </td>
                 <td>
-                  <span className="ui-badge-stack">
-                    <span className={`ui-badge ${row.blackout ? "is-success" : "is-neutral"}`}>
-                      {row.blackout ? "Yes" : "No"}
-                    </span>
-                    {row.hasFirstBlackoutBadge ? (
-                      <span className="ui-badge is-first-blackout" title="First to get a blackout">
-                        First blackout
-                      </span>
-                    ) : null}
+                  <span className={`ui-badge ${row.blackout ? "is-success" : "is-neutral"}`}>
+                    {row.blackout ? "Yes" : "No"}
                   </span>
                 </td>
                 <td>{row.boardHref ? <Link href={row.boardHref}>View board</Link> : "No board yet"}</td>

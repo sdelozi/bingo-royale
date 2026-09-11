@@ -1,5 +1,4 @@
 import { ZodError, z } from "zod";
-import { countBingos, isBlackout } from "@/lib/bingo";
 import { db } from "@/server/db/client";
 import {
   GROUP_OBJECTIVE_COUNT,
@@ -74,8 +73,6 @@ export async function updatePlayerBoardMark(userId: string, groupId: string, raw
     }
   });
 
-  await syncFirstAchievementTimestamps(groupId, userId);
-
   return {
     boardId: board.boardId,
     position: input.position,
@@ -83,59 +80,6 @@ export async function updatePlayerBoardMark(userId: string, groupId: string, raw
     content: square.objective.content,
     isFreeSpace: square.objective.isFreeSpace
   };
-}
-
-// Awards "first bingo"/"first blackout" to whichever currently-qualifying board reached that
-// state earliest; badges are cleared here and recomputed at read time in the leaderboard.
-async function syncFirstAchievementTimestamps(groupId: string, userId: string): Promise<void> {
-  const boardWithMarks = await db.playerBoard.findUnique({
-    where: { groupId_userId: { groupId, userId } },
-    select: {
-      firstBingoAt: true,
-      firstBlackoutAt: true,
-      squares: {
-        select: {
-          position: true,
-          mark: {
-            select: {
-              isMarked: true
-            }
-          }
-        }
-      }
-    }
-  });
-
-  if (!boardWithMarks) {
-    return;
-  }
-
-  const marks = Array.from({ length: GROUP_OBJECTIVE_COUNT }, () => false);
-
-  for (const square of boardWithMarks.squares) {
-    marks[square.position] = square.mark?.isMarked ?? false;
-  }
-
-  const hasBingo = countBingos(marks) > 0;
-  const hasBlackout = isBlackout(marks);
-
-  const nextFirstBingoAt = hasBingo ? (boardWithMarks.firstBingoAt ?? new Date()) : null;
-  const nextFirstBlackoutAt = hasBlackout ? (boardWithMarks.firstBlackoutAt ?? new Date()) : null;
-
-  const bingoChanged = nextFirstBingoAt?.getTime() !== boardWithMarks.firstBingoAt?.getTime();
-  const blackoutChanged = nextFirstBlackoutAt?.getTime() !== boardWithMarks.firstBlackoutAt?.getTime();
-
-  if (!bingoChanged && !blackoutChanged) {
-    return;
-  }
-
-  await db.playerBoard.update({
-    where: { groupId_userId: { groupId, userId } },
-    data: {
-      firstBingoAt: nextFirstBingoAt,
-      firstBlackoutAt: nextFirstBlackoutAt
-    }
-  });
 }
 
 export {

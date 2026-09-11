@@ -10,8 +10,6 @@ type LeaderboardBoard = {
   id: string;
   createdAt: Date;
   updatedAt: Date;
-  firstBingoAt: Date | null;
-  firstBlackoutAt: Date | null;
   squares: Array<{
     position: number;
     mark: {
@@ -28,8 +26,6 @@ export type GroupLeaderboardRow = {
   score: number;
   bingoCount: number;
   blackout: boolean;
-  hasFirstBingoBadge: boolean;
-  hasFirstBlackoutBadge: boolean;
   boardHref: string | null;
 };
 
@@ -102,8 +98,6 @@ export async function getGroupLeaderboardForUser(userId: string, groupId: string
               id: true,
               createdAt: true,
               updatedAt: true,
-              firstBingoAt: true,
-              firstBlackoutAt: true,
               squares: {
                 select: {
                   position: true,
@@ -121,30 +115,24 @@ export async function getGroupLeaderboardForUser(userId: string, groupId: string
     }
   });
 
-  const rowsWithAchievements = memberships.map((member) => {
-    const board = member.user.boards[0];
-    const stats = mapBoardStats(board);
-    const achievedAt = board?.updatedAt ?? member.joinedAt;
+  const rows = memberships
+    .map((member) => {
+      const board = member.user.boards[0];
+      const stats = mapBoardStats(board);
+      const achievedAt = board?.updatedAt ?? member.joinedAt;
 
-    return {
-      userId: member.user.id,
-      displayName: member.user.name?.trim() || member.user.email,
-      role: member.role,
-      joinedAt: member.joinedAt,
-      achievedAt,
-      score: stats.score,
-      bingoCount: stats.bingoCount,
-      blackout: stats.blackout,
-      firstBingoAt: stats.bingoCount > 0 ? (board?.firstBingoAt ?? null) : null,
-      firstBlackoutAt: stats.blackout ? (board?.firstBlackoutAt ?? null) : null,
-      boardHref: board ? `/groups/${groupId}/boards/${member.user.id}` : null
-    };
-  });
-
-  const earliestBingoAt = findEarliestTimestamp(rowsWithAchievements.map((row) => row.firstBingoAt));
-  const earliestBlackoutAt = findEarliestTimestamp(rowsWithAchievements.map((row) => row.firstBlackoutAt));
-
-  const rows = rowsWithAchievements
+      return {
+        userId: member.user.id,
+        displayName: member.user.name?.trim() || member.user.email,
+        role: member.role,
+        joinedAt: member.joinedAt,
+        achievedAt,
+        score: stats.score,
+        bingoCount: stats.bingoCount,
+        blackout: stats.blackout,
+        boardHref: board ? `/groups/${groupId}/boards/${member.user.id}` : null
+      };
+    })
     .sort((left, right) => {
       if (left.blackout !== right.blackout) {
         return Number(right.blackout) - Number(left.blackout);
@@ -160,11 +148,7 @@ export async function getGroupLeaderboardForUser(userId: string, groupId: string
 
       return left.achievedAt.getTime() - right.achievedAt.getTime();
     })
-    .map(({ achievedAt: _achievedAt, firstBingoAt, firstBlackoutAt, ...row }) => ({
-      ...row,
-      hasFirstBingoBadge: isEarliestTimestamp(firstBingoAt, earliestBingoAt),
-      hasFirstBlackoutBadge: isEarliestTimestamp(firstBlackoutAt, earliestBlackoutAt)
-    }) satisfies GroupLeaderboardRow);
+    .map(({ achievedAt: _achievedAt, ...row }) => row satisfies GroupLeaderboardRow);
 
   return {
     groupId: membership.group.id,
@@ -172,18 +156,4 @@ export async function getGroupLeaderboardForUser(userId: string, groupId: string
     generatedAt: new Date(),
     rows
   };
-}
-
-function findEarliestTimestamp(timestamps: Array<Date | null>): Date | null {
-  return timestamps.reduce<Date | null>((earliest, current) => {
-    if (!current) {
-      return earliest;
-    }
-
-    return !earliest || current.getTime() < earliest.getTime() ? current : earliest;
-  }, null);
-}
-
-function isEarliestTimestamp(timestamp: Date | null, earliest: Date | null): boolean {
-  return Boolean(timestamp && earliest && timestamp.getTime() === earliest.getTime());
 }

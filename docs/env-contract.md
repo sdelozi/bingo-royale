@@ -18,7 +18,7 @@ This contract defines deployment-agnostic configuration requirements for Bingo R
 | --- | --- | --- | --- | --- |
 | `NODE_ENV` | Yes | No | `production` | Standard runtime mode |
 | `NEXT_PUBLIC_APP_URL` | Yes | No | `https://app.example.com` | Public app URL |
-| `NEXTAUTH_URL` | Yes (Production) | No | `https://app.example.com` | Auth callback base URL; see Vercel deployment-URL note below |
+| `NEXTAUTH_URL` | Yes | No | `https://app.example.com` | Auth callback base URL |
 | `DATABASE_URL` | Yes | Yes | `postgresql://...` | PostgreSQL connection string |
 | `AUTH_SECRET` | Yes | Yes | random long string | Auth.js signing secret |
 | `GOOGLE_CLIENT_ID` | No | Yes | provider value | Optional Google OAuth |
@@ -45,18 +45,11 @@ This contract defines deployment-agnostic configuration requirements for Bingo R
 - Secrets must not be printed in logs.
 - Secret rotation should happen before high-risk releases and after incident response.
 
-## Vercel Deployment URL and NEXTAUTH_URL
-- If `NEXTAUTH_URL` is not set, NextAuth.js falls back to Vercel's `VERCEL_URL`, which is a unique, ephemeral hostname per deployment (for example `bingo-royale-ncgvl39tx-intx1.vercel.app`).
-- This causes two symptoms: users get redirected after sign-in to that ephemeral deployment URL (404 once the deployment is deleted), and Google OAuth sends a `redirect_uri` that does not match anything registered in Google Cloud Console (`redirect_uri_mismatch`), even for brand-new users with no existing account.
-- Fix: set `NEXTAUTH_URL` to the stable production domain (custom domain or the stable `*.vercel.app` alias) in the Vercel project's **Production** environment variables only. Do not set it for **Preview** deployments, or every preview build will incorrectly redirect to the fixed production URL instead of its own preview URL.
-- After setting it, redeploy Production so the value is baked into the build.
-
 ## Google OAuth Account Linking
 - Default behavior: Google OAuth will not automatically link to an existing same-email credentials account.
 - If users see `OAuthAccountNotLinked`, they signed up previously with a different method for that email.
 - To allow linking in this app, set `GOOGLE_ALLOW_DANGEROUS_EMAIL_ACCOUNT_LINKING=true` and redeploy.
 - Only enable this if you explicitly accept the account-linking risk tradeoff for your user base.
-- `redirect_uri_mismatch` is unrelated to account linking and affects every user, including brand-new sign-ups. In Google Cloud Console, under the OAuth Client's Authorized redirect URIs, register exactly `${NEXTAUTH_URL}/api/auth/callback/google` (the stable production domain), and remove any stale entries pointing at old ephemeral deployment URLs.
 
 ## Enforcement and Tooling
 - CI portability guardrail: `npm run check:portability`
